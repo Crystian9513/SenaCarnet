@@ -16,6 +16,7 @@
         response.sendRedirect("index.jsp");
     }
 %>
+<!-- Cambio sebastian  -->
 <html lang="es">
     <head>
         <meta charset="UTF-8">
