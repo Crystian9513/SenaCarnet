@@ -128,9 +128,6 @@ public class FormacionesServlet extends HttpServlet {
             Sede des = sedes.findSede(sedeListass);
             formacionEditada.setSedeId(des);
             try {
-                
-                System.out.println("datos");
-                
                 se.edit(formacionEditada);
                 String mensaje = "Ediciónguardada";
                 // Codificar el mensaje de respuesta

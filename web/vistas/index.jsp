@@ -9,14 +9,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Inicio de Sesion</title>
         <link rel="stylesheet" href="../css/estilo.css"/>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
     </head>
     <body>
-        <div class="login-page ">
-            <div class="container  ">
+        <div class="login-page">
+            <div class="container">
                 <div class="row ">
                     <div class="col-lg-10 offset-lg-1 ">
                         <div class="bg-white shadow rounded bg-light bg-opacity-75">
@@ -55,7 +56,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <img src="../img/sesion.jpg" class="img-fluid" />
+                                    <img data-aos="flip-left"
+                                         data-aos-easing="ease-out-cubic"
+                                         data-aos-duration="2000" src="../img/sesion.jpg" class="img-fluid" />
                                 </div>
                             </div>
                         </div>
@@ -64,14 +67,14 @@
                 </div>
             </div>
         </div>
-        
+
 
         <!-- MODALES INICIO -->
         <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>//olvidoContrase_aServlet" method="post" class="row g-2 ">
+                        <form action="<%=request.getContextPath()%>/olvidoContrase_aServlet" method="post" class="row g-2 ">
                             <h2 class="pt-2 pb-1 text-center">Olvido su Contraseña</h2>
                             <h6 class="">Ingrese su numero de cedula, y se le enviara un Link a su correo para poder cambiar su contraseña. <br> </h6>
                             <div class="col-12">
@@ -92,9 +95,9 @@
             </div>
         </div>
         <!-- MODALE FINAL -->
-        
-        
 
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
@@ -121,35 +124,37 @@
         } else {
             // Si el usuario existe, obtenemos el rol y la contraseña
             int rol = usuario.getRol();
+            int estadoClave = usuario.getEstadoClave();
             String contraseñaUsuario = usuario.getClaves(); // Obtener la contraseña del usuario
-            System.out.println("className.methodName()" + contraseñaUsuario);
-            System.out.println("className.methodName()" + clave);
 
             // Verificamos si la contraseña coincide con la almacenada en la base de datos
             if (usuarioController.DencryptarClave(contraseñaUsuario, clave)) {
-                // Verificamos si el usuario es un estudiante
+
+                // Verificamos el rol y el estado de la clave para redirigir correctamente
                 if (rol == 1) {
-                    // Si es un estudiante, buscamos su información en la tabla de estudiantes
-                    EstudiantesJpaController estudianteController = new EstudiantesJpaController();
-                    Estudiantes estudiante = estudianteController.findEstudiantes(cedula);
-
-                    // Verificamos si el estudiante existe
-                    if (estudiante == null) {
-                        // Si el estudiante no existe, redirigimos a la página de inicio de sesión con un mensaje de error
-                        String mensaje = "documentoNoExiste";
-                        response.sendRedirect("index.jsp?respuesta=" + mensaje);
-                    } else {
-
+                    // Si el usuario tiene rol 1, verificamos el estado de la clave
+                    if (estadoClave == 1) {
                         HttpSession sessionActual = request.getSession();
-                        sessionActual.setAttribute("estudiante", estudiante);
+                        sessionActual.setAttribute("estudiante", usuario);
+                        // Si la clave está en estado 1, redirigimos a la página de cambio de contraseña
+                        String mensaje = "cambioClavesPrimeraVez";
+                        response.sendRedirect("cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
+                    } else {
+                        // Si la clave no está en estado 1, redirigimos a la página de usuario
+                        HttpSession sessionActual = request.getSession();
+                        sessionActual.setAttribute("estudiante", usuario);
                         response.sendRedirect("usuario.jsp");
-
                     }
                 } else if (rol == 2) {
                     // Si el usuario tiene rol 2, lo redirigimos al menú principal
                     HttpSession sessionActual = request.getSession();
                     sessionActual.setAttribute("user", usuario);
                     response.sendRedirect("menuPrincipal.jsp");
+                } else if (rol == 3) {
+                    // Si el usuario tiene rol 3, lo redirigimos a otra página
+                    HttpSession sessionActual = request.getSession();
+                    sessionActual.setAttribute("coordinador", usuario);
+                    response.sendRedirect("coordinador.jsp");
                 } else {
                     // Si el usuario tiene otro rol, redirigimos a la página de inicio de sesión con un mensaje de error
                     String mensaje = "usuarioSinAcceso";
@@ -164,6 +169,7 @@
     }
 %>
 
+
 <%
     String mensaje2 = request.getParameter("respuesta");
 
@@ -173,11 +179,11 @@
             case "documentoNoExiste":
 %>
 <script>
-    Swal.fire(
-            '¡Oops!',
-            '¡La cedula no existe!',
-            'warning'
-            );
+            Swal.fire(
+                    '¡Oops!',
+                    '¡La cedula no existe!',
+                    'warning'
+                    );
 </script>
 <%
         break;
@@ -186,7 +192,7 @@
 <script>
     Swal.fire(
             '¡Oops!',
-            '¡Usted ya Voto!',
+            '¡Carnet Eliminado!',
             'warning'
             );
 </script>
@@ -203,15 +209,16 @@
 </script>
 <%
         break;
-    case "agendaVotacionInactiva":
+    case "noCedula":
 %>
 <script>
     Swal.fire(
             '¡Oops!',
-            '¡Votacion cerrada!',
+            '¡No existe la cedula en la base de datos !',
             'warning'
             );
 </script>
+
 <%
         break;
     case "enviado":
@@ -221,6 +228,28 @@
             '¡Exito!',
             '¡Correo enviado!',
             'success'
+            );
+</script>
+<%
+        break;
+    case "contraseñaNuevaGuardada":
+%>
+<script>
+    Swal.fire(
+            '¡Exito!',
+            '¡Correo enviado!',
+            'success'
+            );
+</script>
+<%
+        break;
+    case "error":
+%>
+<script>
+    Swal.fire(
+            '¡Oops!',
+            '¡Error!',
+            'warning'
             );
 </script>
 <%

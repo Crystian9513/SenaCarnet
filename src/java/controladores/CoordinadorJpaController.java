@@ -8,7 +8,7 @@ import com.password4j.Hash;
 import com.password4j.Password;
 import controladores.exceptions.NonexistentEntityException;
 import controladores.exceptions.PreexistingEntityException;
-import entidades.Usuarios;
+import entidades.Coordinador;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -23,10 +23,10 @@ import javax.persistence.criteria.Root;
  *
  * @author Peralta
  */
-public class UsuariosJpaController implements Serializable {
+public class CoordinadorJpaController implements Serializable {
 
-    public UsuariosJpaController( ) {
-       this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
+    public CoordinadorJpaController( ) {
+           this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -34,16 +34,16 @@ public class UsuariosJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Usuarios usuarios) throws PreexistingEntityException, Exception {
+    public void create(Coordinador coordinador) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(usuarios);
+            em.persist(coordinador);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findUsuarios(usuarios.getCedula()) != null) {
-                throw new PreexistingEntityException("Usuarios " + usuarios + " already exists.", ex);
+            if (findCoordinador(coordinador.getCedula()) != null) {
+                throw new PreexistingEntityException("Coordinador " + coordinador + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -53,19 +53,19 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
-    public void edit(Usuarios usuarios) throws NonexistentEntityException, Exception {
+    public void edit(Coordinador coordinador) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            usuarios = em.merge(usuarios);
+            coordinador = em.merge(coordinador);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = usuarios.getCedula();
-                if (findUsuarios(id) == null) {
-                    throw new NonexistentEntityException("The usuarios with id " + id + " no longer exists.");
+                Integer id = coordinador.getCedula();
+                if (findCoordinador(id) == null) {
+                    throw new NonexistentEntityException("The coordinador with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -81,14 +81,14 @@ public class UsuariosJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuarios usuarios;
+            Coordinador coordinador;
             try {
-                usuarios = em.getReference(Usuarios.class, id);
-                usuarios.getCedula();
+                coordinador = em.getReference(Coordinador.class, id);
+                coordinador.getCedula();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The usuarios with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The coordinador with id " + id + " no longer exists.", enfe);
             }
-            em.remove(usuarios);
+            em.remove(coordinador);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -97,19 +97,19 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
-    public List<Usuarios> findUsuariosEntities() {
-        return findUsuariosEntities(true, -1, -1);
+    public List<Coordinador> findCoordinadorEntities() {
+        return findCoordinadorEntities(true, -1, -1);
     }
 
-    public List<Usuarios> findUsuariosEntities(int maxResults, int firstResult) {
-        return findUsuariosEntities(false, maxResults, firstResult);
+    public List<Coordinador> findCoordinadorEntities(int maxResults, int firstResult) {
+        return findCoordinadorEntities(false, maxResults, firstResult);
     }
 
-    private List<Usuarios> findUsuariosEntities(boolean all, int maxResults, int firstResult) {
+    private List<Coordinador> findCoordinadorEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Usuarios.class));
+            cq.select(cq.from(Coordinador.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -121,20 +121,20 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
-    public Usuarios findUsuarios(Integer id) {
+    public Coordinador findCoordinador(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Usuarios.class, id);
+            return em.find(Coordinador.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getUsuariosCount() {
+    public int getCoordinadorCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Usuarios> rt = cq.from(Usuarios.class);
+            Root<Coordinador> rt = cq.from(Coordinador.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -143,7 +143,7 @@ public class UsuariosJpaController implements Serializable {
         }
     }
     
-     public boolean DencryptarClave(String claveHash, String claveLogin) {
+        public boolean DencryptarClave(String claveHash, String claveLogin) {
     // Verifica si la contraseña proporcionada coincide con la contraseña almacenada
     return Password.check(claveLogin, claveHash).addPepper().withScrypt();
 }

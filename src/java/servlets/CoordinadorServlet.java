@@ -19,14 +19,11 @@ import entidades.Usuarios;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -40,8 +37,8 @@ import javax.servlet.http.Part;
  * @author Peralta
  */
 @MultipartConfig //Para archivos siempre va esto
-@WebServlet(name = "estudiantesServlet", urlPatterns = {"/estudiantesServlet"})
-public class estudiantesServlet extends HttpServlet {
+@WebServlet(name = "CoordinadorServlet", urlPatterns = {"/CoordinadorServlet"})
+public class CoordinadorServlet extends HttpServlet {
 
     private String pathFiles = "";
     private File uploads;
@@ -57,17 +54,12 @@ public class estudiantesServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ParseException {
-
-        String boton = request.getParameter("action");
+            throws ServletException, IOException {
+        
+         String boton = request.getParameter("action");
 
         switch (boton) {
-            case "Guardar":
-                botonGuardar(request, response);
-                break;
-            case "Eliminar":
-                botonEliminar(request, response);
-                break;
+            
             case "Editar":
                 botonEditar(request, response);
                 break;
@@ -76,151 +68,7 @@ public class estudiantesServlet extends HttpServlet {
         }
 
     }
-
-    public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ParseException {
-
-        String mensaje;
-
-        int cedula = Integer.parseInt(request.getParameter("cedula"));
-        int tpdocumento = Integer.parseInt(request.getParameter("tipoDocumento"));
-        String nombres = request.getParameter("nombres");
-        String apellidos = request.getParameter("apellidos");
-        int formacion = Integer.parseInt(request.getParameter("formacion"));
-        int sede = Integer.parseInt(request.getParameter("sede"));
-        String correo = request.getParameter("correo");
-        Part part = request.getPart("foto");
-
-        String fechaInicio = request.getParameter("vence");
-        int estado = Integer.parseInt(request.getParameter("estado"));
-        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        Date fecha1 = formato.parse(fechaInicio);
-
-        int cedula2 = Integer.parseInt(request.getParameter("cedula"));//TABLA DE USUARIO
-        String nombres2 = request.getParameter("nombres");//TABLA DE USUARIO
-        String apellidos2 = request.getParameter("apellidos");//TABLA DE USUARIO
-        String clave = request.getParameter("cedula");//TABLA DE USUARIO
-
-        UsuariosJpaController controladorUsuario = new UsuariosJpaController();//TABLA DE USUARIO
-        Usuarios guardarUsuario = new Usuarios();//TABLA DE USUARIO
-
-        String claveEncriptada = controladorUsuario.EncryptarClave(clave);
-
-        EstudiantesJpaController controlador = new EstudiantesJpaController();
-        Estudiantes guardarEstudiante = new Estudiantes();
-
-        TipodocumentoJpaController tipo = new TipodocumentoJpaController();
-        FormacionJpaController tipoForma = new FormacionJpaController();
-        SedeJpaController tipoSede = new SedeJpaController();
-        EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
-
-        try {
-
-            if (controlador.findEstudiantes(cedula) != null) {
-
-                mensaje = "Existe";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-
-            }
-            if (part == null) {
-
-                return;
-            }
-            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-            uploads = new File(pathFiles);
-
-            if (isExtension(part.getSubmittedFileName(), extensiones)) {
-                String photo = saveFile(part, uploads);
-
-                guardarEstudiante.setCedula(cedula);
-                Tipodocumento to = tipo.findTipodocumento(tpdocumento);
-                guardarEstudiante.setTipoDocumentoFk(to);
-                guardarEstudiante.setNombres(nombres);
-                guardarEstudiante.setApellidos(apellidos);
-                Formacion fo = tipoForma.findFormacion(formacion);
-                guardarEstudiante.setFormacionFk(fo);
-                Sede se = tipoSede.findSede(sede);
-                guardarEstudiante.setSedeFk(se);
-                guardarEstudiante.setCorreo(correo);
-                guardarEstudiante.setFotografia(photo);
-                guardarEstudiante.setVenceCarnet(fecha1);
-                EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
-                guardarEstudiante.setEstadoCarnetIdestadoCarnet(car);
-                
-
-                //TABLA USUSARIO
-                guardarUsuario.setCedula(cedula2);
-                guardarUsuario.setNombres(nombres2);
-                guardarUsuario.setApellidos(apellidos2);
-                guardarUsuario.setClaves(claveEncriptada);
-                guardarUsuario.setRol(1);
-                guardarUsuario.setEstadoClave(1);
-                guardarUsuario.setEstadoClave(1);
-
-                controlador.create(guardarEstudiante);
-                controladorUsuario.create(guardarUsuario);
-
-                mensaje = "guardar";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-
-            }
-
-        } catch (Exception e) {
-
-            mensaje = "errorAlguardarr";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-        }
-
-    }
-
-    public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String mensaje;
-        int codigoUsuario = Integer.parseInt(request.getParameter("cedula2"));
-
-        try {
-
-            EstudiantesJpaController controlador = new EstudiantesJpaController();
-            UsuariosJpaController controladorUsuario = new UsuariosJpaController();
-
-            // Obtener el estudiante a eliminar
-            Estudiantes estudiante = controlador.findEstudiantes(codigoUsuario);
-
-            // Verificar si el estudiante existe
-            if (estudiante != null) {
-                // Obtener la foto del estudiante
-                String fotoEstudiante = estudiante.getFotografia();
-
-                // Eliminar el estudiante de la base de datos
-                controlador.destroy(codigoUsuario);
-                controladorUsuario.destroy(codigoUsuario);
-
-                // Verificar si se proporcionó una ruta de foto
-                if (fotoEstudiante != null && !fotoEstudiante.isEmpty()) {
-                    // Eliminar la foto del estudiante del servidor
-                    File fileToDelete = new File(getServletContext().getRealPath("vistas/fotos" + fotoEstudiante));
-                    if (fileToDelete.exists()) {
-                        fileToDelete.delete();
-                    }
-                }
-
-                mensaje = "eliminado";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-            } else {
-                // Manejar el caso en que el estudiante no existe
-                mensaje = "El estudiante no existe";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-            }
-
-        } catch (Exception e) {
-
-            mensaje = "errorEliminar";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-        }
-
-    }
-
+    
     public void botonEditar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -296,20 +144,19 @@ public class estudiantesServlet extends HttpServlet {
                 guardarUsuario.setNombres(nombres2);
                 guardarUsuario.setApellidos(apellidos2);
                 guardarUsuario.setClaves(claveEncriptada);
-                guardarUsuario.setRol(1);
-               
+                guardarUsuario.setRol(4);
 
                 controladorUsuario.edit(guardarUsuario);
                 controlador.edit(editarEstudiante);
                 mensaje = "edicionGuardad";
 
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                response.sendRedirect("vistas/coordinador.jsp?respuesta=" + mensaje);
             }
 
         } catch (Exception e) {
 
             mensaje = "erroreditarr";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+            response.sendRedirect("vistas/coordinador.jsp?respuesta=" + mensaje);
         }
 
     }
@@ -358,11 +205,7 @@ public class estudiantesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ParseException ex) {
-            Logger.getLogger(estudiantesServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -376,11 +219,7 @@ public class estudiantesServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (ParseException ex) {
-            Logger.getLogger(estudiantesServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

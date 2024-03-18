@@ -30,6 +30,10 @@ import javax.persistence.Table;
     @NamedQuery(name = "Usuarios.findByRol", query = "SELECT u FROM Usuarios u WHERE u.rol = :rol")})
 public class Usuarios implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "ESTADO_CLAVE")
+    private int estadoClave;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -136,6 +140,14 @@ public class Usuarios implements Serializable {
     @Override
     public String toString() {
         return nombres;
+    }
+
+    public int getEstadoClave() {
+        return estadoClave;
+    }
+
+    public void setEstadoClave(int estadoClave) {
+        this.estadoClave = estadoClave;
     }
 
 }

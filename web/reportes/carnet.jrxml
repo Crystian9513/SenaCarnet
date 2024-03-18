@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="97478bfc-61a5-4b12-af6d-6580c06e7148">
-	<property name="ireport.zoom" value="0.9075000000000002"/>
+	<property name="ireport.zoom" value="0.6655000000000014"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="220"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT e.NOMBRES, e.APELLIDOS,e.CEDULA,e.FOTOGRAFIA,e.VENCE_CARNET, td.NOMBRE AS TIPO_DOCUMENTO, f.NOMBRE AS FORMACION, f.ID_FORMACION AS NUMERO_FICHA, s.NOMBRE AS SEDE
+		<![CDATA[SELECT e.NOMBRES, e.APELLIDOS,e.CEDULA,e.FOTOGRAFIA,e.VENCE_CARNET,e.IDENTIFICADOR_UNICO, td.NOMBRE AS TIPO_DOCUMENTO, f.NOMBRE AS FORMACION, f.ID_FORMACION AS NUMERO_FICHA, s.NOMBRE AS SEDE
 FROM estudiantes e
 INNER JOIN formacion f ON e.FORMACION_FK = f.ID_FORMACION
 INNER JOIN sede s ON f.SEDE_ID = s.ID_SEDE
@@ -29,147 +29,113 @@ WHERE e.CEDULA = $P{id}]]>
 	<field name="VENCE_CARNET" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="IDENTIFICADOR_UNICO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="TIPO_DOCUMENTO" class="java.lang.String"/>
 	<field name="FORMACION" class="java.lang.String"/>
 	<field name="NUMERO_FICHA" class="java.lang.Integer"/>
 	<field name="SEDE" class="java.lang.String"/>
+	<group name="Reverso">
+		<groupExpression><![CDATA[$F{NOMBRES}$F{APELLIDOS}$F{CEDULA}$F{FOTOGRAFIA}$F{VENCE_CARNET}$F{IDENTIFICADOR_UNICO}$F{TIPO_DOCUMENTO}$F{FORMACION}$F{SEDE}]]></groupExpression>
+		<groupHeader>
+			<band height="734">
+				<rectangle radius="12">
+					<reportElement x="68" y="21" width="427" height="679" uuid="a1da5bfc-d312-4ce3-9907-fda4e6c25363"/>
+				</rectangle>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="93" y="59" width="120" height="107" uuid="473dbaf6-0855-4170-b16b-e1fee7b913be"/>
+					<imageExpression><![CDATA["C:\\Users\\Peralta\\Documents\\NetBeansProjects\\SenaCarnet\\web\\img\\sena_reporte.png"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement x="437" y="40" width="41" height="239" uuid="2d0c2f52-8323-462d-a664-c9743a764821"/>
+					<textElement rotation="Left">
+						<font size="32" isBold="true"/>
+					</textElement>
+					<text><![CDATA[APRENDIZ]]></text>
+				</staticText>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="213" y="40" width="224" height="239" uuid="dd31d537-1d4e-4727-a52b-1f81b87f2ddc"/>
+					<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "C:/Users/Peralta/Documents/NetBeansProjects/SenaCarnet/web/vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
+				</image>
+				<line>
+					<reportElement x="93" y="298" width="385" height="1" uuid="66d03159-bd98-4ee7-861f-663cedf43ce1"/>
+					<graphicElement>
+						<pen lineWidth="3.0" lineColor="#009900"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="93" y="311" width="385" height="40" forecolor="#009900" uuid="4c145b83-9edf-4d18-919b-d016694f23ec"/>
+					<textElement>
+						<font size="28" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="93" y="351" width="385" height="40" forecolor="#009900" uuid="c8fdbc1f-3b6e-4b2e-9019-085137389f1d"/>
+					<textElement>
+						<font size="28" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="146" y="391" width="42" height="40" uuid="da919f98-9ef5-4afe-9a5e-018ff4ba9bd7"/>
+					<textElement>
+						<font size="28"/>
+					</textElement>
+					<text><![CDATA[No.]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="93" y="391" width="53" height="40" uuid="7310cceb-af71-4800-a415-78c534a02ce3"/>
+					<textElement>
+						<font size="28"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="188" y="391" width="290" height="40" uuid="2cbf417d-2df1-4601-8223-bfcdf04ab486"/>
+					<textElement>
+						<font size="28" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="93" y="431" width="385" height="40" uuid="9ca2f2e3-65c9-40a1-8450-e697551e380d"/>
+					<textElement>
+						<font size="28"/>
+					</textElement>
+					<text><![CDATA[REGIONAL SUCRE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="93" y="471" width="385" height="30" forecolor="#009900" uuid="b76617a5-e254-4e3f-af68-19bcfca70255"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="93" y="501" width="385" height="30" forecolor="#009900" uuid="447e06f7-e54f-4bff-b327-5a105b0e874b"/>
+					<textElement>
+						<font size="20"/>
+					</textElement>
+					<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
+				</staticText>
+				<image hAlign="Center" vAlign="Top">
+					<reportElement x="93" y="531" width="385" height="157" uuid="0255ddad-6332-439b-af83-31ad839572f7"/>
+					<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
+    new com.google.zxing.qrcode.QRCodeWriter().encode(
+        String.valueOf($F{CEDULA}), com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
+				</image>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="42" splitType="Stretch">
-			<textField>
-				<reportElement x="129" y="0" width="426" height="34" uuid="d31c3270-dc81-4edf-993b-5a0590571808"/>
-				<textElement>
-					<font size="20" isBold="false" isItalic="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{FORMACION}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="0" width="129" height="34" uuid="9b6d4bac-b5ef-40e0-838e-65aed8f6b6ee"/>
-				<textElement>
-					<font size="22" isBold="true" isItalic="true" isUnderline="false" isStrikeThrough="false"/>
-				</textElement>
-				<text><![CDATA[ Formacion:]]></text>
-			</staticText>
-		</band>
-	</title>
-	<detail>
-		<band height="692" splitType="Stretch">
-			<rectangle radius="10">
-				<reportElement x="57" y="13" width="431" height="667" uuid="b0fb00b2-e59e-4dca-8827-6979e74e54fc"/>
-			</rectangle>
-			<line>
-				<reportElement x="57" y="297" width="431" height="1" uuid="62f83e74-9c86-4a87-bd5c-4b49aab3fe70"/>
-			</line>
-			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="76" y="43" width="99" height="97" uuid="3183f0c4-9eb6-4e94-9db1-228fac101ff5"/>
-				<imageExpression><![CDATA["C:\\Users\\Peralta\\Documents\\NetBeansProjects\\SenaCarnet\\web\\img\\sena-reportes.png"]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="73" y="261" width="102" height="36" uuid="4cf5200f-00b7-4e33-afb1-554297230858"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<text><![CDATA[VENCE:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="175" y="261" width="103" height="36" uuid="4d667038-8126-4490-8834-a1ae02b87101"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{VENCE_CARNET}]]></textFieldExpression>
-			</textField>
-			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="175" y="35" width="253" height="226" uuid="44cd1546-4d86-4511-9655-c4087fb86db1"/>
-				<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "C:/Users/Peralta/Documents/NetBeansProjects/SenaCarnet/web/vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
-			</image>
-			<staticText>
-				<reportElement x="428" y="35" width="44" height="226" uuid="b2b42726-4fba-4340-8369-7bc8b3fd692c"/>
-				<textElement textAlignment="Center" rotation="Left">
-					<font size="26" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Aprendiz]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="76" y="335" width="396" height="37" forecolor="#FF6600" uuid="26650bf7-f459-45a3-a0b2-675994f6e981"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="76" y="298" width="396" height="37" forecolor="#FF6600" uuid="782b9393-6796-46fb-83f1-af0f67fbeaed"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="175" y="446" width="297" height="37" uuid="dfd18a43-a9b9-4287-ad23-55ecbfb79f41"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{NUMERO_FICHA}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="119" y="372" width="56" height="37" uuid="33181bf9-a92f-41fe-9f0a-293e90f1eea6"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<text><![CDATA[No.]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="175" y="372" width="297" height="37" uuid="51242106-ece3-47d5-9416-1737b5ac71cb"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="76" y="446" width="99" height="37" uuid="5129321a-d0c4-4343-ad24-af9322220adb"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<text><![CDATA[FICHA:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="76" y="409" width="81" height="37" uuid="e2e45ebf-2867-476c-9418-f55ac9748297"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<text><![CDATA[Sede :]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="76" y="372" width="43" height="37" uuid="fca843b2-e47e-46f2-9ac8-f131f031ccf2"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="157" y="409" width="315" height="37" uuid="97f6c427-48b4-4e98-bf7a-cc40372d7465"/>
-				<textElement>
-					<font size="26"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{SEDE}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="76" y="483" width="396" height="25" uuid="0a1c7595-8e60-4114-b78c-6c52b41c1bca"/>
-				<textElement>
-					<font size="16"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{FORMACION}]]></textFieldExpression>
-			</textField>
-			<image hAlign="Center" vAlign="Top">
-				<reportElement x="76" y="508" width="396" height="160" uuid="8d719686-fe9a-40b1-b23b-be36837a7ae8"/>
-				<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
-    new com.google.zxing.qrcode.QRCodeWriter().encode(
-        String.valueOf($F{CEDULA}), com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
-			</image>
-		</band>
-	</detail>
-	<summary>
 		<band height="42" splitType="Stretch"/>
-	</summary>
+	</title>
 </jasperReport>

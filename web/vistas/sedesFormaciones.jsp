@@ -26,6 +26,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Sedes y Formaciones</title>
         <link rel="stylesheet" href="../css/tabla.css"/>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
@@ -76,7 +77,7 @@
                     <div class="col-md-2 text-center">
                         <h2 class="mt-3 letras"> SENA </h2>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                                 aria-label="Toggle navigation">
@@ -85,13 +86,16 @@
                         <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
                             <ul class="navbar-nav ms-auto navbar-brand">
                                 <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="estudiantes.jsp">Estudiantes</a>
+                                    <a class="nav-link" aria-current="page" href="estudiantes.jsp">Aprendiz</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link" href="administrador.jsp">Administradores</a>
+                                    <a class="nav-link" href="administrador.jsp">Administrador</a>
+                                </li>
+                                 <li class="nav-item ">
+                                    <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link" href="#">Sedes y Formaciones</a>
+                                    <a class="nav-link" href="#">Sede-Formacion</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="menuPrincipal.jsp">Menu Principal</a>
@@ -111,10 +115,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h1 class="letra text-center pt-5 pb-3">Informacion de Sedes</h1>
+                    <h1 class="letra text-center pt-3 pb-3">Informacion de Sedes</h1>
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-3 col-sd-12">
+                            <div class="col-md-6 col-sd-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
                                         <div class="input-group-text col-md-6 col-sd-12"><b>Nueva Sede:</b></div>
@@ -122,18 +126,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-4 col-sd-12">
-                                <form action="<%=request.getContextPath()%>/SedesServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group">
-                                        <div class="input-group-text col-md-8 col-sd-12"><b>Importar datos de Excel:</b></div>
-                                        <!-- comment   <input type="file" name="excelFile" accept=".xls,.xlsx,.csv" class="form-control">-->
-                                        <button value="Importar" name="action" type="submit" class="btn" style="background-color: #6acd56;"><b>Importar</b></button>
-                                    </div>
-                                </form>
-                            </div>
-
-
-                            <div class="col-md-5 col-sd-12">
+                            <div class="col-md-6 col-sd-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
                                         <div class="input-group-text col-4"><b>Buscar:</b></div>
@@ -148,7 +141,7 @@
                         <div class="bg-image" >
                             <div class="mask d-flex align-items-center h-100">
                                 <div class="container tableContenido">
-                                    <div class="row justify-content-center">
+                                    <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
                                         <div class="col-12 tableContenido"> 
                                             <div class="card-body p-0 ">
                                                 <%--TABLA INICIO --%>
@@ -217,7 +210,7 @@
             <div class="container">
                 <div class="row">
 
-                    <div class="col-md-4 col-sd-12">
+                    <div class="col-md-6 col-sd-12">
                         <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                             <div class="input-group mb-2">
                                 <div class="input-group-text col-md-6 col-sd-12"><b>Nueva Formacion:</b></div>
@@ -225,15 +218,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-4 col-sd-12">
-                        <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
-                            <div class="input-group ">
-                                <div class="input-group-text col-md-8 col-sd-12"><b>Importar datos de Exel:</b></div>
-                                <button id="" type="button" class="btn" style="background-color: #6acd56;" ><b>Importar</b></button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4 col-sd-12">
+                    <div class="col-md-6 col-sd-12">
                         <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                             <div class="input-group mb-2">
                                 <div class="input-group-text col-4"><b>Buscar:</b></div>
@@ -244,7 +229,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" data-aos="zoom-in"  data-aos-duration="500">
                 <div class="col-md-12" data-aos="zoom-in"  data-aos-duration="500">
                     <!-- TABLA FORMACIONES INICIO -->
                     <div class="table-responsive table-scroll table-sm" data-mdb-perfect-scrollbar="true" style="position: relative">
@@ -425,8 +410,8 @@
                                 </div>
                             </div>
                             <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
-                                <button type="submit" class="btn botones btn-primary px-4 "
-                                        name="action" value="Guardar"><b>Guardar</b></button>
+                                <button type="submit" class="btn botones px-4 "  style="background-color: #6acd56;"
+                                        name="action" value="Guardar" ><b>Guardar</b></button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                             </div>
                         </form>
@@ -481,7 +466,8 @@
         <!-- MODALES DE FORMACIONES OPCIONES FINAL -->
 
 
-
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
@@ -557,7 +543,7 @@
 <script>
     Swal.fire(
             '¡Éxito!',
-            '¡La sede se ha sido actualizada!',
+            '¡La sede ha sido actualizada!',
             'success'
             );
 </script>
@@ -623,7 +609,7 @@
 <script>
     Swal.fire(
             '¡Éxito!',
-            '¡La sede se ha sido actualizada!',
+            '¡La formacion ha sido actualizada!',
             'success'
             );
 </script>

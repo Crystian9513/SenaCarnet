@@ -7,6 +7,13 @@
     font-style: italic; /* Definición del estilo de la fuente */
 }
 
+.letra2 {
+    font-family: Georgia, serif; /* Definición de la fuente */
+    font-size: 150%; /* Definición del tamaño de la fuente */
+    font-weight: bold; /* Definición del grosor de la fuente */
+    font-style: italic; /* Definición del estilo de la fuente */
+}
+
 table td,
 table th {
   text-overflow: ellipsis;

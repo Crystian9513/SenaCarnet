@@ -33,6 +33,13 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Estudiantes.findByCorreo", query = "SELECT e FROM Estudiantes e WHERE e.correo = :correo")})
 public class Estudiantes implements Serializable {
 
+    @Column(name = "IDENTIFICADOR_UNICO")
+    private String identificadorUnico;
+
+    @JoinColumn(name = "ESTADO_CARNET_IDESTADO_CARNET", referencedColumnName = "IDESTADO_CARNET")
+    @ManyToOne(optional = false)
+    private EstadoCarnet estadoCarnetIdestadoCarnet;
+
     @Column(name = "VENCE_CARNET")
     @Temporal(TemporalType.DATE)
     private Date venceCarnet;
@@ -172,6 +179,22 @@ public class Estudiantes implements Serializable {
 
     public void setVenceCarnet(Date venceCarnet) {
         this.venceCarnet = venceCarnet;
+    }
+
+    public EstadoCarnet getEstadoCarnetIdestadoCarnet() {
+        return estadoCarnetIdestadoCarnet;
+    }
+
+    public void setEstadoCarnetIdestadoCarnet(EstadoCarnet estadoCarnetIdestadoCarnet) {
+        this.estadoCarnetIdestadoCarnet = estadoCarnetIdestadoCarnet;
+    }
+
+    public String getIdentificadorUnico() {
+        return identificadorUnico;
+    }
+
+    public void setIdentificadorUnico(String identificadorUnico) {
+        this.identificadorUnico = identificadorUnico;
     }
     
 }

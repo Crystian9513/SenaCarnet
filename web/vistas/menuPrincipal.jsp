@@ -8,6 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Menu Principal</title>
         <link rel="stylesheet" href="../css/Menu.css"/>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
@@ -62,13 +63,16 @@
                         <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
                             <ul class="navbar-nav ms-auto navbar-brand">
                                 <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="estudiantes.jsp">Estudiantes</a>
+                                    <a class="nav-link" aria-current="page" href="estudiantes.jsp">Aprendiz</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link" href="administrador.jsp">Administradores</a>
+                                    <a class="nav-link" href="administrador.jsp">Administrador</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link" href="sedesFormaciones.jsp">Sedes y Formaciones</a>
+                                    <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
+                                </li>
+                                <li class="nav-item ">
+                                    <a class="nav-link" href="sedesFormaciones.jsp">Sede-Formacion</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Menu Principal</a>
@@ -86,34 +90,51 @@
 
         <%--CONTENIDO INICIO --%>
         <div class="container text-center ">
-            <h1 class="letra text-center pt-5 pb-3">Bienvenido:  <%if (usuario != null) {
+            <h1 class="letra text-center pt-3 pb-3">Bienvenido:  <%if (usuario != null) {
                     out.print(usuario.getNombres());
 
                 }%> </h1>
             <div class="row ">
-                <div class="col-lg-4 col-sd-12 d-flex align-items-center justify-content-center ">
-                    <div class="card">
+                 <div class="col-lg-3 col-sd-12 d-flex align-items-center justify-content-center ">
+                    <div class="card mb-5" data-aos="flip-left"
+                                 data-aos-easing="ease-out-cubic"
+                                 data-aos-duration="2000">
                         <div class="card-details">
-                            <div><img src="../img/menu_administrador.jpg" width="300px" height="200px" alt="alt"/></div>
-                            <h3>Administradores</h3>
-                        </div>
-                        <a href="administrador.jsp"> <button class="card-button">ENTRAR</button></a>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sd-12 d-flex align-items-center justify-content-center ">
-                    <div class="card">
-                        <div class="card-details">
-                            <div><img src="../img/menu_estudiantes" width="300px" height="200px" alt="alt"/></div>
-                            <h3>Estudiantes</h3>
+                            <div><img src="../img/menu_estudiantes" width="210px" height="200px" alt="alt"/></div>
+                            <h3>Aprendiz</h3>
                         </div>
                         <a href="estudiantes.jsp"><button class="card-button" >ENTRAR</button></a>
                     </div>
                 </div>
-                <div class="col-lg-4  col-sd-12 d-flex align-items-center justify-content-center">
-                    <div class="card">
+                <div class="col-lg-3 col-sd-12 d-flex align-items-center justify-content-center ">
+                    <div class="card mb-5" data-aos="flip-left"
+                                 data-aos-easing="ease-out-cubic"
+                                 data-aos-duration="2000">
                         <div class="card-details">
-                            <div><img src="../img/menu_sedes.jpeg" width="300px" height="200px" alt="alt"/></div>
-                            <h3>Sedes y Formaciones</h3>
+                            <div><img src="../img/menu_administrador.jpg" width="210px" height="200px" alt="alt"/></div>
+                            <h3>Administrador</h3>
+                        </div>
+                        <a href="administrador.jsp"> <button class="card-button">ENTRAR</button></a>
+                    </div>
+                </div>
+               <div class="col-lg-3  col-sd-12 d-flex align-items-center justify-content-center">
+                    <div class="card mb-5" data-aos="flip-left"
+                                 data-aos-easing="ease-out-cubic"
+                                 data-aos-duration="2000">
+                        <div class="card-details">
+                            <div><img src="../img/menu-coordinador.jpg" width="210px" height="200px" alt="alt"/></div>
+                            <h3>Coordinador</h3>
+                        </div>
+                        <a href="coordinadorDatos.jsp"><button class="card-button">ENTRAR</button></a>
+                    </div>
+                </div>
+                <div class="col-lg-3  col-sd-12 d-flex align-items-center justify-content-center">
+                    <div class="card mb-5" data-aos="flip-left"
+                                 data-aos-easing="ease-out-cubic"
+                                 data-aos-duration="2000">
+                        <div class="card-details">
+                            <div><img src="../img/menu_sedes.jpeg" width="210px" height="200px" alt="alt"/></div>
+                            <h3>Sede-Formacion</h3>
                         </div>
                         <a href="sedesFormaciones.jsp"><button class="card-button">ENTRAR</button></a>
                     </div>
@@ -121,7 +142,7 @@
             </div>  
         </div>
         <%--CONTENIDO FINAL --%>
-        <h2 class="letra mt-5  text-center">Reporte de Carnet</h2>
+        <h2 class="letra   text-center">Reporte de Carnet</h2>
         <div class="container mb-5">  
             <div class="row">
                 <div class="col-lg-6 col-sd-12 ">
@@ -130,7 +151,9 @@
                     </p>
                 </div>
                 <div class="col-lg-6 col-sd-12 d-flex align-items-center justify-content-center">
-                    <div class="card">
+                    <div class="card" data-aos="flip-left"
+                                 data-aos-easing="ease-out-cubic"
+                                 data-aos-duration="2000">
                         <div class="card-details">
                             <div><img src="../img/menu_carnet.webp" width="300px" height="150px" alt="alt"/></div>
                             <h3 class="text-center">Carnet por Formacion</h3>
@@ -181,7 +204,9 @@
                 </div>
             </div>
         </footer>
-
+                        
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
                 integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>

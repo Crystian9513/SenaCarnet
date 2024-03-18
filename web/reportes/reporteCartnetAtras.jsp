@@ -26,7 +26,7 @@
         parameters.put("id", cedula);
 
         // Obtener la ruta del archivo Jasper
-        String reportPath = application.getRealPath("reportes/carnet.jasper");
+        String reportPath = application.getRealPath("reportes/carnetAtras.jasper");
 
         // Generar el informe Jasper
         JasperPrint jasperPrint = JasperFillManager.fillReport(reportPath, parameters, conexion);

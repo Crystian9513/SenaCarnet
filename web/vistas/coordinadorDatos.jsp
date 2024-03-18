@@ -1,3 +1,5 @@
+<%@page import="entidades.Coordinador"%>
+<%@page import="controladores.CoordinadorJpaController"%>
 <%@page import="entidades.Usuarios"%>
 <%@page import="entidades.Usuarios"%>
 <%@page import="java.util.List"%>
@@ -44,14 +46,12 @@
         </script>
 
         <script>
-            function obtenerDatosAdministradores(Cedula, Nombre, Apellido, Correo, Fotografia) {
+            function obtenerDatosCoordinador(Cedula, Nombre, Apellido, Correo) {
                 $('#cedula2').val(Cedula);
                 $('#nombre2').val(Nombre);
                 $('#apellido2').val(Apellido);
                 $('#correo2').val(Correo);
-                // Construir la URL completa de la foto
-                var fotoUrl = window.location.origin + '../fotos/' + Fotografia;
-                $('#foto2_url').text(fotoUrl);
+
             }
 
         </script>
@@ -86,11 +86,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link" aria-current="page" href="estudiantes.jsp">Aprendiz</a>
                                 </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="#">Administrador</a>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="administrador.jsp">Administrador</a>
                                 </li>
                                 <li class="nav-item ">
-                                    <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
+                                    <a class="nav-link" href="#">Coordinador</a>
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link" href="sedesFormaciones.jsp">Sede-Formacion</a>
@@ -114,7 +114,7 @@
             <div class="row">
                 <div class="col-12">
 
-                    <h1 class="letra text-center pt-3 pb-3">Informacion de Administrador</h1>
+                    <h1 class="letra text-center pt-3 pb-3">Informacion de Coordinador</h1>
 
                     <div class="container">
                         <div class="row">
@@ -154,7 +154,6 @@
                                                                 <th scope="col">Nombres</th>
                                                                 <th scope="col">Apellidos</th>
                                                                 <th scope="col">Correo</th>
-                                                                <th scope="col">Fotografia</th>
                                                                 <th scope="col">Opcines</th>
 
                                                             </tr>
@@ -162,20 +161,20 @@
                                                         <tbody>
 
                                                             <%
-                                                                AdministradorJpaController controlador = new AdministradorJpaController();
-                                                                List<Administrador> admin = controlador.findAdministradorEntities();
+                                                                CoordinadorJpaController controlador = new CoordinadorJpaController();
+                                                                List<Coordinador> coord = controlador.findCoordinadorEntities();
 
-                                                                if (admin.isEmpty()) {
+                                                                if (coord.isEmpty()) {
 
 
                                                             %>
 
                                                             <tr>
-                                                                <td colspan="9" class="text-center">No se encontraron Administradores en la base de datos.</td>
+                                                                <td colspan="5" class="text-center">No se encontraron Administradores en la base de datos.</td>
                                                             </tr>
                                                             <%                                                                } else {
 
-                                                                for (Administrador adm : admin) {
+                                                                for (Coordinador adm : coord) {
 
 
                                                             %>
@@ -185,20 +184,11 @@
                                                                 <td> <%= adm.getApellido()%> </td>
                                                                 <td> <%= adm.getCorreo()%> </td>
                                                                 <td> 
-                                                                    <!-- Utiliza el atributo data-bs-html="true" para que el contenido del popover se interprete como HTML -->
-                                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-html="true"
-                                                                          data-bs-content='<img src="<%= adm.getFotografia()%>" width="120px" height="120px">'
-                                                                          <button class="btn btn-primary btn-md fw-bold" type="button" disabled>Foto</button>
-                                                                    </span>
-                                                                </td>
-
-                                                                <td> 
                                                                     <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" 
-                                                                            data-bs-target="#formularioModal2" onclick="obtenerDatosAdministradores('<%= adm.getCedula()%>',
+                                                                            data-bs-target="#formularioModal2" onclick="obtenerDatosCoordinador('<%= adm.getCedula()%>',
                                                                                             '<%= adm.getNombre()%>',
                                                                                             '<%= adm.getApellido()%>',
-                                                                                            '<%= adm.getCorreo()%>',
-                                                                                            '<%= adm.getFotografia()%>')" >
+                                                                                            '<%= adm.getCorreo()%>')" >
                                                                         Opciones
                                                                     </button>
                                                                 </td>
@@ -250,9 +240,9 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/administradoresServlet" method="post" class="row g-2 "
-                              enctype="multipart/form-data">
-                            <h2 class="pt-5 pb-4 text-center">Registrar Administrador</h2>
+                        <form action="<%=request.getContextPath()%>/CoordinadorDatosServlet" method="post" class="row g-2 "
+                              >
+                            <h2 class="pt-5 pb-4 text-center">Registrar Coordinador</h2>
 
                             <div class="col-12">
                                 <div class="input-group">
@@ -265,14 +255,14 @@
                                 <div class="input-group">
                                     <div class="input-group-text col-5"><b>Nombres:</b></div>
 
-                                    <input type="text" class="form-control" id="nombre" name="nombre" required min="1" maxlength="40">
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required min="1">
                                 </div>
                             </div>
                             <div class="col-12">
                                 <div class="input-group">
                                     <div class="input-group-text col-5"><b>Apellidos:</b></div>
 
-                                    <input type="text" class="form-control" id="apellido" name="apellido" required min="1" maxlength="40">
+                                    <input type="text" class="form-control" id="apellido" name="apellido" required min="1">
                                 </div>
                             </div>
                             <div class="col-12">
@@ -288,90 +278,77 @@
                                     <input type="email" class="form-control" id="correo" name="correo" required min="1" maxlength="45">
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <div class="input-group input-group">
-                                    <div class="input-group-text col-5"><b>Fotografia:</b></div>
-                                    <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required min="1">
-                                </div>
-                            </div>
-                            <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
-                                <button type="submit" class="btn botones  px-4"
-                                        value="Guardar" name="action" style="background-color: #6acd56;"><b>Guardar</b></button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
-                            </div>
-                        </form>
                     </div>
+                    <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
+                        <button type="submit" class="btn botones  px-4"
+                                value="Guardar" name="action" style="background-color: #6acd56;"><b>Guardar</b></button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- MODALES DE SEDES GUARDAR FINAL -->
-        <!-- MODALES DE SEDES GUARDAR INICIO -->
-        <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/administradoresServlet" method="post" class="row g-2 " enctype="multipart/form-data">
-                            <h2 class="pt-5 pb-4 text-center">Administrador</h2>
+    </div>
+    <!-- MODALES DE SEDES GUARDAR FINAL -->
+    <!-- MODALES DE SEDES GUARDAR INICIO -->
+    <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="<%=request.getContextPath()%>/CoordinadorDatosServlet" method="post" class="row g-2 " >
+                        <h2 class="pt-5 pb-4 text-center">Coordinador</h2>
 
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Cedula:</b></div>
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="input-group-text col-5"><b>Cedula:</b></div>
 
-                                    <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999" readonly>
-                                </div>
+                                <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999" readonly>
                             </div>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Nombres:</b></div>
+                        </div>
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="input-group-text col-5"><b>Nombres:</b></div>
 
-                                    <input type="text" class="form-control" id="nombre2" name="nombre2" required min="1" maxlength="45">
-                                </div>
+                                <input type="text" class="form-control" id="nombre2" name="nombre2" required min="1">
                             </div>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Apellidos:</b></div>
+                        </div>
+                        <div class="col-12">
+                            <div class="input-group">
+                                <div class="input-group-text col-5"><b>Apellidos:</b></div>
 
-                                    <input type="text" class="form-control" id="apellido2" name="apellido2" required min="1" maxlength="45">
-                                </div>
-                            </div>  
-                            <div class="col-12">
-                                <div class="input-group input-group">
-                                    <div class="input-group-text col-5"><b>Correo: </b></div>
-                                    <input type="email" class="form-control" id="correo2" name="correo2" required min="1" maxlength="45">
-                                </div>
+                                <input type="text" class="form-control" id="apellido2" name="apellido2" required min="1">
                             </div>
-                            <div class="col-12">
-                                <div class="input-group input-group">
-                                    <div class="input-group-text col-6"><b>Fotografia:</b></div>
-
-                                    <input type="file" class="form-control" id="foto2" name="foto2" accept="image/*" >
-
-                                </div>
+                        </div>  
+                        <div class="col-12">
+                            <div class="input-group input-group">
+                                <div class="input-group-text col-5"><b>Correo: </b></div>
+                                <input type="email" class="form-control" id="correo2" name="correo2" required min="1" maxlength="45">
                             </div>
-                            <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
-                                <button type="submit" class="btn botones  px-4"
-                                        name="action" value="Editar" style="background-color: #6acd56;"><b>Actualizar</b></button>
-                                <button type="submit" class="btn " name="action" value="Eliminar" style="background-color: #6acd56;"><b>Eliminar</b></button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
+                            <button type="submit" class="btn botones  px-4"
+                                    name="action" value="Editar" style="background-color: #6acd56;"><b>Actualizar</b></button>
+                            <button type="submit" class="btn " name="action" value="Eliminar" style="background-color: #6acd56;"><b>Eliminar</b></button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <!-- MODALES DE SEDES GUARDAR FINAL -->
+    </div>
+    <!-- MODALES DE SEDES GUARDAR FINAL -->
 
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script>AOS.init();</script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-        crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="link">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="link">
                                                                                 const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
                                                                                 const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-        </script> 
-    </body>
+    </script> 
+</body>
 </html>
 
 <%
@@ -396,7 +373,7 @@
 <script>
     Swal.fire(
             '¡Éxito!',
-            '¡El administrador ha sido guardado!',
+            '¡El coordinador ha sido guardado!',
             'success'
             );
 </script>
@@ -418,7 +395,7 @@
 <script>
     Swal.fire(
             '¡Éxito!',
-            '¡El administrador ha sido eliminado!',
+            '¡El coordinador ha sido eliminado!',
             'success'
             );
 </script>
@@ -429,7 +406,7 @@
 <script>
     Swal.fire(
             '¡Éxito!',
-            '¡El estudiante ha sido actualizado!',
+            '¡El coordinador ha sido actualizado!',
             'success'
             );
 </script>

@@ -112,6 +112,7 @@ public class administradoresServlet extends HttpServlet {
                 guardaUsuario.setApellidos(apellido);
                 guardaUsuario.setClaves(claveEncriptada);
                 guardaUsuario.setRol(2);
+                guardaUsuario.setEstadoClave(2);
                 controlUsuario.create(guardaUsuario);
 
                 String mensaje = "guardado";
@@ -197,7 +198,7 @@ public class administradoresServlet extends HttpServlet {
             response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
         } else {
             // Si el administrador o el usuario no existen, manejar el error
-            String mensaje = "Error al editar: El administrador o el usuario no existen.";
+            String mensaje = "Erroraleditar";
             response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
         }
     } catch (Exception e) {
