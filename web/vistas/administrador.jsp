@@ -9,7 +9,7 @@
     Usuarios usuario = (Usuarios) sesion.getAttribute("user");
 
     if (usuario == null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("../index.jsp");
     } else {
 
     }
@@ -67,9 +67,9 @@
                 <div class="row">
 
                     <div class="col-md-2">
-                        <a href="index.jsp">
+                        
                             <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-                        </a>
+                        
                     </div>
 
                     <div class="col-md-2 text-center">
@@ -83,8 +83,14 @@
                         </button>
                         <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
                             <ul class="navbar-nav ms-auto navbar-brand">
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="estudiantes.jsp">Aprendiz</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Aprendiz
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="estudiantes.jsp">Ingresar</a></li>
+                                        <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link" href="#">Administrador</a>
@@ -138,15 +144,15 @@
                         </div>
                     </div>
 
-                    <section class="intro mb-5">
+                    <section class="intro mb-2">
                         <div class="bg-image" >
                             <div class="mask d-flex align-items-center h-100">
-                                <div class="container tableContenido">
+                                <div class="container">
                                     <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
-                                        <div class="col-12 tableContenido"> 
+                                        <div class="col-12"> 
                                             <div class="card-body p-0 ">
                                                 <%--TABLA INICIO --%>
-                                                <div class="table-responsive table-scroll table-sm" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+                                                <div class="table-responsive table-scroll table-sm" data-mdb-perfect-scrollbar="true" style="position: relative; height: 210px">
                                                     <table id="tablaAdministradores" class="table table-striped table-sm  mb-0 text-center ">
                                                         <thead class="" style="background-color: #263642;">
                                                             <tr class="text-light">
@@ -229,18 +235,20 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sd-6 pt-3">
                     <img src="../img/icon_facebook.png" alt="alt"/>
-                    <a  href="http://www.facebook.com">Facebook</a>
+                    <a  href="http://www.facebook.com">Facebook</a><br>
                     <img src="../img/icon_instagram.png" alt="alt"/>
-                    <a href="http://www.instagram.com">Instagram</a>
+                    <a href="http://www.instagram.com">Instagram</a><br>
                     <img src="../img/icon_github.png" alt="alt"/>
                     <a href="https://github.com/Crystian9513">Github</a>
                 </div>
                 <div class="col-lg-8 col-md-6 col-sd-6">
 
-                    <h5 class="pt-2">Copyright <%= new java.util.Date().getYear() + 1900%> Crystian Jesus Peralta Arias. <br>
-                        Desarrollador Wed
+                    <h5 class="pt-2">Copyright <%= java.time.LocalDate.now().getYear()%>
+                        Crystian Jesus Peralta Arias y Sebastian Navaja. <br>
+                        Desarrollador Web.
                     </h5>
-
+                    <h6>Telefono: +57 300 7836674 </h6>
+                    <h6>Correo: crystian_9513@hotmail.com</h6>
                 </div>
             </div>
         </footer>
@@ -291,7 +299,7 @@
                             <div class="col-12">
                                 <div class="input-group input-group">
                                     <div class="input-group-text col-5"><b>Fotografia:</b></div>
-                                    <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required min="1">
+                                    <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
                                 </div>
                             </div>
                             <div class="col-12 text-center py-5 pt-5"><!-- bottones -->

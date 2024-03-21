@@ -10,18 +10,29 @@ import controladores.exceptions.NonexistentEntityException;
 import entidades.Coordinador;
 import entidades.Usuarios;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
 
 /**
  *
  * @author Peralta
  */
+@MultipartConfig //Para archivos siempre va esto
 @WebServlet(name = "CoordinadorDatosServlet", urlPatterns = {"/CoordinadorDatosServlet"})
 public class CoordinadorDatosServlet extends HttpServlet {
 
@@ -49,6 +60,7 @@ public class CoordinadorDatosServlet extends HttpServlet {
             case "Editar":
                 botonEditar(request, response);
                 break;
+
             default:
                 throw new AssertionError();
         }
@@ -119,47 +131,46 @@ public class CoordinadorDatosServlet extends HttpServlet {
         controlUsuario.destroy(cedula);
 
         mensaje = "eliminado";
-        response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
-
+         response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+      
     }
 
-   public void botonEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String nombre = request.getParameter("nombre2");
-    String apellido = request.getParameter("apellido2");
-    int cedula = Integer.parseInt(request.getParameter("cedula2"));
-    String correo = request.getParameter("correo2");
+    public void botonEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String nombre = request.getParameter("nombre2");
+        String apellido = request.getParameter("apellido2");
+        int cedula = Integer.parseInt(request.getParameter("cedula2"));
+        String correo = request.getParameter("correo2");
 
-    CoordinadorJpaController controlador = new CoordinadorJpaController();
-    UsuariosJpaController controlUsuario = new UsuariosJpaController();
+        CoordinadorJpaController controlador = new CoordinadorJpaController();
+        UsuariosJpaController controlUsuario = new UsuariosJpaController();
 
-    try {
-        Coordinador coordinadorExistente = controlador.findCoordinador(cedula);
-        Usuarios usuarioExistente = controlUsuario.findUsuarios(cedula);
+        try {
+            Coordinador coordinadorExistente = controlador.findCoordinador(cedula);
+            Usuarios usuarioExistente = controlUsuario.findUsuarios(cedula);
 
-        if (coordinadorExistente != null && usuarioExistente != null) {
-            // Si existen, actualizamos la información
-            coordinadorExistente.setNombre(nombre);
-            coordinadorExistente.setApellido(apellido);
-            coordinadorExistente.setCorreo(correo);
-            controlador.edit(coordinadorExistente);
+            if (coordinadorExistente != null && usuarioExistente != null) {
+                // Si existen, actualizamos la información
+                coordinadorExistente.setNombre(nombre);
+                coordinadorExistente.setApellido(apellido);
+                coordinadorExistente.setCorreo(correo);
+                controlador.edit(coordinadorExistente);
 
-            usuarioExistente.setNombres(nombre);
-            usuarioExistente.setApellidos(apellido);
-         
-            controlUsuario.edit(usuarioExistente);
+                usuarioExistente.setNombres(nombre);
+                usuarioExistente.setApellidos(apellido);
 
-            String mensaje = "editado";
-            response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
-        } else {
-            String mensaje = "noExiste";
+                controlUsuario.edit(usuarioExistente);
+
+                String mensaje = "editado";
+                response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+            } else {
+                String mensaje = "noExiste";
+                response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+            }
+        } catch (Exception e) {
+            String mensaje = "errorAlEditar";
             response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
         }
-    } catch (Exception e) {
-        String mensaje = "errorAlEditar";
-        response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
     }
-}
-
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

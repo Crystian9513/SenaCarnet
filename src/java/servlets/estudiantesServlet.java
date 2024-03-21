@@ -16,14 +16,20 @@ import entidades.Formacion;
 import entidades.Sede;
 import entidades.Tipodocumento;
 import entidades.Usuarios;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,6 +76,12 @@ public class estudiantesServlet extends HttpServlet {
                 break;
             case "Editar":
                 botonEditar(request, response);
+                break;
+            case "NuevaFormacion":
+                botonNuevaFormacion(request, response);
+                break;
+             case "Importar2":
+                botonImportar(request, response);
                 break;
             default:
                 throw new AssertionError();
@@ -146,7 +158,6 @@ public class estudiantesServlet extends HttpServlet {
                 guardarEstudiante.setVenceCarnet(fecha1);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 guardarEstudiante.setEstadoCarnetIdestadoCarnet(car);
-                
 
                 //TABLA USUSARIO
                 guardarUsuario.setCedula(cedula2);
@@ -297,7 +308,6 @@ public class estudiantesServlet extends HttpServlet {
                 guardarUsuario.setApellidos(apellidos2);
                 guardarUsuario.setClaves(claveEncriptada);
                 guardarUsuario.setRol(1);
-               
 
                 controladorUsuario.edit(guardarUsuario);
                 controlador.edit(editarEstudiante);
@@ -313,6 +323,173 @@ public class estudiantesServlet extends HttpServlet {
         }
 
     }
+
+    public void botonNuevaFormacion(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String mensaje;
+
+        int cedula = Integer.parseInt(request.getParameter("cedula20"));
+        int tpdocumento = Integer.parseInt(request.getParameter("tipoDocumento20"));
+        String nombres = request.getParameter("nombres20");
+        String apellidos = request.getParameter("apellidos20");
+        int formacion = Integer.parseInt(request.getParameter("formacion20"));
+        int sede = Integer.parseInt(request.getParameter("sede20"));
+        String correo = request.getParameter("correo20");
+        String vencimiento = request.getParameter("vence20");
+
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+        int estado = Integer.parseInt(request.getParameter("estado20"));
+
+        int cedula2 = Integer.parseInt(request.getParameter("cedula20"));//TABLA DE USUARIO
+        String nombres2 = request.getParameter("nombres20");//TABLA DE USUARIO
+        String apellidos2 = request.getParameter("apellidos20");//TABLA DE 
+        String clave = request.getParameter("cedula20");//TABLA DE USUARIO
+
+        UsuariosJpaController controladorUsuario = new UsuariosJpaController();//TABLA DE USUARIO
+        Usuarios guardarUsuario = new Usuarios();//TABLA DE USUARIO
+        String claveEncriptada = controladorUsuario.EncryptarClave(clave);
+
+        EstudiantesJpaController controlador = new EstudiantesJpaController();
+        Estudiantes editarEstudiante = controlador.findEstudiantes(cedula);
+
+        TipodocumentoJpaController tipo = new TipodocumentoJpaController();
+        FormacionJpaController tipoForma = new FormacionJpaController();
+        SedeJpaController tipoSede = new SedeJpaController();
+        EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
+
+        // Obtener el archivo de la foto
+        Part part = request.getPart("foto20");
+        String photo = null;
+
+        // Verificar si se proporcionó una nueva foto
+        if (part != null && part.getSize() > 0) {
+            // Guardar la nueva foto en el servidor
+            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
+            uploads = new File(pathFiles);
+            if (isExtension(part.getSubmittedFileName(), extensiones)) {
+                photo = saveFile(part, uploads);
+            }
+        }
+
+        try {
+
+            if (editarEstudiante != null) {
+
+                editarEstudiante.setCedula(cedula);
+                Tipodocumento to = tipo.findTipodocumento(tpdocumento);
+                editarEstudiante.setTipoDocumentoFk(to);
+                editarEstudiante.setNombres(nombres);
+                editarEstudiante.setApellidos(apellidos);
+                Formacion form = tipoForma.findFormacion(formacion);
+                editarEstudiante.setFormacionFk(form);
+                Sede se = tipoSede.findSede(sede);
+                editarEstudiante.setSedeFk(se);
+                editarEstudiante.setCorreo(correo);
+                editarEstudiante.setVenceCarnet(formatoFecha.parse(vencimiento));
+                EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
+                editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
+
+                if (photo != null) {
+                    editarEstudiante.setFotografia(photo);
+                }
+
+                //TABLA USUSARIO
+                guardarUsuario.setCedula(cedula2);
+                guardarUsuario.setNombres(nombres2);
+                guardarUsuario.setApellidos(apellidos2);
+                guardarUsuario.setClaves(claveEncriptada);
+                guardarUsuario.setRol(1);
+
+                controladorUsuario.edit(guardarUsuario);
+                controlador.edit(editarEstudiante);
+                mensaje = "edicionGuardad";
+
+                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+            }
+
+        } catch (Exception e) {
+
+            mensaje = "erroreditarr";
+            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+        }
+
+    }
+
+     protected void botonImportar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        Part filePart = request.getPart("file5"); // Obtener el archivo cargado desde la solicitud
+        if (filePart != null) {
+            InputStream inputStream = filePart.getInputStream(); // Obtener el flujo de entrada del archivo
+
+            try {
+                // Iniciando procesamiento del archivo
+                System.out.println("Iniciando procesamiento del archivo...");
+
+                // Cargar el controlador JDBC para MySQL
+                Class.forName("com.mysql.cj.jdbc.Driver");
+
+                // Establecer conexión con la base de datos
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/senacarnet", "root", "27478426*cP");
+                System.out.println("Conexión establecida con la base de datos...");
+
+                // Crear un lector de CSV
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+
+                // Preparar la consulta para insertar datos en la base de datos
+                String sql = "INSERT INTO estudiantes (CEDULA, TIPO_DOCUMENTO_FK, NOMBRES, APELLIDOS, FORMACION_FK, SEDE_FK, FOTOGRAFIA, CORREO, VENCE_CARNET, ESTADO_CARNET_IDESTADO_CARNET) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement statement = conn.prepareStatement(sql);
+
+                // Leer el archivo CSV y guardar los datos en la base de datos
+                while ((line = reader.readLine()) != null) {
+                    String[] data = line.split(";");
+                    if (data.length >= 10) { // Asegúrate de tener suficientes columnas según tu tabla
+                        statement.setInt(1, Integer.parseInt(data[0]));
+                        statement.setInt(2, Integer.parseInt(data[1]));
+                        statement.setString(3, data[2]);
+                        statement.setString(4, data[3]);
+                        statement.setInt(5, Integer.parseInt(data[4]));
+                        statement.setInt(6, Integer.parseInt(data[5]));
+                        statement.setString(7, data[6]);
+                        statement.setString(8, data[7]);
+
+                        // Convertir la fecha de texto a un objeto java.sql.Date
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Ajusta el formato según el formato de tu fecha en el CSV
+                        java.util.Date date = sdf.parse(data[8]); // Parsear la fecha de texto a un objeto java.util.Date
+                        java.sql.Date sqlDate = new java.sql.Date(date.getTime()); // Convertir el objeto java.util.Date a java.sql.Date
+
+                        // Asignar la fecha a los parámetros de la consulta
+                        statement.setDate(9, sqlDate);
+
+                        statement.setInt(10, Integer.parseInt(data[9]));
+
+                        statement.executeUpdate();
+                        System.out.println("Registro insertado en la base de datos: " + Arrays.toString(data));
+                    } else {
+                        // Imprimir un mensaje de advertencia si el registro no tiene suficientes columnas
+                        System.out.println("Advertencia: El registro no tiene suficientes columnas.");
+                    }
+                }
+
+                // Cerrar recursos
+                statement.close();
+                conn.close();
+                reader.close();
+
+                // Imprimir mensaje de éxito en la consola
+                System.out.println("Procesamiento del archivo completado con éxito.");
+                String mensaje = "guardarAprendiz";
+                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+
+            } catch (Exception e) {
+                String mensaje = "ErrorImportacion";
+                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+            }
+        }
+    }
+    
+   
 
     private String saveFile(Part part, File pathUploads) {
         String pathAbsolute = "";

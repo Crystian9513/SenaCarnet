@@ -19,7 +19,7 @@
             Usuarios usuario = (Usuarios) sesion.getAttribute("user");
 
             if (usuario == null) {
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("../index.jsp");
             } else {
 
             }
@@ -27,7 +27,7 @@
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
             response.setHeader("Pragma", "no-cache"); // HTTP 1.0
             response.setHeader("Expires", "0"); // Proxies
-        %>
+%>
 
         <script>
             function verReporte3() {
@@ -46,9 +46,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        <a href="index.jsp">
+                       
                             <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-                        </a>
+                       
                     </div>
 
                     <div class="col-md-2 text-center">
@@ -62,8 +62,15 @@
                         </button>
                         <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
                             <ul class="navbar-nav ms-auto navbar-brand">
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="estudiantes.jsp">Aprendiz</a>
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Aprendiz
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="estudiantes.jsp">Ingresar</a></li>
+                                        <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
+                                    </ul>
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link" href="administrador.jsp">Administrador</a>
@@ -95,10 +102,10 @@
 
                 }%> </h1>
             <div class="row ">
-                 <div class="col-lg-3 col-sd-12 d-flex align-items-center justify-content-center ">
+                <div class="col-lg-3 col-sd-12 d-flex align-items-center justify-content-center ">
                     <div class="card mb-5" data-aos="flip-left"
-                                 data-aos-easing="ease-out-cubic"
-                                 data-aos-duration="2000">
+                         data-aos-easing="ease-out-cubic"
+                         data-aos-duration="2000">
                         <div class="card-details">
                             <div><img src="../img/menu_estudiantes" width="210px" height="200px" alt="alt"/></div>
                             <h3>Aprendiz</h3>
@@ -108,8 +115,8 @@
                 </div>
                 <div class="col-lg-3 col-sd-12 d-flex align-items-center justify-content-center ">
                     <div class="card mb-5" data-aos="flip-left"
-                                 data-aos-easing="ease-out-cubic"
-                                 data-aos-duration="2000">
+                         data-aos-easing="ease-out-cubic"
+                         data-aos-duration="2000">
                         <div class="card-details">
                             <div><img src="../img/menu_administrador.jpg" width="210px" height="200px" alt="alt"/></div>
                             <h3>Administrador</h3>
@@ -117,10 +124,10 @@
                         <a href="administrador.jsp"> <button class="card-button">ENTRAR</button></a>
                     </div>
                 </div>
-               <div class="col-lg-3  col-sd-12 d-flex align-items-center justify-content-center">
+                <div class="col-lg-3  col-sd-12 d-flex align-items-center justify-content-center">
                     <div class="card mb-5" data-aos="flip-left"
-                                 data-aos-easing="ease-out-cubic"
-                                 data-aos-duration="2000">
+                         data-aos-easing="ease-out-cubic"
+                         data-aos-duration="2000">
                         <div class="card-details">
                             <div><img src="../img/menu-coordinador.jpg" width="210px" height="200px" alt="alt"/></div>
                             <h3>Coordinador</h3>
@@ -130,8 +137,8 @@
                 </div>
                 <div class="col-lg-3  col-sd-12 d-flex align-items-center justify-content-center">
                     <div class="card mb-5" data-aos="flip-left"
-                                 data-aos-easing="ease-out-cubic"
-                                 data-aos-duration="2000">
+                         data-aos-easing="ease-out-cubic"
+                         data-aos-duration="2000">
                         <div class="card-details">
                             <div><img src="../img/menu_sedes.jpeg" width="210px" height="200px" alt="alt"/></div>
                             <h3>Sede-Formacion</h3>
@@ -152,8 +159,8 @@
                 </div>
                 <div class="col-lg-6 col-sd-12 d-flex align-items-center justify-content-center">
                     <div class="card" data-aos="flip-left"
-                                 data-aos-easing="ease-out-cubic"
-                                 data-aos-duration="2000">
+                         data-aos-easing="ease-out-cubic"
+                         data-aos-duration="2000">
                         <div class="card-details">
                             <div><img src="../img/menu_carnet.webp" width="300px" height="150px" alt="alt"/></div>
                             <h3 class="text-center">Carnet por Formacion</h3>
@@ -189,22 +196,25 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sd-6 pt-3">
                     <img src="../img/icon_facebook.png" alt="alt"/>
-                    <a  href="http://www.facebook.com">Facebook</a>
+                    <a  href="http://www.facebook.com">Facebook</a><br>
                     <img src="../img/icon_instagram.png" alt="alt"/>
-                    <a href="http://www.instagram.com">Instagram</a>
+                    <a href="http://www.instagram.com">Instagram</a><br>
                     <img src="../img/icon_github.png" alt="alt"/>
                     <a href="https://github.com/Crystian9513">Github</a>
                 </div>
                 <div class="col-lg-8 col-md-6 col-sd-6">
 
-                    <h5 class="pt-2">Copyright <%= new java.util.Date().getYear() + 1900%> Crystian Jesus Peralta Arias. <br>
-                        Desarrollador Wed
+                    <h5 class="pt-2">Copyright <%= java.time.LocalDate.now().getYear()%>
+                        Crystian Jesus Peralta Arias y Sebastian Navaja.<br>
+                        Desarrollador Web.
                     </h5>
+                    <h6>Telefono: +57 300 7836674 </h6>
+                    <h6>Correo: crystian_9513@hotmail.com</h6>
 
                 </div>
             </div>
         </footer>
-                        
+
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"

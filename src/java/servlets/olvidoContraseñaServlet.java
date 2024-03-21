@@ -210,11 +210,11 @@ private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletRes
         String token = UUID.randomUUID().toString(); // Generar un UUID aleatorio como token único
 
         // Construir la URL de recuperación de contraseña con el token único
-        String url = "http://192.168.1.36:8080/SenaCarnet/vistas/olvidoContrasena.jsp?token=" + token;
+        String url = "http://10.217.16.42:8080/SenaCarnet/vistas/olvidoContrasena.jsp?token=" + token;
 
         // Almacenar el token en la sesión del usuario para verificar su validez posteriormente
         HttpSession sesion = request.getSession(true);
-        sesion.setAttribute("token", token);
+        sesion.setAttribute("sesionToken", token);
 
         // Construir el contenido del mensaje con la URL única
         String mensaje = "Hola,\n\nHemos recibido una solicitud para restablecer tu contraseña. "

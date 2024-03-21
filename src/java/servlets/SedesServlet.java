@@ -6,19 +6,29 @@ package servlets;
 
 import controladores.SedeJpaController;
 import entidades.Sede;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.servlet.ServletException;
+import java.io.BufferedReader;
+import java.io.File;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Arrays;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import jxl.Cell;
-import jxl.CellType;
-import jxl.Sheet;
-import jxl.Workbook;
 
 /**
  *
@@ -28,6 +38,7 @@ import jxl.Workbook;
 @WebServlet(name = "SedesServlet", urlPatterns = {"/SedesServlet"})
 public class SedesServlet extends HttpServlet {
 
+ 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -137,64 +148,58 @@ public class SedesServlet extends HttpServlet {
 
    protected void botonImportar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            System.out.println("Iniciando procesamiento del archivo...");
+        Part filePart = request.getPart("file"); // Obtener el archivo cargado desde la solicitud
+        if (filePart != null) {
+            InputStream inputStream = filePart.getInputStream(); // Obtener el flujo de entrada del archivo
 
-            // Verifica si el archivo recibido es nulo
-            Part filePart = request.getPart("excelFile");
-            if (filePart == null) {
-                System.out.println("El archivo recibido es nulo.");
-                return;
-            }
+            try {
+                // Iniciando procesamiento del archivo
+                System.out.println("Iniciando procesamiento del archivo...");
 
-            InputStream fileContent = filePart.getInputStream();
+                // Cargar el controlador JDBC para MySQL
+                Class.forName("com.mysql.cj.jdbc.Driver");
 
-            Workbook workbook = Workbook.getWorkbook(fileContent);
-            Sheet sheet = workbook.getSheet(0);
+                // Establecer conexión con la base de datos
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/senacarnet", "root", "27478426*cP");
+                System.out.println("Conexión establecida con la base de datos...");
 
-            int rows = sheet.getRows();
+                // Crear un lector de CSV
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                // Preparar la consulta para insertar datos en la base de datos
+                String sql = "INSERT INTO sede (NOMBRE) VALUES (?)";
+                PreparedStatement statement = conn.prepareStatement(sql);
 
-            SedeJpaController sedeController = new SedeJpaController();
-
-            for (int i = 1; i < rows; i++) {
-                Cell[] rowCells = sheet.getRow(i);
-
-                int codigo;
-                String nombre;
-
-                if (rowCells[0].getType() == CellType.NUMBER) {
-                    codigo = Integer.parseInt(rowCells[0].getContents());
-                } else {
-                    continue; // Salta a la siguiente fila
+                // Leer el archivo CSV y guardar los datos en la base de datos
+                while ((line = reader.readLine()) != null) {
+                    String[] data = line.split(";");
+                    if (data.length >= 1) { // Asegúrate de tener suficientes columnas según tu tabla
+                        statement.setString(1, data[0]);
+                        statement.executeUpdate();
+                        System.out.println("Registro insertado en la base de datos: " + Arrays.toString(data));
+                    } else {
+                        // Imprimir un mensaje de advertencia si el registro no tiene suficientes columnas
+                        System.out.println("Advertencia: El registro no tiene suficientes columnas.");
+                    }
                 }
 
-                if (rowCells[1].getType() == CellType.LABEL) {
-                    nombre = rowCells[1].getContents();
-                } else {
-                    continue; // Salta a la siguiente fila
-                }
+                // Cerrar recursos
+                statement.close();
+                conn.close();
+                reader.close();
 
-                Sede nuevaSede = new Sede();
-                nuevaSede.setIdSede(codigo);
-                nuevaSede.setNombre(nombre);
+                // Imprimir mensaje de éxito en la consola
+                System.out.println("Procesamiento del archivo completado con éxito.");
+                String mensaje = "ArchivosImportados";
+                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
 
-                // Verificar si el código ya existe en la base de datos
-                if (sedeController.findSede(codigo) == null) {
-                    sedeController.create(nuevaSede);
-                }
-            }
-
-            workbook.close();
-
-            String mensaje = "DatosImportados";
-            response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
-            System.out.println("Procesamiento del archivo completado con éxito.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            String mensaje = "Error al importar";
-            response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+            } catch (Exception e) {
+                 String mensaje = "ErrorImportacion";
+                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+            } 
         }
     }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

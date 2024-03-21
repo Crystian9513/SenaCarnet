@@ -18,7 +18,7 @@
     Usuarios usuario = (Usuarios) sesion.getAttribute("coordinador");
 
     if (usuario == null) {
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("../index.jsp");
     } else {
 
     }
@@ -167,7 +167,7 @@
                         }%> aqui podra buscar y eliminar los carnet de los Aprendices.</h3>
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-6 col-sd-12">
+                            <div class="col-md-12 col-sd-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
                                         <div class="input-group-text col-4"><b>Buscar:</b></div>
@@ -175,17 +175,27 @@
                                     </div>
                                 </form>
                             </div>
+                            <div class="col-md-7 col-sd-12">
+                                <form action="<%=request.getContextPath()%>/FormacionesServlet" method="post" enctype="multipart/form-data" class="pt-2">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-text col-4"><b>Seleccionar archivo CSV:</b></div>
+                                        <input type="file" class="form-control" name="file2" id="fileInput2">
+                                        <button type="submit" class="btn" name="action" value="Importar2" style="background-color: #6acd56;"><b>Subir archivo</b></button>
+
+                                    </div>
+                                </form>
+                            </div>   
                         </div>
                     </div>
-                    <section class="intro mb-5">
+                    <section class="intro mb-2">
                         <div class="bg-image">
                             <div class="mask d-flex align-items-center h-100">
-                                <div class="container tableContenido">
+                                <div class="container ">
                                     <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
-                                        <div class="col-12 tableContenido"> 
+                                        <div class="col-12 "> 
                                             <div class="card-body p-0 ">
                                                 <%--TABLA INICIO --%>
-                                                <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+                                                <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px">
                                                     <table id="tablaEstudiantes" class="table table-striped table-sm mb-0 text-center ">
                                                         <thead class="" style="background-color: #263642;">
                                                             <tr>
@@ -228,8 +238,8 @@
                                                             <tr>
                                                                 <td> 
                                                                     <% SimpleDateFormat dateFormatInput = new SimpleDateFormat("yyyy-MM-dd");
-                                                                        Date venceCarnet = est.getVenceCarnet();
-                                                                        String fechaVencimiento2 = venceCarnet != null ? dateFormatInput.format(venceCarnet) : "Sin fecha";%>
+                                                                       Date venceCarnet = est.getVenceCarnet();
+                                                                       String fechaVencimiento2 = venceCarnet != null ? dateFormatInput.format(venceCarnet) : "Sin fcha";%>
                                                                     <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" 
                                                                             data-bs-target="#formularioModal2" onclick="obtenerDatosEstudiantes('<%= est.getCedula()%>',
                                                                                             '<%= est.getTipoDocumentoFk().getIdTipoDocumento()%>',
@@ -288,23 +298,23 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sd-6 pt-3">
                     <img src="../img/icon_facebook.png" alt="alt"/>
-                    <a  href="http://www.facebook.com">Facebook</a>
+                    <a  href="http://www.facebook.com">Facebook</a><br>
                     <img src="../img/icon_instagram.png" alt="alt"/>
-                    <a href="http://www.instagram.com">Instagram</a>
+                    <a href="http://www.instagram.com">Instagram</a><br>
                     <img src="../img/icon_github.png" alt="alt"/>
                     <a href="https://github.com/Crystian9513">Github</a>
                 </div>
                 <div class="col-lg-8 col-md-6 col-sd-6">
 
-                    <h5 class="pt-2">Copyright <%= new java.util.Date().getYear() + 1900%> Crystian Jesus Peralta Arias. <br>
-                        Desarrollador Wed
+                    <h5 class="pt-2">Copyright <%= java.time.LocalDate.now().getYear()%>
+                        Crystian Jesus Peralta Arias y Sebastian Navaja. <br>
+                        Desarrollador Web.
                     </h5>
-
+                    <h6>Telefono: +57 300 7836674 </h6>
+                    <h6>Correo: crystian_9513@hotmail.com</h6>
                 </div>
             </div>
         </footer>
-
-
 
         <!-- MODAL EDITAR INICIO-->
         <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

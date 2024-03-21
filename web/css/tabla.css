@@ -1,5 +1,6 @@
 
 
+
 .letra {
     font-family: Georgia, serif; /* Definición de la fuente */
     font-size: 350%; /* Definición del tamaño de la fuente */
@@ -44,9 +45,8 @@ thead {
 .table-responsive {
   max-height: 400px;
   overflow-x: auto;
-   max-width: 100%; /* Ajusta según sea necesario */
+  
 }
-
 
 
 

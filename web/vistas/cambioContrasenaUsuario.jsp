@@ -14,7 +14,7 @@
         response.setHeader("Expires", "0"); // Proxies
     } else {
         // Si la sesión no está activa o el estudiante no está en sesión, redirigir al inicio
-        response.sendRedirect("index.jsp");
+        response.sendRedirect("../index.jsp");
     }
 %>
 <!DOCTYPE html>
@@ -125,7 +125,7 @@
         timer: 2300,
         showConfirmButton: false
     }).then(function () {
-        window.location.href = 'index.jsp';
+        window.location.href = '../index.jsp';
     });
 </script>
 <%

@@ -8,6 +8,6 @@
     sesion=null;
     response.setHeader("Pragma", "no-cache"); // HTTP 1.0
     response.setHeader("Expires", "0"); // Proxies
-    response.sendRedirect("index.jsp");
+    response.sendRedirect("../index.jsp");
 
 %>

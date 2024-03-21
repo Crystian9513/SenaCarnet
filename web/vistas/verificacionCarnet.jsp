@@ -44,7 +44,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <a  href="index.jsp"><img data-aos="flip-left"
+                                    <a  href="../index.jsp"><img data-aos="flip-left"
                                                               data-aos-easing="ease-out-cubic"
                                                               data-aos-duration="2000" src="../img/sesion.jpg" class="img-fluid" /></a>
                                 </div>

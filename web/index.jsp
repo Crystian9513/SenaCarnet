@@ -8,7 +8,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Inicio de Sesion</title>
-        <link rel="stylesheet" href="../css/estilo.css"/>
+        <link rel="stylesheet" href="css/estilo.css"/>
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
@@ -58,7 +58,7 @@
                                 <div class="col-md-6">
                                     <img data-aos="flip-left"
                                          data-aos-easing="ease-out-cubic"
-                                         data-aos-duration="2000" src="../img/sesion.jpg" class="img-fluid" />
+                                         data-aos-duration="2000" src="img/sesion.jpg" class="img-fluid" />
                                 </div>
                             </div>
                         </div>
@@ -138,23 +138,23 @@
                         sessionActual.setAttribute("estudiante", usuario);
                         // Si la clave está en estado 1, redirigimos a la página de cambio de contraseña
                         String mensaje = "cambioClavesPrimeraVez";
-                        response.sendRedirect("cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
+                        response.sendRedirect("vistas/cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
                     } else {
                         // Si la clave no está en estado 1, redirigimos a la página de usuario
                         HttpSession sessionActual = request.getSession();
                         sessionActual.setAttribute("estudiante", usuario);
-                        response.sendRedirect("usuario.jsp");
+                        response.sendRedirect("vistas/usuario.jsp");
                     }
                 } else if (rol == 2) {
                     // Si el usuario tiene rol 2, lo redirigimos al menú principal
                     HttpSession sessionActual = request.getSession();
                     sessionActual.setAttribute("user", usuario);
-                    response.sendRedirect("menuPrincipal.jsp");
+                    response.sendRedirect("vistas/menuPrincipal.jsp");
                 } else if (rol == 3) {
                     // Si el usuario tiene rol 3, lo redirigimos a otra página
                     HttpSession sessionActual = request.getSession();
                     sessionActual.setAttribute("coordinador", usuario);
-                    response.sendRedirect("coordinador.jsp");
+                    response.sendRedirect("vistas/coordinador.jsp");
                 } else {
                     // Si el usuario tiene otro rol, redirigimos a la página de inicio de sesión con un mensaje de error
                     String mensaje = "usuarioSinAcceso";

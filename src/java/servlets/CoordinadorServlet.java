@@ -7,12 +7,14 @@ package servlets;
 import controladores.EstadoCarnetJpaController;
 import controladores.EstudiantesJpaController;
 import controladores.FormacionJpaController;
+import controladores.InformacionCarnetJpaController;
 import controladores.SedeJpaController;
 import controladores.TipodocumentoJpaController;
 import controladores.UsuariosJpaController;
 import entidades.EstadoCarnet;
 import entidades.Estudiantes;
 import entidades.Formacion;
+import entidades.InformacionCarnet;
 import entidades.Sede;
 import entidades.Tipodocumento;
 import entidades.Usuarios;
@@ -24,6 +26,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -55,11 +60,11 @@ public class CoordinadorServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-         String boton = request.getParameter("action");
+
+        String boton = request.getParameter("action");
 
         switch (boton) {
-            
+
             case "Editar":
                 botonEditar(request, response);
                 break;
@@ -68,7 +73,7 @@ public class CoordinadorServlet extends HttpServlet {
         }
 
     }
-    
+
     public void botonEditar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -102,6 +107,13 @@ public class CoordinadorServlet extends HttpServlet {
         FormacionJpaController tipoForma = new FormacionJpaController();
         SedeJpaController tipoSede = new SedeJpaController();
         EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
+
+        LocalDate fechaSistema = LocalDate.now();
+        Date fechaSistemaDate = Date.from(fechaSistema.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        //TABLA IMFORMACION_CARNET
+        InformacionCarnetJpaController controladorInfo = new InformacionCarnetJpaController();
+        InformacionCarnet guardarInfo = new InformacionCarnet();
 
         // Obtener el archivo de la foto
         Part part = request.getPart("foto2");
@@ -145,6 +157,14 @@ public class CoordinadorServlet extends HttpServlet {
                 guardarUsuario.setApellidos(apellidos2);
                 guardarUsuario.setClaves(claveEncriptada);
                 guardarUsuario.setRol(4);
+
+                guardarInfo.setCedula(cedula);
+                guardarInfo.setNombres(nombres);
+                guardarInfo.setApellidos(apellidos);
+                guardarInfo.setFormacion(formacion);
+                guardarInfo.setFechaEliminacion(fechaSistemaDate);
+                
+                controladorInfo.create(guardarInfo);
 
                 controladorUsuario.edit(guardarUsuario);
                 controlador.edit(editarEstudiante);

@@ -67,7 +67,7 @@ public class administradoresServlet extends HttpServlet {
 
     }
 
-    public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
+ public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String nombre = request.getParameter("nombre");
@@ -92,6 +92,7 @@ public class administradoresServlet extends HttpServlet {
                 return; // Se agrega un return para terminar la ejecución del método
             }
             if (part == null) {
+                guardarAdmin.setFotografia(null); // Guardar null en la base de datos si la foto no se envía
                 return;
             }
             pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
@@ -124,6 +125,7 @@ public class administradoresServlet extends HttpServlet {
         }
 
     }
+
 
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NonexistentEntityException {

@@ -2,19 +2,14 @@
 <%@page import="controladores.UsuariosJpaController"%>
 <%@page import="java.util.UUID"%>
 <!DOCTYPE html>
-<%
-    HttpSession session2 = request.getSession(false); // No crea una nueva sesión si no existe
-    String token = (String) session2.getAttribute("token");
 
-    // Verificar si la sesión está activa y si el token está presente
-    if (token == null) { // Cambiado || por && para redirigir si no hay sesión o no hay token
-         response.sendRedirect("index.jsp");
-    } else {
-        // El token está presente y la sesión está activa, puedes continuar con el flujo normal
-        System.out.println("Sesión activa. Token: " + token);
-    }
+
+ <%
+    HttpSession sesion = request.getSession(); // No crea una nueva sesión si no existe
+    String recuperar = (String) sesion.getAttribute("sesionToken");
+
+    out.println(recuperar);
 %>
-
 
 
 <html lang="es">
@@ -89,5 +84,5 @@
 
 <%
     // Mensajes de depuración
-    System.out.println("Token recibido en la página: " + request.getParameter("token"));
+    out.println("Token recibido en la página: " + request.getParameter("token"));
 %>
