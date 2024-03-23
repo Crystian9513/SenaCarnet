@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fd1c22ca-1087-480b-a4d8-2a15ae292e74">
 	<property name="ireport.zoom" value="0.8857805000000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="190"/>
+	<property name="ireport.y" value="146"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -69,7 +69,7 @@ WHERE e.CEDULA = $P{id}]]>
 				<textElement>
 					<font size="13"/>
 				</textElement>
-				<text><![CDATA[http://localhost:8080/SenaCarnet/vistas/verificacionCarnet.jsp]]></text>
+				<text><![CDATA[https://cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="193" y="541" width="271" height="40" uuid="71e923a9-4828-4668-ac39-d5bc178f9972"/>
@@ -79,7 +79,7 @@ WHERE e.CEDULA = $P{id}]]>
 				<textFieldExpression><![CDATA[$F{NUMERO_FICHA}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="206" y="501" width="115" height="40" uuid="ca55d85a-9982-40f4-95f2-ffaad10cf755"/>
+				<reportElement x="206" y="501" width="95" height="40" uuid="ca55d85a-9982-40f4-95f2-ffaad10cf755"/>
 				<textElement>
 					<font size="28"/>
 				</textElement>

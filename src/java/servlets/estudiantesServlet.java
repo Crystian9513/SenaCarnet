@@ -166,7 +166,7 @@ public class estudiantesServlet extends HttpServlet {
                 guardarUsuario.setClaves(claveEncriptada);
                 guardarUsuario.setRol(1);
                 guardarUsuario.setEstadoClave(1);
-                guardarUsuario.setEstadoClave(1);
+               
 
                 controlador.create(guardarEstudiante);
                 controladorUsuario.create(guardarUsuario);
@@ -308,6 +308,7 @@ public class estudiantesServlet extends HttpServlet {
                 guardarUsuario.setApellidos(apellidos2);
                 guardarUsuario.setClaves(claveEncriptada);
                 guardarUsuario.setRol(1);
+                guardarUsuario.setEstadoClave(1);
 
                 controladorUsuario.edit(guardarUsuario);
                 controlador.edit(editarEstudiante);

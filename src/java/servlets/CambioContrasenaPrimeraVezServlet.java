@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Peralta
  */
-@WebServlet(name = "CambioContraseñaPrimeraVezServlet", urlPatterns = {"/CambioContrase_aPrimeraVezServlet"})
-public class CambioContraseñaPrimeraVezServlet extends HttpServlet {
+@WebServlet(name = "CambioContrasenaPrimeraVezServlet", urlPatterns = {"/CambioContrasenaPrimeraVezServlet"})
+public class CambioContrasenaPrimeraVezServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,8 +34,7 @@ public class CambioContraseñaPrimeraVezServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
-
-        String boton = request.getParameter("action");
+         String boton = request.getParameter("action");
 
         switch (boton) {
             case "Guardar":
@@ -45,10 +44,9 @@ public class CambioContraseñaPrimeraVezServlet extends HttpServlet {
             default:
                 throw new AssertionError();
         }
-
     }
-
-    public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
+    
+      public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
 
         String mensaje;
@@ -92,8 +90,6 @@ public class CambioContraseñaPrimeraVezServlet extends HttpServlet {
 
     }
 
-  
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -109,7 +105,7 @@ public class CambioContraseñaPrimeraVezServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(CambioContraseñaPrimeraVezServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CambioContrasenaPrimeraVezServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -127,7 +123,7 @@ public class CambioContraseñaPrimeraVezServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(CambioContraseñaPrimeraVezServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CambioContrasenaPrimeraVezServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

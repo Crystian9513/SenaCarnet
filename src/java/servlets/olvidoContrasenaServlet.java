@@ -38,7 +38,7 @@ import javax.servlet.http.HttpSession;
  * @author Peralta
  */
 @WebServlet(name = "olvidoContraseñaServlet", urlPatterns = {"/olvidoContrase_aServlet"})
-public class olvidoContraseñaServlet extends HttpServlet {
+public class olvidoContrasenaServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -257,7 +257,7 @@ private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletRes
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(olvidoContraseñaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(olvidoContrasenaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -275,7 +275,7 @@ private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletRes
         try {
             processRequest(request, response);
         } catch (Exception ex) {
-            Logger.getLogger(olvidoContraseñaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(olvidoContrasenaServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

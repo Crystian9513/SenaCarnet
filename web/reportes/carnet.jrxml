@@ -39,89 +39,89 @@ WHERE e.CEDULA = $P{id}]]>
 	<group name="Reverso">
 		<groupExpression><![CDATA[$F{NOMBRES}$F{APELLIDOS}$F{CEDULA}$F{FOTOGRAFIA}$F{VENCE_CARNET}$F{IDENTIFICADOR_UNICO}$F{TIPO_DOCUMENTO}$F{FORMACION}$F{SEDE}]]></groupExpression>
 		<groupHeader>
-			<band height="734">
+			<band height="709">
 				<rectangle radius="12">
-					<reportElement x="68" y="21" width="427" height="679" uuid="a1da5bfc-d312-4ce3-9907-fda4e6c25363"/>
+					<reportElement x="68" y="11" width="427" height="679" uuid="a1da5bfc-d312-4ce3-9907-fda4e6c25363"/>
 				</rectangle>
 				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="93" y="59" width="120" height="107" uuid="473dbaf6-0855-4170-b16b-e1fee7b913be"/>
-					<imageExpression><![CDATA["C:\\Users\\Peralta\\Documents\\NetBeansProjects\\SenaCarnet\\web\\img\\sena_reporte.png"]]></imageExpression>
+					<reportElement x="93" y="49" width="120" height="107" uuid="473dbaf6-0855-4170-b16b-e1fee7b913be"/>
+					<imageExpression><![CDATA["../img/sena_reporte.png"]]></imageExpression>
 				</image>
 				<staticText>
-					<reportElement x="437" y="40" width="41" height="239" uuid="2d0c2f52-8323-462d-a664-c9743a764821"/>
+					<reportElement x="437" y="30" width="41" height="239" uuid="2d0c2f52-8323-462d-a664-c9743a764821"/>
 					<textElement rotation="Left">
 						<font size="32" isBold="true"/>
 					</textElement>
 					<text><![CDATA[APRENDIZ]]></text>
 				</staticText>
 				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="213" y="40" width="224" height="239" uuid="dd31d537-1d4e-4727-a52b-1f81b87f2ddc"/>
-					<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "C:/Users/Peralta/Documents/NetBeansProjects/SenaCarnet/web/vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
+					<reportElement x="213" y="30" width="224" height="239" uuid="dd31d537-1d4e-4727-a52b-1f81b87f2ddc"/>
+					<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "../vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
 				</image>
 				<line>
-					<reportElement x="93" y="298" width="385" height="1" uuid="66d03159-bd98-4ee7-861f-663cedf43ce1"/>
+					<reportElement x="93" y="288" width="385" height="1" uuid="66d03159-bd98-4ee7-861f-663cedf43ce1"/>
 					<graphicElement>
 						<pen lineWidth="3.0" lineColor="#009900"/>
 					</graphicElement>
 				</line>
 				<textField>
-					<reportElement x="93" y="311" width="385" height="40" forecolor="#009900" uuid="4c145b83-9edf-4d18-919b-d016694f23ec"/>
+					<reportElement x="93" y="301" width="385" height="40" forecolor="#009900" uuid="4c145b83-9edf-4d18-919b-d016694f23ec"/>
 					<textElement>
 						<font size="28" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="93" y="351" width="385" height="40" forecolor="#009900" uuid="c8fdbc1f-3b6e-4b2e-9019-085137389f1d"/>
+					<reportElement x="93" y="341" width="385" height="40" forecolor="#009900" uuid="c8fdbc1f-3b6e-4b2e-9019-085137389f1d"/>
 					<textElement>
 						<font size="28" isBold="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="146" y="391" width="42" height="40" uuid="da919f98-9ef5-4afe-9a5e-018ff4ba9bd7"/>
+					<reportElement x="146" y="381" width="42" height="40" uuid="da919f98-9ef5-4afe-9a5e-018ff4ba9bd7"/>
 					<textElement>
 						<font size="28"/>
 					</textElement>
 					<text><![CDATA[No.]]></text>
 				</staticText>
 				<textField>
-					<reportElement x="93" y="391" width="53" height="40" uuid="7310cceb-af71-4800-a415-78c534a02ce3"/>
+					<reportElement x="93" y="381" width="53" height="40" uuid="7310cceb-af71-4800-a415-78c534a02ce3"/>
 					<textElement>
 						<font size="28"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement x="188" y="391" width="290" height="40" uuid="2cbf417d-2df1-4601-8223-bfcdf04ab486"/>
+					<reportElement x="188" y="381" width="290" height="40" uuid="2cbf417d-2df1-4601-8223-bfcdf04ab486"/>
 					<textElement>
 						<font size="28" isBold="false"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
 				</textField>
 				<staticText>
-					<reportElement x="93" y="431" width="385" height="40" uuid="9ca2f2e3-65c9-40a1-8450-e697551e380d"/>
+					<reportElement x="93" y="421" width="385" height="40" uuid="9ca2f2e3-65c9-40a1-8450-e697551e380d"/>
 					<textElement>
 						<font size="28"/>
 					</textElement>
 					<text><![CDATA[REGIONAL SUCRE]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="93" y="471" width="385" height="30" forecolor="#009900" uuid="b76617a5-e254-4e3f-af68-19bcfca70255"/>
+					<reportElement x="93" y="461" width="385" height="30" forecolor="#009900" uuid="b76617a5-e254-4e3f-af68-19bcfca70255"/>
 					<textElement>
 						<font size="20"/>
 					</textElement>
 					<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="93" y="501" width="385" height="30" forecolor="#009900" uuid="447e06f7-e54f-4bff-b327-5a105b0e874b"/>
+					<reportElement x="93" y="491" width="385" height="30" forecolor="#009900" uuid="447e06f7-e54f-4bff-b327-5a105b0e874b"/>
 					<textElement>
 						<font size="20"/>
 					</textElement>
 					<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
 				</staticText>
 				<image hAlign="Center" vAlign="Top">
-					<reportElement x="93" y="531" width="385" height="157" uuid="0255ddad-6332-439b-af83-31ad839572f7"/>
+					<reportElement x="93" y="521" width="385" height="157" uuid="0255ddad-6332-439b-af83-31ad839572f7"/>
 					<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
     new com.google.zxing.qrcode.QRCodeWriter().encode(
         String.valueOf($F{CEDULA}), com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>

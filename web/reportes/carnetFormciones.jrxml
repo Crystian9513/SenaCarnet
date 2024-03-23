@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c577f27a-b9d3-475a-89d5-a32a80933027">
 	<property name="ireport.zoom" value="1.3310000000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="99"/>
+	<property name="ireport.y" value="43"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -66,7 +66,7 @@ WHERE f.ID_FORMACION = $P{id}]]>
 				<reportElement x="310" y="11" width="211" height="337" uuid="d69c8fbf-d368-4e64-827a-0b96c84c1e3d"/>
 			</rectangle>
 			<textField>
-				<reportElement x="383" y="272" width="55" height="20" uuid="b047c7b2-f217-4aae-a442-5468ecbb3903"/>
+				<reportElement x="383" y="272" width="50" height="20" uuid="b047c7b2-f217-4aae-a442-5468ecbb3903"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -116,7 +116,7 @@ WHERE f.ID_FORMACION = $P{id}]]>
 			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="124" y="15" width="110" height="135" uuid="a9627805-1c36-473d-a4a9-3c4ff689307d"/>
-				<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "C:/Users/Peralta/Documents/NetBeansProjects/SenaCarnet/web/vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
+				<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "../vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="325" y="292" width="54" height="20" uuid="efd3971c-6ef1-448c-8ea7-58f40627bb6d"/>
@@ -134,7 +134,7 @@ WHERE f.ID_FORMACION = $P{id}]]>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="72" y="30" width="52" height="51" uuid="f2c10d38-7497-48d9-a95c-a71804441c22"/>
-				<imageExpression><![CDATA["C:\\Users\\Peralta\\Documents\\NetBeansProjects\\SenaCarnet\\web\\img\\sena_reporte.png"]]></imageExpression>
+				<imageExpression><![CDATA["../img/sena_reporte.png"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="234" y="15" width="27" height="120" uuid="6145ba81-47f0-4e9b-9ca7-c17752f0c16c"/>
@@ -217,7 +217,7 @@ WHERE f.ID_FORMACION = $P{id}]]>
 				<textElement>
 					<font size="7"/>
 				</textElement>
-				<text><![CDATA[http://localhost:8080/SenaCarnet/vistas/index.jsp]]></text>
+				<text><![CDATA[https://cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="394" y="312" width="124" height="15" uuid="0d4123be-96c0-4be6-adab-f850f13a00f5"/>

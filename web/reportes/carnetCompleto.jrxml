@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f1258751-6e45-4c84-9c28-706ef408bab8">
 	<property name="ireport.zoom" value="1.1000000000000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="46"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -54,10 +54,6 @@ WHERE e.CEDULA = $P{id}]]>
 				</textElement>
 				<text><![CDATA[APRENDIZ]]></text>
 			</staticText>
-			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="119" y="37" width="110" height="135" uuid="54fae2a8-7023-4ec7-abd4-9253d7a1b5c8"/>
-				<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "C:/Users/Peralta/Documents/NetBeansProjects/SenaCarnet/web/vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
-			</image>
 			<rectangle radius="12">
 				<reportElement x="290" y="33" width="211" height="337" uuid="a01454a8-67c0-408d-b024-0511bfcf31d5"/>
 			</rectangle>
@@ -71,12 +67,6 @@ WHERE e.CEDULA = $P{id}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
 			</textField>
-			<image hAlign="Center" vAlign="Top">
-				<reportElement x="61" y="284" width="181" height="84" uuid="59c59a1e-b73c-4c56-b658-8d7da9dd352d"/>
-				<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
-    new com.google.zxing.qrcode.QRCodeWriter().encode(
-        String.valueOf($F{CEDULA}), com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
-			</image>
 			<line>
 				<reportElement x="61" y="173" width="181" height="1" uuid="27f0b3e1-7cf2-4eee-a6bd-bb1553edb10f"/>
 				<graphicElement>
@@ -90,10 +80,6 @@ WHERE e.CEDULA = $P{id}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
 			</textField>
-			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="67" y="52" width="52" height="51" uuid="62e091dc-f56d-446f-99ff-3e8e993e0888"/>
-				<imageExpression><![CDATA["C:\\Users\\Peralta\\Documents\\NetBeansProjects\\SenaCarnet\\web\\img\\sena_reporte.png"]]></imageExpression>
-			</image>
 			<staticText>
 				<reportElement x="61" y="254" width="181" height="15" forecolor="#009900" uuid="acd80d46-3261-48ed-a908-7c5c24ce7b39"/>
 				<textElement>
@@ -176,7 +162,7 @@ WHERE e.CEDULA = $P{id}]]>
 				<text><![CDATA[Por disposicion de las Leyes 418 de 1997, 548 de 1997, 642 de 2001 y 1106 de 2006, los menores de 18 años de edad y los estudiantes de educacion superior no seran incorporados en la prestacion del servicio militar.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="363" y="292" width="55" height="20" uuid="88162fa8-5a08-4b7d-b74b-eaf4c197159d"/>
+				<reportElement x="363" y="292" width="49" height="20" uuid="88162fa8-5a08-4b7d-b74b-eaf4c197159d"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -208,6 +194,10 @@ WHERE e.CEDULA = $P{id}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Marco Eugenio Gomez Ordosgoitia]]></text>
 			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="88" y="50" width="120" height="107" uuid="86a83ef7-60b9-4f02-86dd-dd1ecbe34e67"/>
+				<imageExpression><![CDATA["https://cits.com.co/sena_reporte.png"]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 	<pageFooter>

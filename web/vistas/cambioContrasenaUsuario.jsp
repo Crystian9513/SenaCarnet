@@ -40,7 +40,7 @@
                                 <div class="col-md-6 pe-0">
                                     <h1 class=" pt-5 text-center">Nueva Contraseña</h1>
                                     <div class="form-left h-100 py-4 px-5">
-                                        <form action="<%=request.getContextPath()%>/CambioContrase_aPrimeraVezServlet" class="row g-4">
+                                        <form action="<%=request.getContextPath()%>/CambioContrasenaPrimeraVezServlet" class="row g-4">
                                             <div class="col-12">
                                                 <label><strong>Numero de Cedula</strong><span class="text-danger">*</span></label>
                                                 <div class="input-group">

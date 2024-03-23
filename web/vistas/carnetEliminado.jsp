@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title> Carnet Eliminado</title>
         <link rel="stylesheet" href="../css/Menu.css"/>
-         <link rel="stylesheet" href="../css/tabla.css"/>
+        <link rel="stylesheet" href="../css/tabla.css"/>
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
@@ -31,7 +31,7 @@
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
             response.setHeader("Pragma", "no-cache"); // HTTP 1.0
             response.setHeader("Expires", "0"); // Proxies
-        %>
+%>
 
 
     </head>
@@ -42,9 +42,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-2">
-                        
-                            <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-                       
+
+                        <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
+
                     </div>
 
                     <div class="col-md-2 text-center">
@@ -108,7 +108,7 @@
                             </div>
                         </div>
                     </div>
-                                    
+
                     <section class="intro mb-2">
                         <div class="bg-image" >
                             <div class="mask d-flex align-items-center pt-1">
@@ -122,11 +122,11 @@
                                                         <thead class="" style="background-color: #263642;">
                                                             <tr class="text-light">
                                                                 <th scope="col">Cedula</th>
-                                                                 <th scope="col">Formacion</th>
+                                                                <th scope="col">Formacion</th>
                                                                 <th scope="col">Nombres</th>
                                                                 <th scope="col">Apellidos</th>
                                                                 <th scope="col">Fecha de Eliminacion</th>
-                                                               
+
 
                                                             </tr>
                                                         </thead>
@@ -147,22 +147,22 @@
                                                             <%                                                                } else {
 
                                                                 for (InformacionCarnet adm : info) {
-                                                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                                                     String fechaeEliminado = adm.getFechaEliminacion() != null ? dateFormat.format(adm.getFechaEliminacion()) : "Sin fecha";
 
                                                             %>
                                                             <tr>
                                                                 <td> <%= adm.getCedula()%> </td>
-                                                                <td> <%= adm.getFormacion() %></td>
-                                                                <td> <%= adm.getNombres() %> </td>
-                                                                <td> <%= adm.getApellidos() %> </td>
-                                                                <td> <%= fechaeEliminado %> </td>
-                                                                
-                                                            <%
-                                                                    }
+                                                                <td> <%= adm.getFormacion()%></td>
+                                                                <td> <%= adm.getNombres()%> </td>
+                                                                <td> <%= adm.getApellidos()%> </td>
+                                                                <td> <%= fechaeEliminado%> </td>
 
-                                                                }
-                                                            %>
+                                                                <%
+                                                                        }
+
+                                                                    }
+                                                                %>
                                                         </tbody>
                                                     </table>
                                                     <%--CONTENIDO FINAL --%>
@@ -177,7 +177,7 @@
                 </div>
             </div>  
         </div>
-      
+
         <%--CONTENIDO FINAL --%>
 
         <footer class="py-3 mt-2 text-center" style="background-color: #6acd56;">
@@ -216,16 +216,16 @@
 
 
 <script>
-    const filtroInput = document.getElementById("filtro1");
-    const filas = document.querySelectorAll("#tablaCarnet tbody tr");
-    filtroInput.addEventListener("input", function () {
-        const filtro = filtroInput.value.trim().toLowerCase();
-        filas.forEach(function (fila) {
-            const textoFila = fila.textContent.toLowerCase();
-            if (textoFila.includes(filtro)) {
-                fila.style.display = "";
-            } else {
-                fila.style.display = "none";
-            }
-        });
-    });</script>
+            const filtroInput = document.getElementById("filtro1");
+            const filas = document.querySelectorAll("#tablaCarnet tbody tr");
+            filtroInput.addEventListener("input", function () {
+                const filtro = filtroInput.value.trim().toLowerCase();
+                filas.forEach(function (fila) {
+                    const textoFila = fila.textContent.toLowerCase();
+                    if (textoFila.includes(filtro)) {
+                        fila.style.display = "";
+                    } else {
+                        fila.style.display = "none";
+                    }
+                });
+            });</script>
