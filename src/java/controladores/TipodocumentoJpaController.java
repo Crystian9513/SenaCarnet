@@ -27,7 +27,7 @@ import javax.persistence.Persistence;
 public class TipodocumentoJpaController implements Serializable {
 
     public TipodocumentoJpaController( ) {
-       this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
+         this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
 

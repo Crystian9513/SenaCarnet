@@ -69,32 +69,32 @@
         </div>
 
 
-        <!-- MODALES INICIO -->
-        <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/olvidoContrase_aServlet" method="post" class="row g-2 ">
-                            <h2 class="pt-2 pb-1 text-center">Olvido su Contraseña</h2>
-                            <h6 class="">Ingrese su numero de cedula, y se le enviara un Link a su correo para poder cambiar su contraseña. <br> </h6>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Cedula:</b></div>
-
-                                    <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999">
-                                </div>
-                            </div>
-
-                            <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
-                                <button type="submit" class="btn botones  px-4"
-                                        name="action" value="Enviar" style="background-color: #6acd56;"><b>Enviar</b></button>
-                            </div>
-                        </form>
+       <!-- MODALES INICIO -->
+<div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form action="<%=request.getContextPath()%>/olvidoContrase_aServlet" method="post" class="row g-2 ">
+                    <h2 class="pt-2 pb-1 text-center">Olvido su Contraseña</h2>
+                    <h6 class="">Ingrese su numero de cedula, y se le enviara un Link a su correo para poder cambiar su contraseña. <br> </h6>
+                    <div class="col-12">
+                        <div class="input-group">
+                            <div class="input-group-text col-5"><b>Cedula:</b></div>
+                            <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999">
+                        </div>
                     </div>
-                </div>
+
+                    <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
+                        <button type="submit" class="btn botones  px-4"
+                                name="action" value="Enviar" style="background-color: #6acd56;"><b>Enviar</b></button>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- MODALE FINAL -->
+    </div>
+</div>
+<!-- MODALE FINAL -->
+
 
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>

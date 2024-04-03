@@ -12,11 +12,10 @@ import entidades.Administrador;
 import entidades.Coordinador;
 import entidades.Estudiantes;
 import entidades.Usuarios;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.Message;
@@ -58,60 +57,13 @@ public class olvidoContrasenaServlet extends HttpServlet {
             case "Enviar":
                 buscarCorreo(request, response);
                 break;
-            case "Guardar":
-                cambiarContraseña(request, response);
-                break;
             default:
                 throw new AssertionError();
         }
 
     }
 
-    public void cambiarContraseña(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, Exception {
-
-        String mensaje;
-
-        UsuariosJpaController controladorUsuario = new UsuariosJpaController();
-
-        // Obtener el número de cédula del usuario desde el formulario
-        int numeroCedula = Integer.parseInt(request.getParameter("cedula"));
-
-        // Buscar al usuario por su número de cédula
-        Usuarios usuario = controladorUsuario.findUsuarios(numeroCedula);
-
-        if (usuario == null) {
-            // Si no se encuentra ningún usuario con la cédula proporcionada, redirigir a una página de error
-            mensaje = "usuarioNoEncontrado";
-            response.sendRedirect("vistas/olvidoContrasena.jsp?respuesta=" + mensaje);
-
-        } else {
-            String clave1 = request.getParameter("clave1");
-            String clave2 = request.getParameter("clave2");
-
-            if (!clave1.equals(clave2)) {
-                // Las contraseñas no coinciden
-                mensaje = "noCoinciden";
-
-                // Redirigir de vuelta al formulario de cambio de contraseña sin guardar
-                response.sendRedirect("vistas/olvidoContrasena.jsp?respuesta=" + mensaje);
-                return;
-            }
-
-            // Encontrado el usuario y las contraseñas coinciden, ahora puedes cambiar su contraseña
-            String contraseñaEncriptada = controladorUsuario.EncryptarClave(clave1);
-
-            // Actualizar la contraseña en el objeto del usuario
-            usuario.setClaves(contraseñaEncriptada);
-
-            // Guardar los cambios en la base de datos
-            controladorUsuario.edit(usuario);
-
-            // Redirigir a una página de confirmación
-            mensaje = "contraseñaNuevaGuardada";
-            response.sendRedirect("vistas/index.jsp?respuesta=" + mensaje);
-        }
-    }
+   
 
     public void buscarCorreo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
@@ -171,7 +123,7 @@ public class olvidoContrasenaServlet extends HttpServlet {
             if (!correoEnviado) {
                 // Si no se envió el correo, significa que no se encontró ninguna cédula
                 String mensaje = "noCedula";
-                response.sendRedirect("vistas/index.jsp?respuesta=" + mensaje);
+                response.sendRedirect("index.jsp?respuesta=" + mensaje);
             } else {
 
             }
@@ -182,65 +134,61 @@ public class olvidoContrasenaServlet extends HttpServlet {
         }
     }
 
-private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletResponse response,
-        HttpServletRequest request) throws IOException {
-    String correoOrigen = "peralta9513@gmail.com";
-    String password = "ndok qjog axmf ynhd";
+    private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletResponse response,
+            HttpServletRequest request) throws IOException {
+        String correoOrigen = "peralta9513@gmail.com";
+        String password = "ndok qjog axmf ynhd";
 
-    Properties properties = new Properties();
-    properties.put("mail.smtp.auth", "true");
-    properties.put("mail.smtp.starttls.enable", "true");
-    properties.put("mail.smtp.host", "smtp.gmail.com");
-    properties.put("mail.smtp.port", "587");
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
 
-    Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-        protected PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(correoOrigen, password);
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(correoOrigen, password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+
+            message.setFrom(new InternetAddress(correoOrigen));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino));
+            message.setSubject("Recuperación de contraseña");
+
+            // Generar un token único para la URL de recuperación de contraseña
+            String token = UUID.randomUUID().toString(); // Generar un UUID aleatorio como token único
+
+            String url = "http://10.217.16.16:8080/SenaCarnet/vistas/olvidoContrasena.jsp?token=" + token
+                    + "&cedula=" + usuario.getCedula();
+
+            // Construir el contenido del mensaje con la URL única
+            String mensaje = "Hola,\n\nHemos recibido una solicitud para restablecer tu contraseña. "
+                    + "Si no solicitaste esto, puedes ignorar este correo.\n\n"
+                    + "Para cambiar tu contraseña, haz clic en el siguiente enlace:\n"
+                    + "<a href=\"" + url + "\" rel=\"noopener\">Cambiar contraseña</a>"
+                    + " Si tienes alguna pregunta, contáctanos.";
+
+            message.setContent(mensaje, "text/html");
+
+            // Enviar el correo electrónico
+            Transport.send(message);
+
+            // Redireccionar a la página de inicio con un mensaje de confirmación
+            String mensajeRedireccion = "enviado";
+            response.sendRedirect("index.jsp?respuesta=" + mensajeRedireccion);
+
+            // Mensajes de depuración
+            System.out.println("Correo enviado correctamente.");
+            System.out.println("URL de recuperación de contraseña: " + url);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.out.println("Error al enviar el correo: " + e.getMessage());
         }
-    });
-
-    try {
-        Message message = new MimeMessage(session);
-
-        message.setFrom(new InternetAddress(correoOrigen));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(correoDestino));
-        message.setSubject("Recuperación de contraseña");
-
-        // Generar un token único para la URL de recuperación de contraseña
-        String token = UUID.randomUUID().toString(); // Generar un UUID aleatorio como token único
-
-        // Construir la URL de recuperación de contraseña con el token único
-        String url = "http://10.217.16.42:8080/SenaCarnet/vistas/olvidoContrasena.jsp?token=" + token;
-
-        // Almacenar el token en la sesión del usuario para verificar su validez posteriormente
-        HttpSession sesion = request.getSession(true);
-        sesion.setAttribute("sesionToken", token);
-
-        // Construir el contenido del mensaje con la URL única
-        String mensaje = "Hola,\n\nHemos recibido una solicitud para restablecer tu contraseña. "
-                + "Si no solicitaste esto, puedes ignorar este correo.\n\n"
-                + "Para cambiar tu contraseña, haz clic en el siguiente enlace:\n"
-                + "<a href=\"" + url + "\">Cambiar contraseña</a>"
-                + " Si tienes alguna pregunta, contáctanos.";
-
-        message.setContent(mensaje, "text/html");
-
-        // Enviar el correo electrónico
-        Transport.send(message);
-
-        // Redireccionar a la página de inicio con un mensaje de confirmación
-        String mensajeRedireccion = "enviado";
-        response.sendRedirect("vistas/index.jsp?respuesta=" + mensajeRedireccion);
-        
-        // Mensajes de depuración
-        System.out.println("Correo enviado correctamente.");
-        System.out.println("URL de recuperación de contraseña: " + url);
-
-    } catch (MessagingException e) {
-        e.printStackTrace();
-        System.out.println("Error al enviar el correo: " + e.getMessage());
     }
-}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

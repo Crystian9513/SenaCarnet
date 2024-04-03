@@ -17,13 +17,9 @@ import entidades.Sede;
 import entidades.Tipodocumento;
 import entidades.Usuarios;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -49,9 +45,7 @@ import javax.servlet.http.Part;
 @WebServlet(name = "estudiantesServlet", urlPatterns = {"/estudiantesServlet"})
 public class estudiantesServlet extends HttpServlet {
 
-    private String pathFiles = "";
-    private File uploads;
-    private String[] extensiones = {".ico", ".png", ".jpg", ".jpeg"};
+   
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -80,7 +74,7 @@ public class estudiantesServlet extends HttpServlet {
             case "NuevaFormacion":
                 botonNuevaFormacion(request, response);
                 break;
-             case "Importar2":
+            case "Importar2":
                 botonImportar(request, response);
                 break;
             default:
@@ -138,50 +132,43 @@ public class estudiantesServlet extends HttpServlet {
 
                 return;
             }
-            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-            uploads = new File(pathFiles);
 
-            if (isExtension(part.getSubmittedFileName(), extensiones)) {
-                String photo = saveFile(part, uploads);
+            byte[] imagenBytes = part.getInputStream().readAllBytes();
 
-                guardarEstudiante.setCedula(cedula);
-                Tipodocumento to = tipo.findTipodocumento(tpdocumento);
-                guardarEstudiante.setTipoDocumentoFk(to);
-                guardarEstudiante.setNombres(nombres);
-                guardarEstudiante.setApellidos(apellidos);
-                Formacion fo = tipoForma.findFormacion(formacion);
-                guardarEstudiante.setFormacionFk(fo);
-                Sede se = tipoSede.findSede(sede);
-                guardarEstudiante.setSedeFk(se);
-                guardarEstudiante.setCorreo(correo);
-                guardarEstudiante.setFotografia(photo);
-                guardarEstudiante.setVenceCarnet(fecha1);
-                EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
-                guardarEstudiante.setEstadoCarnetIdestadoCarnet(car);
+            guardarEstudiante.setCedula(cedula);
+            Tipodocumento to = tipo.findTipodocumento(tpdocumento);
+            guardarEstudiante.setTipoDocumentoFk(to);
+            guardarEstudiante.setNombres(nombres);
+            guardarEstudiante.setApellidos(apellidos);
+            Formacion fo = tipoForma.findFormacion(formacion);
+            guardarEstudiante.setFormacionFk(fo);
+            Sede se = tipoSede.findSede(sede);
+            guardarEstudiante.setSedeFk(se);
+            guardarEstudiante.setCorreo(correo);
+            guardarEstudiante.setVenceCarnet(fecha1);
+            EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
+            guardarEstudiante.setEstadoCarnetIdestadoCarnet(car);
+            guardarEstudiante.setFotografia(imagenBytes); // Guardar la imagen en el campo BLOB
 
-                //TABLA USUSARIO
-                guardarUsuario.setCedula(cedula2);
-                guardarUsuario.setNombres(nombres2);
-                guardarUsuario.setApellidos(apellidos2);
-                guardarUsuario.setClaves(claveEncriptada);
-                guardarUsuario.setRol(1);
-                guardarUsuario.setEstadoClave(1);
-               
+            //TABLA USUARIO
+            guardarUsuario.setCedula(cedula2);
+            guardarUsuario.setNombres(nombres2);
+            guardarUsuario.setApellidos(apellidos2);
+            guardarUsuario.setClaves(claveEncriptada);
+            guardarUsuario.setRol(1);
+            guardarUsuario.setEstadoClave(1);
 
-                controlador.create(guardarEstudiante);
-                controladorUsuario.create(guardarUsuario);
+            controlador.create(guardarEstudiante);
+            controladorUsuario.create(guardarUsuario);
 
-                mensaje = "guardar";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
-
-            }
+            mensaje = "guardar";
+            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
 
         } catch (Exception e) {
 
             mensaje = "errorAlguardarr";
             response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
         }
-
     }
 
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
@@ -200,21 +187,9 @@ public class estudiantesServlet extends HttpServlet {
 
             // Verificar si el estudiante existe
             if (estudiante != null) {
-                // Obtener la foto del estudiante
-                String fotoEstudiante = estudiante.getFotografia();
-
                 // Eliminar el estudiante de la base de datos
                 controlador.destroy(codigoUsuario);
                 controladorUsuario.destroy(codigoUsuario);
-
-                // Verificar si se proporcionó una ruta de foto
-                if (fotoEstudiante != null && !fotoEstudiante.isEmpty()) {
-                    // Eliminar la foto del estudiante del servidor
-                    File fileToDelete = new File(getServletContext().getRealPath("vistas/fotos" + fotoEstudiante));
-                    if (fileToDelete.exists()) {
-                        fileToDelete.delete();
-                    }
-                }
 
                 mensaje = "eliminado";
                 response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
@@ -268,16 +243,12 @@ public class estudiantesServlet extends HttpServlet {
 
         // Obtener el archivo de la foto
         Part part = request.getPart("foto2");
-        String photo = null;
+        byte[] nuevaFoto = null;
 
         // Verificar si se proporcionó una nueva foto
         if (part != null && part.getSize() > 0) {
-            // Guardar la nueva foto en el servidor
-            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-            uploads = new File(pathFiles);
-            if (isExtension(part.getSubmittedFileName(), extensiones)) {
-                photo = saveFile(part, uploads);
-            }
+            // Guardar la nueva foto en un arreglo de bytes
+            nuevaFoto = part.getInputStream().readAllBytes();
         }
 
         try {
@@ -298,22 +269,24 @@ public class estudiantesServlet extends HttpServlet {
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
 
-                if (photo != null) {
-                    editarEstudiante.setFotografia(photo);
+                // Verificar si se proporcionó una nueva foto y actualizarla
+                if (nuevaFoto != null) {
+                    editarEstudiante.setFotografia(nuevaFoto);
                 }
 
-                //TABLA USUSARIO
+                // Actualizar los datos del estudiante
+                controlador.edit(editarEstudiante);
+
+                // Actualizar los datos del usuario
                 guardarUsuario.setCedula(cedula2);
                 guardarUsuario.setNombres(nombres2);
                 guardarUsuario.setApellidos(apellidos2);
                 guardarUsuario.setClaves(claveEncriptada);
                 guardarUsuario.setRol(1);
                 guardarUsuario.setEstadoClave(1);
-
                 controladorUsuario.edit(guardarUsuario);
-                controlador.edit(editarEstudiante);
-                mensaje = "edicionGuardad";
 
+                mensaje = "edicionGuardad";
                 response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
             }
 
@@ -359,20 +332,6 @@ public class estudiantesServlet extends HttpServlet {
         SedeJpaController tipoSede = new SedeJpaController();
         EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
 
-        // Obtener el archivo de la foto
-        Part part = request.getPart("foto20");
-        String photo = null;
-
-        // Verificar si se proporcionó una nueva foto
-        if (part != null && part.getSize() > 0) {
-            // Guardar la nueva foto en el servidor
-            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-            uploads = new File(pathFiles);
-            if (isExtension(part.getSubmittedFileName(), extensiones)) {
-                photo = saveFile(part, uploads);
-            }
-        }
-
         try {
 
             if (editarEstudiante != null) {
@@ -390,10 +349,6 @@ public class estudiantesServlet extends HttpServlet {
                 editarEstudiante.setVenceCarnet(formatoFecha.parse(vencimiento));
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
-
-                if (photo != null) {
-                    editarEstudiante.setFotografia(photo);
-                }
 
                 //TABLA USUSARIO
                 guardarUsuario.setCedula(cedula2);
@@ -417,7 +372,8 @@ public class estudiantesServlet extends HttpServlet {
 
     }
 
-     protected void botonImportar(HttpServletRequest request, HttpServletResponse response)
+
+    protected void botonImportar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Part filePart = request.getPart("file5"); // Obtener el archivo cargado desde la solicitud
         if (filePart != null) {
@@ -489,40 +445,8 @@ public class estudiantesServlet extends HttpServlet {
             }
         }
     }
-    
+
    
-
-    private String saveFile(Part part, File pathUploads) {
-        String pathAbsolute = "";
-
-        try {
-
-            Path path = Paths.get(part.getSubmittedFileName());
-            String fileName = path.getFileName().toString();
-            InputStream input = part.getInputStream();
-
-            if (input != null) {
-                File file = new File(pathUploads, fileName);
-                pathAbsolute = "fotos/" + fileName;
-                Files.copy(input, file.toPath());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return pathAbsolute;
-    }
-
-    private boolean isExtension(String fileName, String[] extensions) {
-        for (String et : extensions) {
-            if (fileName.toLowerCase().endsWith(et)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

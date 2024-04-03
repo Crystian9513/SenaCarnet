@@ -1,5 +1,8 @@
-<%@page import="entidades.EstadoCarnet"%>
+<%@page import="entidades.Estudiantes"%>
+<%@page import="controladores.EstudiantesJpaController"%>
 <%@page import="controladores.EstadoCarnetJpaController"%>
+<%@page import="entidades.EstadoCarnet"%>
+
 <%@page import="entidades.Usuarios"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -10,8 +13,7 @@
 <%@page import="entidades.Tipodocumento"%>
 <%@page import="controladores.TipodocumentoJpaController"%>
 <%@page import="java.util.List"%>
-<%@page import="entidades.Estudiantes"%>
-<%@page import="controladores.EstudiantesJpaController"%>
+
 
 <% HttpSession sesion = request.getSession();
 
@@ -36,7 +38,7 @@
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
-        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
         <link rel="stylesheet" href="../css/tabla.css"/>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
@@ -48,10 +50,39 @@
 
                 // Itera sobre cada elemento y crea un nuevo objeto Popover para él
                 var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-                    return new bootstrap.Popover(popoverTriggerEl);
+                    // Crea un nuevo objeto Popover
+                    var popover = new bootstrap.Popover(popoverTriggerEl);
+
+                    // Agrega un evento para cuando se muestre el popover
+                    popoverTriggerEl.addEventListener('shown.bs.popover', function () {
+                        // Obtiene el identificador del estudiante
+                        var cedula = popoverTriggerEl.getAttribute('data-estudiante');
+
+                        // Realiza una solicitud AJAX para obtener la imagen del estudiante
+                        var xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    // Si la solicitud es exitosa, actualiza el contenido del popover con la imagen recibida
+                                    var imgSrc = 'data:image/jpeg;base64,' + xhr.responseText;
+                                    var popoverInstance = bootstrap.Popover.getInstance(popoverTriggerEl);
+                                    popoverInstance.setContent('<img src="' + imgSrc + '" width="120px" height="120px">');
+                                } else {
+                                    // Maneja el caso en que la solicitud no sea exitosa
+                                    console.error('Error al obtener la imagen del estudiante');
+                                }
+                            }
+                        };
+                        xhr.open('GET', 'estudiantesServlet?idEstudiante=' + cedula, true);
+                        xhr.send();
+                    });
+
+                    // Devuelve el objeto Popover
+                    return popover;
                 });
             });
         </script>
+
 
         <script>
             // Función para obtener los datos de la sede y mostrarlos en el modal
@@ -187,53 +218,48 @@
     <body  style="background-color: #fefafb;">
         <%--MENU INICIO --%>
         <nav class="navbar text-l navbar-expand-lg "  style="background-color: #6acd56;">
-            <div class="container">
+            <div class="container justify-content-center align-items-center">
+                <div class="col-md-2 col-12 text-center">
 
-                <div class="row">
+                    <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
 
-                    <div class="col-md-2">
-                       
-                            <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-                       
-                    </div>
-
-                    <div class="col-md-2 text-center">
-                        <h2 class="mt-3 letras"> SENA </h2>
-                    </div>
-                    <div class="col-md-8">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
-                            <ul class="navbar-nav ms-auto navbar-brand">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Aprendiz
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="">Ingresar</a></li>
-                                        <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="administrador.jsp">Administrador</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="sedesFormaciones.jsp">Sede-Formacion</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="menuPrincipal.jsp">Menu Principal</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="cerrarSesionAdministrador.jsp">Salir</a>
-                                </li>
-                            </ul>
-                        </div>
+                </div>
+                <div class="col-md-2 col-12 text-center">
+                    <h2 class="mt-3 letras"> SENA </h2>
+                </div>
+                <div class="col-md-8 col-12 text-center">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
+                        <ul class="navbar-nav ms-auto navbar-brand">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Aprendiz
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="">Ingresar</a></li>
+                                    <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="administrador.jsp">Administrador</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="sedesFormaciones.jsp">Sede-Formacion</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="menuPrincipal.jsp">Menu Principal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="cerrarSesionAdministrador.jsp">Salir</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -249,42 +275,15 @@
                     <div class="container">
                         <div class="row">
                             
-                            <div class="col-md-6 col-sd-12">
-                                <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Aprendices:</b></div>
-                                        <input type="file" class="form-control" name="file5" id="fileInput2" required="1">
-                                        <button type="submit" class="btn" name="action" value="Importar2" style="background-color: #6acd56;"><b>Importar</b></button>
-
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-6 col-sd-12">
+                            <div class="col-md-6 col-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
-                                        <div class="input-group-text col-md-9 col-sd-12"><b>Nuevo estudiante:</b></div>
+                                        <div class="input-group-text col-md-9 col-8"><b>Nuevo estudiante:</b></div>
                                         <button id="" type="button" class="btn" style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formularioModal"><b>Formulario</b></button>
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-6 col-sd-12">
-                                <form action="<%=request.getContextPath()%>/usuarioServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Usuarios:</b></div>
-                                        <input type="file" class="form-control" name="file3" id="fileInput3" required="1">
-                                        <button type="submit" class="btn" name="action" value="Importar" style="background-color: #6acd56;"><b>Importar</b></button>
-                                    </div>
-                                </form>
-                            </div>
-                                    <!--  <div class="col-md-6 col-sd-12">
-                                <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-md-9 col-sd-12"><b>Encriptar Clave de Usuarios Nuevos:</b></div>
-                                        <button id="" type="button" class="btn" style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formularioModal"><b>Formulario</b></button>
-                                    </div>
-                                </form>
-                            </div> -->
-                            <div class="col-md-12 col-sd-12">
+                            <div class="col-md-6 col-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
                                         <div class="input-group-text col-4"><b>Buscar:</b></div>
@@ -292,9 +291,28 @@
                                     </div>
                                 </form>
                             </div>
+                            <div class="col-md-6 col-12">
+                                <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" enctype="multipart/form-data" class="pt-2">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-text col-4"><b>Aprendices:</b></div>
+                                        <input type="file" class="form-control" name="file5" id="fileInput2" required="1" accept=".csv">
+                                        <button type="submit" class="btn" name="action" value="Importar2" style="background-color: #6acd56;"><b>Importar</b></button>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <form action="<%=request.getContextPath()%>/usuarioServlet" method="post" enctype="multipart/form-data" class="pt-2">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-text col-4"><b>Usuarios:</b></div>
+                                        <input type="file" class="form-control" name="file3" id="fileInput3" required="1" accept=".csv">
+                                        <button type="submit" class="btn"  name="action" value="Importar" style="background-color: #6acd56;"><b>Importar</b></button>
+                                    </div>
+                                </form>
+                            </div>
+                            
                         </div>
                     </div>
-
                     <section class="intro mb-5">
                         <div class="bg-image" >
                             <div class="mask d-flex align-items-center h-100">

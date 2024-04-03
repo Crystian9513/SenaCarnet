@@ -1,5 +1,5 @@
+<%@page import="java.io.InputStream"%>
 <%@page import="java.io.OutputStream"%>
-<%@ page import="java.io.File" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.sql.Connection" %>
 <%@ page import="java.sql.DriverManager" %>
@@ -16,17 +16,17 @@
         // Obtener el parámetro de la cédula
         String cedulaStr = request.getParameter("cedula");
         int cedula = Integer.parseInt(cedulaStr);
-
+        
         // Crear un HashMap para almacenar los parámetros del informe
         HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("id", cedula);
 
         // Obtener la ruta del archivo Jasper
         String reportPath = application.getRealPath("reportes/carnetCompleto.jasper");
-        File reportFile = new File(reportPath);
 
+    
         // Generar el informe PDF con los parámetros
-        byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), parameters, conexion);
+        byte[] bytes = JasperRunManager.runReportToPdf(reportPath, parameters, conexion);
 
         // Configurar la respuesta HTTP para el PDF
         response.setContentLength(bytes.length);
@@ -38,4 +38,3 @@
         e.printStackTrace();
     } 
 %>
-zs

@@ -133,25 +133,28 @@
         <nav class="" style="background-color: #6acd56;">
             <div class="container">
                 <div class="row py-2">
-                    <div class="col-lg-4 col-md-6 col-sd-12 ">
-                        <img class=" float-end" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-2 col-sd-12 text-center">
+                        <img  src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sd-12 text-center">
+                    <div class="col-md-2 col-sd-12 text-center">
                         <h1 class="mt-3"> SENA  </h1> 
                         <p></p>
                     </div>
-                    <div class="navbar col-lg-4 col-md-2 col-sd-12 ">
-                        <ul class="navbar-nav  navbar-brand  ">
+                    <div class="col-md-2 col-sd-12 text-center">
+                        <ul class="navbar-nav navbar-brand text-center">
                             <li class="nav-item">
-                                <a class="nav-link pt-3 " aria-current="page" href="cerrarSesionCoordinador.jsp">
-                                    Salir
+                                <a class="nav-link pt-4" aria-current="page" href="cerrarSesionCoordinador.jsp">
+                                    <h4> Salir</h4>
                                 </a>
                             </li>
                         </ul>
                     </div>
+                    <div class="col-md-3"></div>
                 </div>
             </div>
         </nav>
+
 
 
 
@@ -175,16 +178,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-md-7 col-sd-12">
-                                <form action="<%=request.getContextPath()%>/FormacionesServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Seleccionar archivo CSV:</b></div>
-                                        <input type="file" class="form-control" name="file2" id="fileInput2">
-                                        <button type="submit" class="btn" name="action" value="Importar2" style="background-color: #6acd56;"><b>Subir archivo</b></button>
-
-                                    </div>
-                                </form>
-                            </div>   
+                            
                         </div>
                     </div>
                     <section class="intro mb-2">
@@ -238,8 +232,8 @@
                                                             <tr>
                                                                 <td> 
                                                                     <% SimpleDateFormat dateFormatInput = new SimpleDateFormat("yyyy-MM-dd");
-                                                                       Date venceCarnet = est.getVenceCarnet();
-                                                                       String fechaVencimiento2 = venceCarnet != null ? dateFormatInput.format(venceCarnet) : "Sin fcha";%>
+                                                                        Date venceCarnet = est.getVenceCarnet();
+                                                                        String fechaVencimiento2 = venceCarnet != null ? dateFormatInput.format(venceCarnet) : "Sin fcha";%>
                                                                     <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" 
                                                                             data-bs-target="#formularioModal2" onclick="obtenerDatosEstudiantes('<%= est.getCedula()%>',
                                                                                             '<%= est.getTipoDocumentoFk().getIdTipoDocumento()%>',

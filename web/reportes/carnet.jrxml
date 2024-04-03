@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="97478bfc-61a5-4b12-af6d-6580c06e7148">
-	<property name="ireport.zoom" value="0.6655000000000014"/>
+	<property name="ireport.zoom" value="0.6050000000000014"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT e.NOMBRES, e.APELLIDOS,e.CEDULA,e.FOTOGRAFIA,e.VENCE_CARNET,e.IDENTIFICADOR_UNICO, td.NOMBRE AS TIPO_DOCUMENTO, f.NOMBRE AS FORMACION, f.ID_FORMACION AS NUMERO_FICHA, s.NOMBRE AS SEDE
-FROM estudiantes e
-INNER JOIN formacion f ON e.FORMACION_FK = f.ID_FORMACION
-INNER JOIN sede s ON f.SEDE_ID = s.ID_SEDE
-INNER JOIN tipodocumento td ON e.TIPO_DOCUMENTO_FK = td.ID_TIPO_DOCUMENTO
-WHERE e.CEDULA = $P{id}]]>
+		<![CDATA[SELECT 
+    e.NOMBRES, 
+    e.APELLIDOS,
+    e.CEDULA,
+    e.FOTOGRAFIA,
+    e.VENCE_CARNET,
+    e.IDENTIFICADOR_UNICO, 
+    td.NOMBRE AS TIPO_DOCUMENTO, 
+    f.NOMBRE AS FORMACION, 
+    f.ID_FORMACION AS NUMERO_FICHA, 
+    s.NOMBRE AS SEDE,
+    logo.IDLOGO,
+    logo.IMAGEN,
+    logo.DIRECTOR, 
+    logo.FIRMA
+FROM 
+    estudiantes e
+INNER JOIN 
+    formacion f ON e.FORMACION_FK = f.ID_FORMACION
+INNER JOIN 
+    sede s ON f.SEDE_ID = s.ID_SEDE
+INNER JOIN 
+    tipodocumento td ON e.TIPO_DOCUMENTO_FK = td.ID_TIPO_DOCUMENTO
+CROSS JOIN 
+    (SELECT IDLOGO ,DIRECTOR, IMAGEN , FIRMA FROM logo LIMIT 1) AS logo
+WHERE 
+    e.CEDULA = $P{id}]]>
 	</queryString>
 	<field name="NOMBRES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -23,7 +44,7 @@ WHERE e.CEDULA = $P{id}]]>
 	<field name="CEDULA" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FOTOGRAFIA" class="java.lang.String">
+	<field name="FOTOGRAFIA" class="java.lang.Object">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="VENCE_CARNET" class="java.sql.Date">
@@ -36,6 +57,18 @@ WHERE e.CEDULA = $P{id}]]>
 	<field name="FORMACION" class="java.lang.String"/>
 	<field name="NUMERO_FICHA" class="java.lang.Integer"/>
 	<field name="SEDE" class="java.lang.String"/>
+	<field name="IDLOGO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IMAGEN" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DIRECTOR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FIRMA" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<group name="Reverso">
 		<groupExpression><![CDATA[$F{NOMBRES}$F{APELLIDOS}$F{CEDULA}$F{FOTOGRAFIA}$F{VENCE_CARNET}$F{IDENTIFICADOR_UNICO}$F{TIPO_DOCUMENTO}$F{FORMACION}$F{SEDE}]]></groupExpression>
 		<groupHeader>
@@ -43,10 +76,6 @@ WHERE e.CEDULA = $P{id}]]>
 				<rectangle radius="12">
 					<reportElement x="68" y="11" width="427" height="679" uuid="a1da5bfc-d312-4ce3-9907-fda4e6c25363"/>
 				</rectangle>
-				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="93" y="49" width="120" height="107" uuid="473dbaf6-0855-4170-b16b-e1fee7b913be"/>
-					<imageExpression><![CDATA["../img/sena_reporte.png"]]></imageExpression>
-				</image>
 				<staticText>
 					<reportElement x="437" y="30" width="41" height="239" uuid="2d0c2f52-8323-462d-a664-c9743a764821"/>
 					<textElement rotation="Left">
@@ -54,10 +83,6 @@ WHERE e.CEDULA = $P{id}]]>
 					</textElement>
 					<text><![CDATA[APRENDIZ]]></text>
 				</staticText>
-				<image hAlign="Center" vAlign="Middle">
-					<reportElement x="213" y="30" width="224" height="239" uuid="dd31d537-1d4e-4727-a52b-1f81b87f2ddc"/>
-					<imageExpression><![CDATA[($F{FOTOGRAFIA} != null && !$F{FOTOGRAFIA}.isEmpty()) ? "../vistas/" + $F{FOTOGRAFIA} : null]]></imageExpression>
-				</image>
 				<line>
 					<reportElement x="93" y="288" width="385" height="1" uuid="66d03159-bd98-4ee7-861f-663cedf43ce1"/>
 					<graphicElement>
@@ -121,10 +146,18 @@ WHERE e.CEDULA = $P{id}]]>
 					<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
 				</staticText>
 				<image hAlign="Center" vAlign="Top">
-					<reportElement x="93" y="521" width="385" height="157" uuid="0255ddad-6332-439b-af83-31ad839572f7"/>
+					<reportElement x="93" y="521" width="385" height="156" uuid="84f335fd-4e2d-4cda-8520-c55f7b85f633"/>
 					<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
     new com.google.zxing.qrcode.QRCodeWriter().encode(
         String.valueOf($F{CEDULA}), com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
+				</image>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="200" y="30" width="237" height="239" uuid="97e4104b-eb66-43b3-904b-1afdc0f12fb0"/>
+					<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{FOTOGRAFIA})]]></imageExpression>
+				</image>
+				<image hAlign="Center" vAlign="Middle">
+					<reportElement x="85" y="30" width="103" height="96" uuid="d5820939-f26f-436f-8892-ea04b4af3876"/>
+					<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{IMAGEN})]]></imageExpression>
 				</image>
 			</band>
 		</groupHeader>

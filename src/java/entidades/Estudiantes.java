@@ -11,6 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -29,20 +30,10 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Estudiantes.findByCedula", query = "SELECT e FROM Estudiantes e WHERE e.cedula = :cedula"),
     @NamedQuery(name = "Estudiantes.findByNombres", query = "SELECT e FROM Estudiantes e WHERE e.nombres = :nombres"),
     @NamedQuery(name = "Estudiantes.findByApellidos", query = "SELECT e FROM Estudiantes e WHERE e.apellidos = :apellidos"),
-    @NamedQuery(name = "Estudiantes.findByFotografia", query = "SELECT e FROM Estudiantes e WHERE e.fotografia = :fotografia"),
-    @NamedQuery(name = "Estudiantes.findByCorreo", query = "SELECT e FROM Estudiantes e WHERE e.correo = :correo")})
+    @NamedQuery(name = "Estudiantes.findByCorreo", query = "SELECT e FROM Estudiantes e WHERE e.correo = :correo"),
+    @NamedQuery(name = "Estudiantes.findByVenceCarnet", query = "SELECT e FROM Estudiantes e WHERE e.venceCarnet = :venceCarnet"),
+    @NamedQuery(name = "Estudiantes.findByIdentificadorUnico", query = "SELECT e FROM Estudiantes e WHERE e.identificadorUnico = :identificadorUnico")})
 public class Estudiantes implements Serializable {
-
-    @Column(name = "IDENTIFICADOR_UNICO")
-    private String identificadorUnico;
-
-    @JoinColumn(name = "ESTADO_CARNET_IDESTADO_CARNET", referencedColumnName = "IDESTADO_CARNET")
-    @ManyToOne(optional = false)
-    private EstadoCarnet estadoCarnetIdestadoCarnet;
-
-    @Column(name = "VENCE_CARNET")
-    @Temporal(TemporalType.DATE)
-    private Date venceCarnet;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,11 +46,21 @@ public class Estudiantes implements Serializable {
     @Basic(optional = false)
     @Column(name = "APELLIDOS")
     private String apellidos;
+    @Lob
     @Column(name = "FOTOGRAFIA")
-    private String fotografia;
+    private byte[] fotografia;
     @Basic(optional = false)
     @Column(name = "CORREO")
     private String correo;
+    @Basic(optional = false)
+    @Column(name = "VENCE_CARNET")
+    @Temporal(TemporalType.DATE)
+    private Date venceCarnet;
+    @Column(name = "IDENTIFICADOR_UNICO")
+    private String identificadorUnico;
+    @JoinColumn(name = "ESTADO_CARNET_IDESTADO_CARNET", referencedColumnName = "IDESTADO_CARNET")
+    @ManyToOne(optional = false)
+    private EstadoCarnet estadoCarnetIdestadoCarnet;
     @JoinColumn(name = "FORMACION_FK", referencedColumnName = "ID_FORMACION")
     @ManyToOne(optional = false)
     private Formacion formacionFk;
@@ -77,11 +78,12 @@ public class Estudiantes implements Serializable {
         this.cedula = cedula;
     }
 
-    public Estudiantes(Integer cedula, String nombres, String apellidos, String correo) {
+    public Estudiantes(Integer cedula, String nombres, String apellidos, String correo, Date venceCarnet) {
         this.cedula = cedula;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
+        this.venceCarnet = venceCarnet;
     }
 
     public Integer getCedula() {
@@ -108,11 +110,11 @@ public class Estudiantes implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public String getFotografia() {
+    public byte[] getFotografia() {
         return fotografia;
     }
 
-    public void setFotografia(String fotografia) {
+    public void setFotografia(byte[] fotografia) {
         this.fotografia = fotografia;
     }
 
@@ -122,6 +124,30 @@ public class Estudiantes implements Serializable {
 
     public void setCorreo(String correo) {
         this.correo = correo;
+    }
+
+    public Date getVenceCarnet() {
+        return venceCarnet;
+    }
+
+    public void setVenceCarnet(Date venceCarnet) {
+        this.venceCarnet = venceCarnet;
+    }
+
+    public String getIdentificadorUnico() {
+        return identificadorUnico;
+    }
+
+    public void setIdentificadorUnico(String identificadorUnico) {
+        this.identificadorUnico = identificadorUnico;
+    }
+
+    public EstadoCarnet getEstadoCarnetIdestadoCarnet() {
+        return estadoCarnetIdestadoCarnet;
+    }
+
+    public void setEstadoCarnetIdestadoCarnet(EstadoCarnet estadoCarnetIdestadoCarnet) {
+        this.estadoCarnetIdestadoCarnet = estadoCarnetIdestadoCarnet;
     }
 
     public Formacion getFormacionFk() {
@@ -170,31 +196,7 @@ public class Estudiantes implements Serializable {
 
     @Override
     public String toString() {
-        return nombres;
-    }
-
-    public Date getVenceCarnet() {
-        return venceCarnet;
-    }
-
-    public void setVenceCarnet(Date venceCarnet) {
-        this.venceCarnet = venceCarnet;
-    }
-
-    public EstadoCarnet getEstadoCarnetIdestadoCarnet() {
-        return estadoCarnetIdestadoCarnet;
-    }
-
-    public void setEstadoCarnetIdestadoCarnet(EstadoCarnet estadoCarnetIdestadoCarnet) {
-        this.estadoCarnetIdestadoCarnet = estadoCarnetIdestadoCarnet;
-    }
-
-    public String getIdentificadorUnico() {
-        return identificadorUnico;
-    }
-
-    public void setIdentificadorUnico(String identificadorUnico) {
-        this.identificadorUnico = identificadorUnico;
+        return "entidades.Estudiantes[ cedula=" + cedula + " ]";
     }
     
 }

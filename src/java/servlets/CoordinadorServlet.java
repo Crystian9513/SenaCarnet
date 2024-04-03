@@ -18,13 +18,7 @@ import entidades.InformacionCarnet;
 import entidades.Sede;
 import entidades.Tipodocumento;
 import entidades.Usuarios;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -35,7 +29,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 /**
  *
@@ -44,10 +37,6 @@ import javax.servlet.http.Part;
 @MultipartConfig //Para archivos siempre va esto
 @WebServlet(name = "CoordinadorServlet", urlPatterns = {"/CoordinadorServlet"})
 public class CoordinadorServlet extends HttpServlet {
-
-    private String pathFiles = "";
-    private File uploads;
-    private String[] extensiones = {".ico", ".png", ".jpg", ".jpeg"};
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -93,7 +82,7 @@ public class CoordinadorServlet extends HttpServlet {
 
         int cedula2 = Integer.parseInt(request.getParameter("cedula2"));//TABLA DE USUARIO
         String nombres2 = request.getParameter("nombres2");//TABLA DE USUARIO
-        String apellidos2 = request.getParameter("apellidos2");//TABLA DE 
+        String apellidos2 = request.getParameter("apellidos2");//TABLA DE
         String clave = request.getParameter("cedula2");//TABLA DE USUARIO
 
         UsuariosJpaController controladorUsuario = new UsuariosJpaController();//TABLA DE USUARIO
@@ -110,24 +99,10 @@ public class CoordinadorServlet extends HttpServlet {
 
         LocalDate fechaSistema = LocalDate.now();
         Date fechaSistemaDate = Date.from(fechaSistema.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
+        
         //TABLA IMFORMACION_CARNET
         InformacionCarnetJpaController controladorInfo = new InformacionCarnetJpaController();
         InformacionCarnet guardarInfo = new InformacionCarnet();
-
-        // Obtener el archivo de la foto
-        Part part = request.getPart("foto2");
-        String photo = null;
-
-        // Verificar si se proporcionó una nueva foto
-        if (part != null && part.getSize() > 0) {
-            // Guardar la nueva foto en el servidor
-            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-            uploads = new File(pathFiles);
-            if (isExtension(part.getSubmittedFileName(), extensiones)) {
-                photo = saveFile(part, uploads);
-            }
-        }
 
         try {
 
@@ -147,17 +122,13 @@ public class CoordinadorServlet extends HttpServlet {
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
 
-                if (photo != null) {
-                    editarEstudiante.setFotografia(photo);
-                }
-
-                //TABLA USUSARIO
+                //TABLA USUARIO
                 guardarUsuario.setCedula(cedula2);
                 guardarUsuario.setNombres(nombres2);
                 guardarUsuario.setApellidos(apellidos2);
                 guardarUsuario.setClaves(claveEncriptada);
                 guardarUsuario.setRol(4);
-
+                
                 guardarInfo.setCedula(cedula);
                 guardarInfo.setNombres(nombres);
                 guardarInfo.setApellidos(apellidos);
@@ -179,38 +150,6 @@ public class CoordinadorServlet extends HttpServlet {
             response.sendRedirect("vistas/coordinador.jsp?respuesta=" + mensaje);
         }
 
-    }
-
-    private String saveFile(Part part, File pathUploads) {
-        String pathAbsolute = "";
-
-        try {
-
-            Path path = Paths.get(part.getSubmittedFileName());
-            String fileName = path.getFileName().toString();
-            InputStream input = part.getInputStream();
-
-            if (input != null) {
-                File file = new File(pathUploads, fileName);
-                pathAbsolute = "fotos/" + fileName;
-                Files.copy(input, file.toPath());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return pathAbsolute;
-    }
-
-    private boolean isExtension(String fileName, String[] extensions) {
-        for (String et : extensions) {
-            if (fileName.toLowerCase().endsWith(et)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

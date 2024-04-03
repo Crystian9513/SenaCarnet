@@ -65,52 +65,48 @@
 
         <%--MENU INICIO --%>
         <nav class="navbar text-l navbar-expand-lg "  style="background-color: #6acd56;">
-            <div class="container">
+            <div class="container justify-content-center align-items-center">
+                <div class="col-md-2 col-12 text-center">
 
-                <div class="row">
+                    <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
 
-                    <div class="col-md-2">
-                        
-                            <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-                       
-                    </div>
-                    <div class="col-md-2 text-center">
-                        <h2 class="mt-3 letras"> SENA </h2>
-                    </div>
-                    <div class="col-md-8">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
-                            <ul class="navbar-nav ms-auto navbar-brand">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Aprendiz
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="estudiantes.jsp">Ingresar</a></li>
-                                        <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="administrador.jsp">Administrador</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="#">Sede-Formacion</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="menuPrincipal.jsp">Menu Principal</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="cerrarSesionAdministrador.jsp">Salir</a>
-                                </li>
-                            </ul>
-                        </div>
+                </div>
+                <div class="col-md-2 col-12 text-center">
+                    <h2 class="mt-3 letras"> SENA </h2>
+                </div>
+                <div class="col-md-8 col-12 text-center">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
+                        <ul class="navbar-nav ms-auto navbar-brand">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Aprendiz
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="estudiantes.jsp">Ingresar</a></li>
+                                    <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="administrador.jsp">Administrador</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#">Sede-Formacion</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="menuPrincipal.jsp">Menu Principal</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="cerrarSesionAdministrador.jsp">Salir</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -124,25 +120,15 @@
                     <h1 class="letra text-center pt-3 pb-3">Informacion de Sedes</h1>
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-5 col-sd-12">
+                            <div class="col-md-6 col-sd-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
-                                        <div class="input-group-text col-md-6 col-sd-12"><b>Nueva Sede:</b></div>
+                                        <div class="input-group-text col-md-6 col-8"><b>Nueva Sede:</b></div>
                                         <button type="button" class="btn" style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formularioModal"><b>Formulario</b></button>
                                     </div>
                                 </form>
-                            </div>
-                            <div class="col-md-7 col-sd-12">
-                                <form action="<%=request.getContextPath()%>/SedesServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Seleccionar archivo CSV:</b></div>
-                                        <input type="file" class="form-control" name="file" id="fileInput" required="1">
-                                        <button type="submit" class="btn" name="action" value="Importar" style="background-color: #6acd56;"><b>Subir archivo</b></button>
-                                        
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-12 col-sd-12">
+                            </div> 
+                            <div class="col-md-6 col-sd-12">
                                 <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
                                     <div class="input-group mb-2">
                                         <div class="input-group-text col-4"><b>Buscar:</b></div>
@@ -226,34 +212,21 @@
             <p class="letra text-center py-4">Informacion de Formaciones </p>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-5 col-sd-12">
-                        <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
+                    <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" class="row g-2 " enctype="multipart/form-data">
+                        <div class="col-md-6 col-sd-12">
                             <div class="input-group mb-2">
-                                <div class="input-group-text col-md-6 col-sd-12"><b>Nueva Formacion:</b></div>
+                                <div class="input-group-text col-md-6 col-8"><b>Nueva Formacion:</b></div>
                                 <button id="editarBtnFormaciones" type="button" class="btn " style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formulario3Modal"><b>Formulario</b></button>
                             </div>
-                        </form>
-                    </div>
-                     <div class="col-md-7 col-sd-12">
-                                <form action="<%=request.getContextPath()%>/FormacionesServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Seleccionar archivo CSV:</b></div>
-                                        <input type="file" class="form-control" name="file2" id="fileInput2" required="1">
-                                        <button type="submit" class="btn" name="action" value="Importar2" style="background-color: #6acd56;"><b>Subir archivo</b></button>
-                                        
-                                    </div>
-                                </form>
-                            </div>       
-                    <div class="col-md-12 col-sd-12">
-                        <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
+                        </div>
+                             
+                        <div class="col-md-6 col-sd-12">
                             <div class="input-group mb-2">
                                 <div class="input-group-text col-4"><b>Buscar:</b></div>
                                 <input type="text" class="form-control" id="filtro2">
                             </div>
-                        </form>
-                    </div>
-
-
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -294,7 +267,7 @@
                                     <td>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#formulario4Modal"
                                                 onclick="obtenerDatosFormacion(<%= sion.getIdFormacion()%>, '<%= sion.getNombre()%>',
-                                                                '<%= sion.getSedeId().getIdSede()%>')" >
+                                                            '<%= sion.getSedeId().getIdSede()%>')" >
                                             Opciones
                                         </button>
                                     </td>
@@ -517,11 +490,11 @@
             case "Existe":
 %>
 <script>
-                                  Swal.fire(
-                                          '¡Oops!',
-                                          'El codigo ya existe en la base de datos',
-                                          'warning'
-                                          );
+                              Swal.fire(
+                                      '¡Oops!',
+                                      'El codigo ya existe en la base de datos',
+                                      'warning'
+                                      );
 </script>
 
 <%

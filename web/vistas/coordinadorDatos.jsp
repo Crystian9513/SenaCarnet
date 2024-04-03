@@ -62,20 +62,16 @@
 
         <%--MENU INICIO --%>
         <nav class="navbar text-l navbar-expand-lg " style="background-color: #6acd56;">
-            <div class="container">
-
-                <div class="row">
-
-                    <div class="col-md-2">
+            <div class="container justify-content-center align-items-center">
+                    <div class="col-md-2 col-12 text-center">
                      
                             <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
                        
                     </div>
-
-                    <div class="col-md-2 text-center">
+                    <div class="col-md-2 col-12 text-center">
                         <h2 class="mt-3 letras"> SENA </h2>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-8 col-12 text-center">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                                 aria-label="Toggle navigation">
@@ -110,7 +106,6 @@
                             </ul>
                         </div>
                     </div>
-                </div>
             </div>
         </nav>
         <%--MENU FINAL --%>

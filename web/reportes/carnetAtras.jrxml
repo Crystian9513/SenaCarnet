@@ -2,17 +2,38 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fd1c22ca-1087-480b-a4d8-2a15ae292e74">
 	<property name="ireport.zoom" value="0.8857805000000005"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="146"/>
+	<property name="ireport.y" value="189"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[SELECT e.NOMBRES, e.APELLIDOS,e.CEDULA,e.FOTOGRAFIA,e.VENCE_CARNET,e.IDENTIFICADOR_UNICO, td.NOMBRE AS TIPO_DOCUMENTO, f.NOMBRE AS FORMACION, f.ID_FORMACION AS NUMERO_FICHA, s.NOMBRE AS SEDE
-FROM estudiantes e
-INNER JOIN formacion f ON e.FORMACION_FK = f.ID_FORMACION
-INNER JOIN sede s ON f.SEDE_ID = s.ID_SEDE
-INNER JOIN tipodocumento td ON e.TIPO_DOCUMENTO_FK = td.ID_TIPO_DOCUMENTO
-WHERE e.CEDULA = $P{id}]]>
+		<![CDATA[SELECT 
+    e.NOMBRES, 
+    e.APELLIDOS,
+    e.CEDULA,
+    e.FOTOGRAFIA,
+    e.VENCE_CARNET,
+    e.IDENTIFICADOR_UNICO, 
+    td.NOMBRE AS TIPO_DOCUMENTO, 
+    f.NOMBRE AS FORMACION, 
+    f.ID_FORMACION AS NUMERO_FICHA, 
+    s.NOMBRE AS SEDE,
+    logo.IDLOGO,
+    logo.IMAGEN,
+    logo.DIRECTOR, 
+    logo.FIRMA
+FROM 
+    estudiantes e
+INNER JOIN 
+    formacion f ON e.FORMACION_FK = f.ID_FORMACION
+INNER JOIN 
+    sede s ON f.SEDE_ID = s.ID_SEDE
+INNER JOIN 
+    tipodocumento td ON e.TIPO_DOCUMENTO_FK = td.ID_TIPO_DOCUMENTO
+CROSS JOIN 
+    (SELECT IDLOGO ,DIRECTOR, IMAGEN , FIRMA FROM logo LIMIT 1) AS logo
+WHERE 
+    e.CEDULA = $P{id}]]>
 	</queryString>
 	<field name="NOMBRES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -23,7 +44,7 @@ WHERE e.CEDULA = $P{id}]]>
 	<field name="CEDULA" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="FOTOGRAFIA" class="java.lang.String">
+	<field name="FOTOGRAFIA" class="java.lang.Object">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="VENCE_CARNET" class="java.sql.Date">
@@ -36,6 +57,18 @@ WHERE e.CEDULA = $P{id}]]>
 	<field name="FORMACION" class="java.lang.String"/>
 	<field name="NUMERO_FICHA" class="java.lang.Integer"/>
 	<field name="SEDE" class="java.lang.String"/>
+	<field name="IDLOGO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IMAGEN" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DIRECTOR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FIRMA" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -67,7 +100,7 @@ WHERE e.CEDULA = $P{id}]]>
 			<staticText>
 				<reportElement x="93" y="611" width="378" height="30" uuid="a3c395e8-1ab6-4af5-9ede-8556c3e7cc2f"/>
 				<textElement>
-					<font size="13"/>
+					<font size="11"/>
 				</textElement>
 				<text><![CDATA[https://cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
 			</staticText>
@@ -86,7 +119,7 @@ WHERE e.CEDULA = $P{id}]]>
 				<textFieldExpression><![CDATA[$F{VENCE_CARNET}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="220" y="581" width="244" height="30" uuid="00f61e2e-2deb-44f2-90e6-f4a46a6476cb"/>
+				<reportElement x="248" y="581" width="226" height="30" uuid="00f61e2e-2deb-44f2-90e6-f4a46a6476cb"/>
 				<textElement>
 					<font size="20"/>
 				</textElement>
@@ -100,13 +133,6 @@ WHERE e.CEDULA = $P{id}]]>
 				<text><![CDATA[FICHA:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="103" y="434" width="344" height="30" uuid="ade63a70-c816-4ed7-bd84-5f42f4783c14"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="16"/>
-				</textElement>
-				<text><![CDATA[Marco Eugenio Gomez Ordosgoitia]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="93" y="501" width="113" height="40" uuid="23db3419-8553-47c2-bc6f-150b52828fa9"/>
 				<textElement>
 					<font size="28"/>
@@ -114,7 +140,7 @@ WHERE e.CEDULA = $P{id}]]>
 				<text><![CDATA[VENCE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="93" y="581" width="127" height="30" uuid="2db3abd8-d951-4ccd-b617-5901bc316bf3"/>
+				<reportElement x="93" y="581" width="142" height="30" uuid="2db3abd8-d951-4ccd-b617-5901bc316bf3"/>
 				<textElement>
 					<font size="20" isBold="false"/>
 				</textElement>
@@ -127,6 +153,17 @@ WHERE e.CEDULA = $P{id}]]>
 				</textElement>
 				<text><![CDATA[Por disposicion de las Leyes 418 de 1997, 548 de 1997, 642 de 2001 y 1106 de 2006, los menores de 18 años de edad y los estudiantes de educacion superior no seran incorporados en la prestacion del servicio militar.]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="103" y="440" width="344" height="40" uuid="5b0054c6-40e9-4765-b580-58add8ee415e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DIRECTOR}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="103" y="370" width="344" height="70" uuid="62ae39dc-eff2-4d97-a812-8a9882437aa0"/>
+				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte [])$F{FIRMA} )]]></imageExpression>
+			</image>
 		</band>
 	</detail>
 	<summary>

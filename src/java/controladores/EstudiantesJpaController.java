@@ -258,8 +258,7 @@ public class EstudiantesJpaController implements Serializable {
         }
     }
     
-
- public Object[] findEstudianteYEstadoCarnetPorIdentificadorUnico(String identificadorUnico) {
+     public Object[] findEstudianteYEstadoCarnetPorIdentificadorUnico(String identificadorUnico) {
         EntityManager em = getEntityManager();
         try {
             Query query = em.createQuery("SELECT e, e.estadoCarnetIdestadoCarnet FROM Estudiantes e WHERE e.identificadorUnico = :identificadorUnico");

@@ -47,7 +47,7 @@
             <%--CONTENIDO INICIO --%>
             <div class="container text-center ">
 
-                <h4>En esta página, encontrarás la opción de descargar tu carnet en formato PNG con solo pulsar un botón. </h4>
+                <h4>En esta página, encontrarás la opción de descargar tu carnet en formato PDF con solo pulsar un botón. </h4>
 
                 <div class="row ">
                     <div class="col-12 d-flex align-items-center justify-content-center pt-3">
@@ -60,10 +60,7 @@
                             </div>
                             <div>
                                 <button type="button" class="btn" onclick="verReporte()" data-cedula="${not empty estudiante ? estudiante.cedula : ''}" style="background-color: #6acd56;">
-                                    <b>Adelante</b>
-                                </button>
-                                <button type="button" class="btn" onclick="verReporte2()" data-cedula="${not empty estudiante ? estudiante.cedula : ''}" style="background-color: #6acd56;">
-                                    <b>Atras</b>
+                                    <b>Descargar</b>
                                 </button>
                             </div>
 
@@ -82,13 +79,14 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 </html>
+
 <script>
                                     // Script para descargar el carnet
                                     function verReporte() {
                                         var cedula = document.querySelector("[data-cedula]").getAttribute("data-cedula");
                                         console.log("Valor de cedula:", cedula); // Debugging
                                         if (cedula !== '') {
-                                            window.open("<%= request.getContextPath()%>/reportes/reporteCarnet.jsp?cedula=" + cedula, "_blank");
+                                            window.open("<%= request.getContextPath()%>/reportes/reporteCarnetCompleto.jsp?cedula=" + cedula, "_blank");
                                         } else {
                                             // Manejar el caso donde el estudiante no está en sesión
                                             alert("No se puede generar el carnet. Por favor, inicie sesión.");
@@ -96,17 +94,5 @@
                                     }
 </script>
 
-<script>
-                                    // Script para descargar el carnet
-                                    function verReporte2() {
-                                        var cedula = document.querySelector("[data-cedula]").getAttribute("data-cedula");
-                                        console.log("Valor de cedula:", cedula); // Debugging
-                                        if (cedula !== '') {
-                                            window.open("<%= request.getContextPath()%>/reportes/reporteCartnetAtras.jsp?cedula=" + cedula, "_blank");
-                                        } else {
-                                            // Manejar el caso donde el estudiante no está en sesión
-                                            alert("No se puede generar el carnet. Por favor, inicie sesión.");
-                                        }
-                                    }
-</script>
+
 
