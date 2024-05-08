@@ -31,86 +31,13 @@
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        
 
-        <script>
-            // Función para obtener los datos de la sede y mostrarlos en el modal
-            function obtenerDatosSede(idSede, nombreSede) {
-                // Actualiza los campos del modal con los datos de la sede seleccionada
-                document.getElementById('codigoModal2').value = idSede;
-                document.getElementById('nombreModal2').value = nombreSede;
-            }
-        </script>
-
-        <script>
-            function obtenerDatosFormacion(IdFormacion, Nombre, SedeId) {
-                // Actualiza los campos del modal con los datos de la formación seleccionada
-                $("#codigoModal5").val(IdFormacion);
-                $("#nombreModal5").val(Nombre);
-                $("#SedesLista2").val(SedeId);
-
-                // Realiza la solicitud AJAX para obtener los datos adicionales si es necesario
-                $.ajax({
-                    type: "POST",
-                    url: "../Busquedas/obtenerSede.jsp",
-                    data: {idsede: SedeId},
-                    dataType: "html",
-                    success: function (data) {
-                        $("#SedesLista2").empty().append(data);
-                    }
-                });
-            }
-        </script>
     </head>
     <body  style="background-color: #fefafb;">     
 
         <%--MENU INICIO --%>
-        <nav class="navbar text-l navbar-expand-lg "  style="background-color: #6acd56;">
-            <div class="container justify-content-center align-items-center">
-                <div class="col-md-2 col-12 text-center">
-
-                    <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-
-                </div>
-                <div class="col-md-2 col-12 text-center">
-                    <h2 class="mt-3 letras"> SENA </h2>
-                </div>
-                <div class="col-md-8 col-12 text-center">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
-                        <ul class="navbar-nav ms-auto navbar-brand">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Aprendiz
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="estudiantes.jsp">Ingresar</a></li>
-                                    <li><a class="dropdown-item" href="carnetEliminado.jsp">Carnet Eliminado</a></li>
-                                </ul>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link" href="administrador.jsp">Administrador</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
-                            </li>
-                            <li class="nav-item ">
-                                <a class="nav-link" href="#">Sede-Formacion</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="menuPrincipal.jsp">Menu Principal</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="cerrarSesionAdministrador.jsp">Salir</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <jsp:include page="../Componentes/menu.jsp" ></jsp:include>
         <%--MENU FINAL --%>
 
         <%--CONTENIDO INICIO --%>
@@ -129,14 +56,11 @@
                                 </form>
                             </div> 
                             <div class="col-md-6 col-sd-12">
-                                <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Buscar:</b></div>
-                                        <input type="text" class="form-control" id="filtro1">
-                                    </div>
-                                </form>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text col-4"><b>Buscar:</b></div>
+                                    <input type="text" class="form-control" id="filtro1">
+                                </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -201,7 +125,6 @@
                             </div>
                         </div>
                     </section>
-
                 </div>
             </div>  
         </div>
@@ -212,24 +135,25 @@
             <p class="letra text-center py-4">Informacion de Formaciones </p>
             <div class="container">
                 <div class="row">
-                    <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" class="row g-2 " enctype="multipart/form-data">
-                        <div class="col-md-6 col-sd-12">
+                    <div class="col-md-6 col-sd-12">
+                        <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" class="row g-2 " enctype="multipart/form-data">
                             <div class="input-group mb-2">
                                 <div class="input-group-text col-md-6 col-8"><b>Nueva Formacion:</b></div>
-                                <button id="editarBtnFormaciones" type="button" class="btn " style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formulario3Modal"><b>Formulario</b></button>
+                                <button id="editarBtnFormaciones" type="button" class="btn " style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formulario3Modal">
+                                    <b>Formulario</b>
+                                </button>
                             </div>
+                        </form>
+                    </div>
+
+                    <div class="col-md-6 col-sd-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-text col-4"><b>Buscar:</b></div>
+                            <input type="text" class="form-control" id="filtro2">
                         </div>
-                             
-                        <div class="col-md-6 col-sd-12">
-                            <div class="input-group mb-2">
-                                <div class="input-group-text col-4"><b>Buscar:</b></div>
-                                <input type="text" class="form-control" id="filtro2">
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-
             <div class="row" data-aos="zoom-in"  data-aos-duration="500">
                 <div class="col-md-12" data-aos="zoom-in"  data-aos-duration="500">
                     <!-- TABLA FORMACIONES INICIO -->
@@ -267,7 +191,7 @@
                                     <td>
                                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#formulario4Modal"
                                                 onclick="obtenerDatosFormacion(<%= sion.getIdFormacion()%>, '<%= sion.getNombre()%>',
-                                                            '<%= sion.getSedeId().getIdSede()%>')" >
+                                                                '<%= sion.getSedeId().getIdSede()%>')" >
                                             Opciones
                                         </button>
                                     </td>
@@ -283,69 +207,16 @@
             </div>
         </div>
         <!-- TABLA FORMACIONES FINAL -->
+        <jsp:include page="../Componentes/footer.jsp" ></jsp:include>
 
-        <footer class="py-3 mt-2 text-center" style="background-color: #6acd56;">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sd-6 pt-3">
-                    <img src="../img/icon_facebook.png" alt="alt"/>
-                    <a  href="http://www.facebook.com">Facebook</a><br>
-                    <img src="../img/icon_instagram.png" alt="alt"/>
-                    <a href="http://www.instagram.com">Instagram</a><br>
-                    <img src="../img/icon_github.png" alt="alt"/>
-                    <a href="https://github.com/Crystian9513">Github</a>
-                </div>
-                <div class="col-lg-8 col-md-6 col-sd-6">
+        <jsp:include page="../Componentes/modales.jsp" ></jsp:include>  
 
-                    <h5 class="pt-2">Copyright <%= java.time.LocalDate.now().getYear()%>
-                        Crystian Jesus Peralta Arias y Sebastian Navaja. <br>
-                        Desarrollador Web.
-                    </h5>
-                    <h6>Telefono: +57 300 7836674 </h6>
-                    <h6>Correo: crystian_9513@hotmail.com</h6>
-                </div>
-            </div>
-        </footer>
-
-        <!-- MODALES DE SEDES GUARDAR INICIO -->
-        <div class="modal fade" id="formularioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/SedesServlet" method="post" class="row g-2 "
-                              onsubmit="return validarCamposVacios();"
-                              >
-                            <h2 class="pt-5 pb-4 text-center">Registrar Sede</h2>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Codigo:</b></div>
-                                    <input type="number" class="form-control" id="codigoModal" name="codigo" required min="1" max="999999999999">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Nombre:</b></div>
-
-                                    <input type="text" class="form-control" id="nombreModal" name="nombre" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
-                                <button type="submit" class="btn botones  px-4"
-                                        value="Guardar" name="action" style="background-color: #6acd56;"><b>Guardar</b></button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- MODALES DE SEDES GUARDAR FINAL -->
-
-        <!-- MODALES DE SEDES OPCIONES INICIO -->
-        <div class="modal fade" id="formulario2Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/SedesServlet" method="post" class="row g-2 " >
+            <!-- MODALES DE SEDES OPCIONES INICIO -->
+            <div class="modal fade" id="formulario2Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form action="<%=request.getContextPath()%>/SedesServlet" method="post" class="row g-2 " >
                             <h2 class="pt-5 pb-4 text-center">Sede</h2>
                             <div class="col-12">
                                 <div class="input-group m">
@@ -373,60 +244,6 @@
         </div>
         <!-- MODALES DE SEDES OPCIONES FINAL -->
 
-        <!-- MODALES DE FORMACIONES GUARDAR INICIO -->
-        <div class="modal fade" id="formulario3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/FormacionesServlet" method="post" class="row g-2 "
-                              onsubmit="return validarCamposVacios2();">
-                            <h2 class="pt-5 pb-4 text-center">Registrar Formacion</h2>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Codigo:</b></div>
-
-                                    <input type="number" class="form-control" id="codigoModal3" name="codigo2" required min="1" max="999999999999">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Nombre:</b></div>
-                                    <input type="text" class="form-control" id="nombreModal3" name="nombre2" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group">
-                                    <div class="input-group-text col-5"><b>Sedes</b></div>
-                                    <select name="SedesLista" id="SedesLista"
-                                            class="from-selec col-7"  required>
-                                        <option value="" disabled selected hidden>-- Elija --</option>
-                                        <%
-                                            SedeJpaController se = new SedeJpaController();
-                                            List lista = se.findSedeEntities();
-
-                                            for (int i = 0; i < lista.size(); i++) {
-                                                Sede de = (Sede) lista.get(i);
-                                                out.print("<option value='" + de.getIdSede() + "'>");
-                                                out.print(de.getNombre());
-                                                out.print("</option>");
-                                            }
-                                        %>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12 text-center py-5 pt-5"><!-- bottones -->
-                                <button type="submit" class="btn botones px-4 "  style="background-color: #6acd56;"
-                                        name="action" value="Guardar" ><b>Guardar</b></button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- MODALES DE FORMACIONES GUARDAR FINAL -->
-
         <!-- MODALES DE FORMACIONES OPCIONES INICIO -->
         <div class="modal fade" id="formulario4Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -452,7 +269,6 @@
                                     <div class="input-group-text col-5"><b>Sedes</b></div>
                                     <select name="SedesLista2" id="SedesLista2"
                                             class="from-selec col-7"  required>
-
                                     </select>
                                 </div>
                             </div>
@@ -470,7 +286,7 @@
 
         <!-- MODALES DE FORMACIONES OPCIONES FINAL -->
 
-
+        <script src="../js/sedesFormaciones.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -490,11 +306,11 @@
             case "Existe":
 %>
 <script>
-                              Swal.fire(
-                                      '¡Oops!',
-                                      'El codigo ya existe en la base de datos',
-                                      'warning'
-                                      );
+                                  Swal.fire(
+                                          '¡Oops!',
+                                          'El codigo ya existe en la base de datos',
+                                          'warning'
+                                          );
 </script>
 
 <%
@@ -659,36 +475,4 @@
 
 %>
 
-<script>
-    const filtroInput = document.getElementById("filtro1");
-    const filas = document.querySelectorAll("#tablaSede tbody tr");
 
-    filtroInput.addEventListener("input", function () {
-        const filtro = filtroInput.value.trim().toLowerCase();
-
-        filas.forEach(function (fila) {
-            const textoFila = fila.textContent.toLowerCase();
-            if (textoFila.includes(filtro)) {
-                fila.style.display = "";
-            } else {
-                fila.style.display = "none";
-            }
-        });
-    });
-</script>
-<script>
-    const filtroInput2 = document.getElementById("filtro2");
-    const filasFormacion = document.querySelectorAll("#tablaFormacion tbody tr"); // Cambio de nombre aquí
-    filtroInput2.addEventListener("input", function () {
-        const filtro = filtroInput2.value.trim().toLowerCase();
-
-        filasFormacion.forEach(function (fila) { // Cambio de nombre aquí también
-            const textoFila = fila.textContent.toLowerCase();
-            if (textoFila.includes(filtro)) {
-                fila.style.display = "";
-            } else {
-                fila.style.display = "none";
-            }
-        });
-    });
-</script>

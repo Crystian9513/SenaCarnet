@@ -31,13 +31,19 @@
     // Obtener la ruta del archivo Jasper
     File reportFile = new File(application.getRealPath("reportes/carnetFormciones.jasper"));
 
-    // Generar el informe PDF con los parámetros
-    byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), parameters, coneccion);
+    try {
+        // Generar el informe PDF con los parámetros
+        byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), parameters, coneccion);
 
-    response.setContentType("application/pdf");
-    response.setContentLength(bytes.length);
-    ServletOutputStream ouputStream = response.getOutputStream();
-    ouputStream.write(bytes, 0, bytes.length);
-    ouputStream.flush();
-    ouputStream.close();
+        // Mostrar el PDF normalmente
+        response.setContentType("application/pdf");
+        response.setContentLength(bytes.length);
+        ServletOutputStream outputStream = response.getOutputStream();
+        outputStream.write(bytes, 0, bytes.length);
+        outputStream.flush();
+        outputStream.close();
+    } catch (Exception e) {
+        // Capturar cualquier excepción que pueda ocurrir durante la generación del informe
+        out.println("Error falta de imagenes en los carnet de la formacion: " + e.getMessage());
+    }
 %>

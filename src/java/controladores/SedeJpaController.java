@@ -27,7 +27,7 @@ import javax.persistence.Persistence;
 public class SedeJpaController implements Serializable {
 
     public SedeJpaController( ) {
-         this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
+        this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
 

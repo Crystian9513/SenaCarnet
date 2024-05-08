@@ -9,33 +9,21 @@ import controladores.UsuariosJpaController;
 import controladores.exceptions.NonexistentEntityException;
 import entidades.Administrador;
 import entidades.Usuarios;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 /**
  *
  * @author Peralta
  */
-@MultipartConfig //Para archivos siempre va esto
 @WebServlet(name = "administradoresServlet", urlPatterns = {"/administradoresServlet"})
 public class administradoresServlet extends HttpServlet {
-
-    private String pathFiles = "";
-    private File uploads;
-    private String[] extensiones = {".ico", ".png", ".jpg", ".jpeg"};
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -67,14 +55,13 @@ public class administradoresServlet extends HttpServlet {
 
     }
 
- public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
+    public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String nombre = request.getParameter("nombre");
         String apellido = request.getParameter("apellido");
         int cedula = Integer.parseInt(request.getParameter("cedula"));
         String correo = request.getParameter("correo");
-        Part part = request.getPart("foto");
 
         AdministradorJpaController controladorAdm = new AdministradorJpaController();
         Administrador guardarAdmin = new Administrador();
@@ -85,47 +72,34 @@ public class administradoresServlet extends HttpServlet {
         String claveEncriptada = controladorAdm.EncryptarClave(clave);
 
         try {
-
             if (controladorAdm.findAdministrador(cedula) != null && controlUsuario.findUsuarios(cedula) != null) {
                 String mensaje = "existe";
                 response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
                 return; // Se agrega un return para terminar la ejecución del método
             }
-            if (part == null) {
-                guardarAdmin.setFotografia(null); // Guardar null en la base de datos si la foto no se envía
-                return;
-            }
-            pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-            uploads = new File(pathFiles);
 
-            if (isExtension(part.getSubmittedFileName(), extensiones)) {
-                String photo = saveFile(part, uploads);
-                guardarAdmin.setNombre(nombre);
-                guardarAdmin.setApellido(apellido);
-                guardarAdmin.setCedula(cedula);
-                guardarAdmin.setClave(clave);
-                guardarAdmin.setCorreo(correo);
-                guardarAdmin.setFotografia(photo);
-                controladorAdm.create(guardarAdmin);
+            guardarAdmin.setNombre(nombre);
+            guardarAdmin.setApellido(apellido);
+            guardarAdmin.setCedula(cedula);
+            guardarAdmin.setClave(clave);
+            guardarAdmin.setCorreo(correo);
+            controladorAdm.create(guardarAdmin);
 
-                guardaUsuario.setCedula(cedula);
-                guardaUsuario.setNombres(nombre);
-                guardaUsuario.setApellidos(apellido);
-                guardaUsuario.setClaves(claveEncriptada);
-                guardaUsuario.setRol(2);
-                guardaUsuario.setEstadoClave(2);
-                controlUsuario.create(guardaUsuario);
+            guardaUsuario.setCedula(cedula);
+            guardaUsuario.setNombres(nombre);
+            guardaUsuario.setApellidos(apellido);
+            guardaUsuario.setClaves(claveEncriptada);
+            guardaUsuario.setRol(2);
+            guardaUsuario.setEstadoClave(2);
+            controlUsuario.create(guardaUsuario);
 
-                String mensaje = "guardado";
-                response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
-            }
+            String mensaje = "guardado";
+            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
         } catch (Exception e) {
             String mensaje = "errorAlguardar";
             response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
         }
-
     }
-
 
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NonexistentEntityException {
@@ -144,105 +118,53 @@ public class administradoresServlet extends HttpServlet {
 
     }
 
-  public void botonEditar(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    public void botonEditar(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    int cedula = Integer.parseInt(request.getParameter("cedula2"));
-    String nombre = request.getParameter("nombre2");
-    String apellido = request.getParameter("apellido2");
-    String correo = request.getParameter("correo2");
-    Part part = request.getPart("foto2");
-    String photo = null;
+        int cedula = Integer.parseInt(request.getParameter("cedula2"));
+        String nombre = request.getParameter("nombre2");
+        String apellido = request.getParameter("apellido2");
+        String correo = request.getParameter("correo2");
 
-    AdministradorJpaController controladorAdm = new AdministradorJpaController();
-    Administrador adminExistente = controladorAdm.findAdministrador(cedula);
+        AdministradorJpaController controladorAdm = new AdministradorJpaController();
+        Administrador adminExistente = controladorAdm.findAdministrador(cedula);
 
-    UsuariosJpaController controladorUsuario = new UsuariosJpaController();
-    Usuarios usuarioExistente = controladorUsuario.findUsuarios(cedula);
-    
-    // Verificar si se proporcionó una nueva foto
-    if (part != null && part.getSize() > 0) {
-        // Guardar la nueva foto en el servidor y obtener su URL
-        pathFiles = getServletContext().getResource("vistas/fotos").getPath().replace("build", "");
-        uploads = new File(pathFiles);
-        if (isExtension(part.getSubmittedFileName(), extensiones)) {
-            photo = saveFile(part, uploads);
-        }
-    }
-
-    try {
-        if (adminExistente != null && usuarioExistente != null) {
-            // Si el administrador y el usuario existen, proceder con la edición
-            // Actualizar los campos del administrador
-            adminExistente.setNombre(nombre);
-            adminExistente.setApellido(apellido);
-            adminExistente.setCorreo(correo);
-            adminExistente.setCedula(cedula);
-            
-            // Si se proporcionó una nueva foto, actualizar la URL de la foto en la base de datos
-            if (photo != null) {
-                adminExistente.setFotografia(photo);
-            }
-
-            // Actualizar los campos del usuario
-            usuarioExistente.setNombres(nombre);
-            usuarioExistente.setApellidos(apellido);
-            usuarioExistente.setCedula(cedula);
-            usuarioExistente.setRol(2);
-            
-            // Actualizar otros campos según sea necesario
-
-            // Guardar los cambios en la base de datos
-            controladorAdm.edit(adminExistente);
-            controladorUsuario.edit(usuarioExistente);
-
-            String mensaje = "editado";
-            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
-        } else {
-            // Si el administrador o el usuario no existen, manejar el error
-            String mensaje = "Erroraleditar";
-            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
-        }
-    } catch (Exception e) {
-        // Imprimir el seguimiento de la pila para depuración
-        e.printStackTrace();
-        String mensaje = "Error al editar: " + e.getMessage();
-        response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
-    }
-}
-
-
-
-    private String saveFile(Part part, File pathUploads) {
-        String pathAbsolute = "";
+        UsuariosJpaController controladorUsuario = new UsuariosJpaController();
+        Usuarios usuarioExistente = controladorUsuario.findUsuarios(cedula);
 
         try {
+            if (adminExistente != null && usuarioExistente != null) {
+                // Si el administrador y el usuario existen, proceder con la edición
+                // Actualizar los campos del administrador
+                adminExistente.setNombre(nombre);
+                adminExistente.setApellido(apellido);
+                adminExistente.setCorreo(correo);
+                adminExistente.setCedula(cedula);
 
-            Path path = Paths.get(part.getSubmittedFileName());
-            String fileName = path.getFileName().toString();
-            InputStream input = part.getInputStream();
+                // Actualizar los campos del usuario
+                usuarioExistente.setNombres(nombre);
+                usuarioExistente.setApellidos(apellido);
+                usuarioExistente.setCedula(cedula);
+                usuarioExistente.setRol(2);
 
-            if (input != null) {
-                File file = new File(pathUploads, fileName);
-                pathAbsolute = "fotos/" + fileName;
-                Files.copy(input, file.toPath());
+                // Actualizar otros campos según sea necesario
+                // Guardar los cambios en la base de datos
+                controladorAdm.edit(adminExistente);
+                controladorUsuario.edit(usuarioExistente);
+
+                String mensaje = "editado";
+                response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+            } else {
+                // Si el administrador o el usuario no existen, manejar el error
+                String mensaje = "Error al editar: no se encontró el administrador o el usuario";
+                response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
             }
-
         } catch (Exception e) {
+            // Imprimir el seguimiento de la pila para depuración
             e.printStackTrace();
+            String mensaje = "Error al editar: " + e.getMessage();
+            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
         }
-
-        return pathAbsolute;
-    }
-
-    private boolean isExtension(String fileName, String[] extensions) {
-        for (String et : extensions) {
-            if (fileName.toLowerCase().endsWith(et)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

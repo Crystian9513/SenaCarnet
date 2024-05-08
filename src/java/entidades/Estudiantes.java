@@ -35,6 +35,13 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Estudiantes.findByIdentificadorUnico", query = "SELECT e FROM Estudiantes e WHERE e.identificadorUnico = :identificadorUnico")})
 public class Estudiantes implements Serializable {
 
+    @Lob
+    @Column(name = "FOTOGRAFIA")
+    private byte[] fotografia;
+    @Basic(optional = false)
+    @Column(name = "RH")
+    private String rh;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -46,9 +53,6 @@ public class Estudiantes implements Serializable {
     @Basic(optional = false)
     @Column(name = "APELLIDOS")
     private String apellidos;
-    @Lob
-    @Column(name = "FOTOGRAFIA")
-    private byte[] fotografia;
     @Basic(optional = false)
     @Column(name = "CORREO")
     private String correo;
@@ -110,13 +114,6 @@ public class Estudiantes implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public byte[] getFotografia() {
-        return fotografia;
-    }
-
-    public void setFotografia(byte[] fotografia) {
-        this.fotografia = fotografia;
-    }
 
     public String getCorreo() {
         return correo;
@@ -197,6 +194,22 @@ public class Estudiantes implements Serializable {
     @Override
     public String toString() {
         return "entidades.Estudiantes[ cedula=" + cedula + " ]";
+    }
+
+    public byte[] getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(byte[] fotografia) {
+        this.fotografia = fotografia;
+    }
+
+    public String getRh() {
+        return rh;
+    }
+
+    public void setRh(String rh) {
+        this.rh = rh;
     }
     
 }

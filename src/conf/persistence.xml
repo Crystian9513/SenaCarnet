@@ -5,13 +5,13 @@
     <class>entidades.Estudiantes</class>
     <class>entidades.Formacion</class>
     <class>entidades.Sede</class>
-    <class>entidades.Administrador</class>
     <class>entidades.Tipodocumento</class>
     <class>entidades.Usuarios</class>
     <class>entidades.EstadoCarnet</class>
     <class>entidades.Coordinador</class>
     <class>entidades.InformacionCarnet</class>
     <class>entidades.Logo</class>
+    <class>entidades.Administrador</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/senacarnet?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

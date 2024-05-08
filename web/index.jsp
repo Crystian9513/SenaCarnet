@@ -31,7 +31,7 @@
                                                 <div class="input-group">
                                                     <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
                                                     <input type="number" id="numero" name="numero" class="form-control"
-                                                           placeholder="Numero de Cedula" required min="1" max="999999999999">
+                                                           placeholder="Numero de Cedula" required min="1" max="2147483647">
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -39,14 +39,14 @@
                                                 <div class="input-group">
                                                     <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                                                     <input type="password" id="clave" name="clave" class="form-control"
-                                                           placeholder="Contraseña" required min="1" maxlength="25">
+                                                           placeholder="Contraseña" required min="1" maxlength="20">
                                                 </div>
                                             </div>
-                                            <div class="col-12 ">
+                                          <!--<div class="col-12 ">
                                                 <a href="#" class="float-end text-primary " data-bs-toggle="modal" data-bs-target="#formularioModal2" > 
                                                     <strong>Olvido su Contraseña? </strong> 
                                                 </a>
-                                            </div>
+                                            </div>--> 
                                             <div class="col-12 d-flex justify-content-center align-items-center">
                                                 <button type="submit" name="btninicio" class="btn mx-auto mt-2" style="background-color: #6acd56;"
                                                         >
@@ -69,31 +69,31 @@
         </div>
 
 
-       <!-- MODALES INICIO -->
-<div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form action="<%=request.getContextPath()%>/olvidoContrase_aServlet" method="post" class="row g-2 ">
-                    <h2 class="pt-2 pb-1 text-center">Olvido su Contraseña</h2>
-                    <h6 class="">Ingrese su numero de cedula, y se le enviara un Link a su correo para poder cambiar su contraseña. <br> </h6>
-                    <div class="col-12">
-                        <div class="input-group">
-                            <div class="input-group-text col-5"><b>Cedula:</b></div>
-                            <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999">
-                        </div>
-                    </div>
+        <!-- MODALES INICIO -->
+        <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form action="<%=request.getContextPath()%>/olvidoContrase_aServlet" method="post" class="row g-2 ">
+                            <h2 class="pt-2 pb-1 text-center">Olvido su Contraseña</h2>
+                            <h6 class="">Ingrese su numero de cedula, y se le enviara un Link a su correo para poder cambiar su contraseña. <br> </h6>
+                            <div class="col-12">
+                                <div class="input-group">
+                                    <div class="input-group-text col-5"><b>Cedula:</b></div>
+                                    <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999">
+                                </div>
+                            </div>
 
-                    <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
-                        <button type="submit" class="btn botones  px-4"
-                                name="action" value="Enviar" style="background-color: #6acd56;"><b>Enviar</b></button>
+                            <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
+                                <button type="submit" class="btn botones  px-4"
+                                        name="action" value="Enviar" style="background-color: #6acd56;"><b>Enviar</b></button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<!-- MODALE FINAL -->
+        <!-- MODALE FINAL -->
 
 
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -117,54 +117,59 @@
         UsuariosJpaController usuarioController = new UsuariosJpaController();
         Usuarios usuario = usuarioController.findUsuarios(cedula);
 
-        if (usuario == null) {
-            // Si el usuario no existe, redirigimos a la página de inicio de sesión con un mensaje de error
-            String mensaje = "documentoNoExiste";
-            response.sendRedirect("index.jsp?respuesta=" + mensaje);
-        } else {
-            // Si el usuario existe, obtenemos el rol y la contraseña
-            int rol = usuario.getRol();
-            int estadoClave = usuario.getEstadoClave();
-            String contraseñaUsuario = usuario.getClaves(); // Obtener la contraseña del usuario
+        try {
+            if (usuario == null) {
+                // Si el usuario no existe, redirigimos a la página de inicio de sesión con un mensaje de error
+                String mensaje = "documentoNoExiste";
+                response.sendRedirect("index.jsp?respuesta=" + mensaje);
+            } else {
+                // Si el usuario existe, obtenemos el rol y la contraseña
+                int rol = usuario.getRol();
+                int estadoClave = usuario.getEstadoClave();
+                String contraseñaUsuario = usuario.getClaves(); // Obtener la contraseña del usuario
 
-            // Verificamos si la contraseña coincide con la almacenada en la base de datos
-            if (usuarioController.DencryptarClave(contraseñaUsuario, clave)) {
+                // Verificamos si la contraseña coincide con la almacenada en la base de datos
+                if (usuarioController.DencryptarClave(contraseñaUsuario, clave)) {
 
-                // Verificamos el rol y el estado de la clave para redirigir correctamente
-                if (rol == 1) {
-                    // Si el usuario tiene rol 1, verificamos el estado de la clave
-                    if (estadoClave == 1) {
+                    // Verificamos el rol y el estado de la clave para redirigir correctamente
+                    if (rol == 1) {
+                        // Si el usuario tiene rol 1, verificamos el estado de la clave
+                        if (estadoClave == 1) {
+                            HttpSession sessionActual = request.getSession();
+                            sessionActual.setAttribute("estudiante", usuario);
+                            // Si la clave está en estado 1, redirigimos a la página de cambio de contraseña
+                            String mensaje = "cambioClavesPrimeraVez";
+                            response.sendRedirect("vistas/cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
+                        } else {
+                            // Si la clave no está en estado 1, redirigimos a la página de usuario
+                            HttpSession sessionActual = request.getSession();
+                            sessionActual.setAttribute("estudiante", usuario);
+                            response.sendRedirect("vistas/usuario.jsp");
+                        }
+                    } else if (rol == 2) {
+                        // Si el usuario tiene rol 2, lo redirigimos al menú principal
                         HttpSession sessionActual = request.getSession();
-                        sessionActual.setAttribute("estudiante", usuario);
-                        // Si la clave está en estado 1, redirigimos a la página de cambio de contraseña
-                        String mensaje = "cambioClavesPrimeraVez";
-                        response.sendRedirect("vistas/cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
+                        sessionActual.setAttribute("user", usuario);
+                        response.sendRedirect("vistas/menuPrincipal.jsp");
+                    } else if (rol == 3) {
+                        // Si el usuario tiene rol 3, lo redirigimos a otra página
+                        HttpSession sessionActual = request.getSession();
+                        sessionActual.setAttribute("coordinador", usuario);
+                        response.sendRedirect("vistas/coordinador.jsp");
                     } else {
-                        // Si la clave no está en estado 1, redirigimos a la página de usuario
-                        HttpSession sessionActual = request.getSession();
-                        sessionActual.setAttribute("estudiante", usuario);
-                        response.sendRedirect("vistas/usuario.jsp");
+                        // Si el usuario tiene otro rol, redirigimos a la página de inicio de sesión con un mensaje de error
+                        String mensaje = "usuarioSinAcceso";
+                        response.sendRedirect("index.jsp?respuesta=" + mensaje);
                     }
-                } else if (rol == 2) {
-                    // Si el usuario tiene rol 2, lo redirigimos al menú principal
-                    HttpSession sessionActual = request.getSession();
-                    sessionActual.setAttribute("user", usuario);
-                    response.sendRedirect("vistas/menuPrincipal.jsp");
-                } else if (rol == 3) {
-                    // Si el usuario tiene rol 3, lo redirigimos a otra página
-                    HttpSession sessionActual = request.getSession();
-                    sessionActual.setAttribute("coordinador", usuario);
-                    response.sendRedirect("vistas/coordinador.jsp");
                 } else {
-                    // Si el usuario tiene otro rol, redirigimos a la página de inicio de sesión con un mensaje de error
-                    String mensaje = "usuarioSinAcceso";
+                    // Si la contraseña no coincide, redirigimos a la página de inicio de sesión con un mensaje de error
+                    String mensaje = "conIncorrecta";
                     response.sendRedirect("index.jsp?respuesta=" + mensaje);
                 }
-            } else {
-                // Si la contraseña no coincide, redirigimos a la página de inicio de sesión con un mensaje de error
-                String mensaje = "conIncorrecta";
-                response.sendRedirect("index.jsp?respuesta=" + mensaje);
             }
+        } catch (Exception e) {
+            String mensaje = "error";
+            response.sendRedirect("index.jsp?respuesta=" + mensaje);
         }
     }
 %>
@@ -228,6 +233,17 @@
             '¡Exito!',
             '¡Correo enviado!',
             'success'
+            );
+</script>
+<%
+        break;
+    case "errorEnvio":
+%>
+<script>
+    Swal.fire(
+            '¡Oops!',
+            '¡Error al enviar el Correo!',
+            'warning'
             );
 </script>
 <%

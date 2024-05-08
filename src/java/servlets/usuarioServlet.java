@@ -4,6 +4,7 @@
  */
 package servlets;
 
+import entidades.IncriptacionContraseñas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,6 +61,8 @@ public class usuarioServlet extends HttpServlet {
         Part filePart = request.getPart("file3");
         if (filePart != null) {
             try {
+                
+                IncriptacionContraseñas encriptar = new IncriptacionContraseñas();
                 InputStream inputStream = filePart.getInputStream();
                 System.out.println("Iniciando procesamiento del archivo...");
 
@@ -97,6 +100,8 @@ public class usuarioServlet extends HttpServlet {
                 System.out.println("Procesamiento del archivo completado con éxito.");
                 String mensaje = "guardarImportacion2";
                 response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                
+                encriptar.Asiganacion();
 
             } catch (Exception e) {
                 e.printStackTrace();

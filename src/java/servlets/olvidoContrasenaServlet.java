@@ -1,19 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package servlets;
-
 import controladores.AdministradorJpaController;
 import controladores.CoordinadorJpaController;
 import controladores.EstudiantesJpaController;
-import controladores.UsuariosJpaController;
 import entidades.Administrador;
 import entidades.Coordinador;
 import entidades.Estudiantes;
 import entidades.Usuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -62,8 +57,6 @@ public class olvidoContrasenaServlet extends HttpServlet {
         }
 
     }
-
-   
 
     public void buscarCorreo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, Exception {
@@ -130,12 +123,12 @@ public class olvidoContrasenaServlet extends HttpServlet {
         } catch (Exception ex) {
             // Manejar cualquier excepción que pueda ocurrir durante la búsqueda
             ex.printStackTrace();
-            response.sendRedirect("error.jsp");
+            String mensaje = "error";
+            response.sendRedirect("index.jsp?respuesta=" + mensaje);
         }
     }
 
-    private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletResponse response,
-            HttpServletRequest request) throws IOException {
+    private void enviarCorreo(String correoDestino, Usuarios usuario, HttpServletResponse response, HttpServletRequest request) throws IOException {
         String correoOrigen = "peralta9513@gmail.com";
         String password = "ndok qjog axmf ynhd";
 
@@ -161,8 +154,23 @@ public class olvidoContrasenaServlet extends HttpServlet {
             // Generar un token único para la URL de recuperación de contraseña
             String token = UUID.randomUUID().toString(); // Generar un UUID aleatorio como token único
 
-            String url = "http://10.217.16.16:8080/SenaCarnet/vistas/olvidoContrasena.jsp?token=" + token
-                    + "&cedula=" + usuario.getCedula();
+            // Obtener la fecha y hora actual
+            LocalDateTime now = LocalDateTime.now();
+
+            // Convertir la fecha y hora actual a milisegundos
+            long nowMillis = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+            // Definir la validez del token en minutos (5 minuto en este caso)
+            int validityMinutes = 5;
+
+            // Calcular la fecha y hora de expiración del token
+            long expirationMillis = nowMillis + (validityMinutes * 60 * 1000);
+
+            // Crear la URL con el token y la fecha de expiración
+            String url = "http://cits.com.co/SenaCarnet/vistas/olvidoContrasena.jsp?token=" + token
+                    + "&cedula=" + usuario.getCedula() + "&expiration=" + expirationMillis;
+
+            System.out.println("servlets.olvidoContrasenaServlet.enviarCorreo()" + url);
 
             // Construir el contenido del mensaje con la URL única
             String mensaje = "Hola,\n\nHemos recibido una solicitud para restablecer tu contraseña. "
@@ -180,13 +188,9 @@ public class olvidoContrasenaServlet extends HttpServlet {
             String mensajeRedireccion = "enviado";
             response.sendRedirect("index.jsp?respuesta=" + mensajeRedireccion);
 
-            // Mensajes de depuración
-            System.out.println("Correo enviado correctamente.");
-            System.out.println("URL de recuperación de contraseña: " + url);
-
         } catch (MessagingException e) {
-            e.printStackTrace();
-            System.out.println("Error al enviar el correo: " + e.getMessage());
+            String mensaje = "errorEnvio";
+            response.sendRedirect("index.jsp?respuesta=" + mensaje);
         }
     }
 

@@ -1,49 +1,71 @@
+<%@page import="java.time.ZoneId"%>
+<%@page import="java.time.LocalDateTime"%>
 <%@page import="entidades.Usuarios"%>
 <%@page import="controladores.UsuariosJpaController"%>
 <%@page import="java.util.UUID"%>
 
-<!DOCTYPE html>
 <%
 // Obtener la URL base
-    String urlBase = request.getRequestURL().toString();
+String urlBase = request.getRequestURL().toString();
 
 // Obtener la cadena de consulta (parámetros)
-    String queryString = request.getQueryString();
+String queryString = request.getQueryString();
 
 // Combinar la URL base y la cadena de consulta para obtener la URL completa
-    String urlCompleta = urlBase + (queryString != null ? "?" + queryString : "");
+String urlCompleta = urlBase + (queryString != null ? "?" + queryString : "");
 
 // Almacenar la URL completa en la sesión
-    HttpSession session1 = request.getSession();
-    session1.setAttribute("urlAnterior", urlCompleta);
+HttpSession session1 = request.getSession();
+session1.setAttribute("urlAnterior", urlCompleta);
 
 // Recuperar el token de la URL
-    String tokenFromURL = request.getParameter("token");
+String tokenFromURL = request.getParameter("token");
 
 // Recuperar la cédula del usuario de la URL
-    int cedula2 = 0; // Inicializamos la cédula a 0 por defecto
-    try {
-        cedula2 = Integer.parseInt(request.getParameter("cedula"));
-    } catch (NumberFormatException e) {
-        // Manejo de error si la cédula no se puede convertir a entero
-        e.printStackTrace();
-    }
+int cedula2 = 0; // Inicializamos la cédula a 0 por defecto
+try {
+    cedula2 = Integer.parseInt(request.getParameter("cedula"));
+} catch (NumberFormatException e) {
+    // Manejo de error si la cédula no se puede convertir a entero
+    e.printStackTrace();
+}
 
 // Almacenar el token en la sesión
-    session1.setAttribute("sesionToken", tokenFromURL);
+session1.setAttribute("sesionToken", tokenFromURL);
 
-// Verificar si el token es nulo
-    if (tokenFromURL == null) {
-        // Si el token es nulo, redirigir al usuario a la página de inicio
+// Verificar si el token es nulo o si ha expirado
+if (tokenFromURL == null) {
+    // Si el token es nulo, redirigir al usuario a la página de inicio
+    response.sendRedirect("../index.jsp");
+} else {
+    // Obtener la fecha de expiración del token en milisegundos desde la época
+    long expirationMillis = Long.parseLong(request.getParameter("expiration"));
+
+    // Obtener la fecha y hora actual
+    LocalDateTime now = LocalDateTime.now();
+
+    // Convertir la fecha y hora actual a milisegundos
+    long nowMillis = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    
+    System.out.println("className.methodName()" + nowMillis);
+
+    // Verificar si el token ha expirado
+    if (nowMillis > expirationMillis) {
+        // Si el token ha expirado, redirigir al usuario a la página de inicio
         response.sendRedirect("../index.jsp");
     } else {
+        // El token es válido, continuar con el proceso de cambio de contraseña
+%>
 
+<!-- Aquí va el resto de tu HTML -->
+
+<%
     }
-
+}
 // Establecer encabezados para evitar el almacenamiento en caché de la página
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
-    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
-    response.setHeader("Expires", "0"); // Proxies
+response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+response.setHeader("Expires", "0"); // Proxies
 %>
 
 

@@ -25,12 +25,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "Administrador.findByNombre", query = "SELECT a FROM Administrador a WHERE a.nombre = :nombre"),
     @NamedQuery(name = "Administrador.findByApellido", query = "SELECT a FROM Administrador a WHERE a.apellido = :apellido"),
     @NamedQuery(name = "Administrador.findByClave", query = "SELECT a FROM Administrador a WHERE a.clave = :clave"),
-    @NamedQuery(name = "Administrador.findByFotografia", query = "SELECT a FROM Administrador a WHERE a.fotografia = :fotografia")})
+    @NamedQuery(name = "Administrador.findByCorreo", query = "SELECT a FROM Administrador a WHERE a.correo = :correo")})
 public class Administrador implements Serializable {
-
-    @Basic(optional = false)
-    @Column(name = "CORREO")
-    private String correo;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -46,8 +42,9 @@ public class Administrador implements Serializable {
     @Basic(optional = false)
     @Column(name = "CLAVE")
     private String clave;
-    @Column(name = "FOTOGRAFIA")
-    private String fotografia;
+    @Basic(optional = false)
+    @Column(name = "CORREO")
+    private String correo;
 
     public Administrador() {
     }
@@ -56,11 +53,12 @@ public class Administrador implements Serializable {
         this.cedula = cedula;
     }
 
-    public Administrador(Integer cedula, String nombre, String apellido, String clave) {
+    public Administrador(Integer cedula, String nombre, String apellido, String clave, String correo) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.apellido = apellido;
         this.clave = clave;
+        this.correo = correo;
     }
 
     public Integer getCedula() {
@@ -95,12 +93,12 @@ public class Administrador implements Serializable {
         this.clave = clave;
     }
 
-    public String getFotografia() {
-        return fotografia;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setFotografia(String fotografia) {
-        this.fotografia = fotografia;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     @Override
@@ -125,15 +123,7 @@ public class Administrador implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
+        return "entidades.Administrador[ cedula=" + cedula + " ]";
     }
     
 }

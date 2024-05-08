@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="504" pageHeight="420" orientation="Landscape" columnWidth="464" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="f1258751-6e45-4c84-9c28-706ef408bab8">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.zoom" value="1.6105100000000019"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="147"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -12,6 +12,7 @@
     e.APELLIDOS,
     e.CEDULA,
     e.FOTOGRAFIA,
+    e.RH,
     e.VENCE_CARNET,
     e.IDENTIFICADOR_UNICO, 
     td.NOMBRE AS TIPO_DOCUMENTO, 
@@ -45,6 +46,9 @@ WHERE
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="FOTOGRAFIA" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RH" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="VENCE_CARNET" class="java.sql.Date">
@@ -111,7 +115,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="25" y="236" width="181" height="15" forecolor="#009900" uuid="acd80d46-3261-48ed-a908-7c5c24ce7b39"/>
+				<reportElement x="25" y="271" width="181" height="15" forecolor="#009900" uuid="acd80d46-3261-48ed-a908-7c5c24ce7b39"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -132,7 +136,7 @@ WHERE
 				<text><![CDATA[No.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="251" width="181" height="15" forecolor="#009900" uuid="32456552-05b1-410e-8553-9a899156e19d"/>
+				<reportElement x="25" y="286" width="181" height="15" forecolor="#009900" uuid="32456552-05b1-410e-8553-9a899156e19d"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -167,7 +171,7 @@ WHERE
 				<text><![CDATA[VENCE:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="338" y="316" width="113" height="15" uuid="6cf1d669-1bb2-47de-9d25-6d067cf9d982"/>
+				<reportElement x="328" y="316" width="123" height="15" uuid="6cf1d669-1bb2-47de-9d25-6d067cf9d982"/>
 				<textFieldExpression><![CDATA[$F{IDENTIFICADOR_UNICO}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -191,15 +195,15 @@ WHERE
 				</textElement>
 				<text><![CDATA[Por disposicion de las Leyes 418 de 1997, 548 de 1997, 642 de 2001 y 1106 de 2006, los menores de 18 años de edad y los estudiantes de educacion superior no seran incorporados en la prestacion del servicio militar.]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="316" y="276" width="49" height="20" uuid="88162fa8-5a08-4b7d-b74b-eaf4c197159d"/>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="316" y="276" width="123" height="20" uuid="88162fa8-5a08-4b7d-b74b-eaf4c197159d"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VENCE_CARNET}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="258" y="316" width="80" height="15" uuid="4bfdc2d1-b0c4-41ea-bf8f-cd52f58ad126"/>
+				<reportElement x="258" y="316" width="70" height="15" uuid="4bfdc2d1-b0c4-41ea-bf8f-cd52f58ad126"/>
 				<textElement>
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -216,32 +220,53 @@ WHERE
 				<reportElement x="79" y="19" width="114" height="130" uuid="ab5a4bb8-80a8-456d-80e6-9bb692c4a3fe"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{FOTOGRAFIA})]]></imageExpression>
 			</image>
-			<image hAlign="Center" vAlign="Top">
-				<reportElement x="25" y="266" width="181" height="84" uuid="e0658a08-78db-4c34-a9dc-6027a2fcee41"/>
-				<imageExpression><![CDATA[com.google.zxing.client.j2se.MatrixToImageWriter.toBufferedImage(
-    new com.google.zxing.qrcode.QRCodeWriter().encode(
-        String.valueOf($F{CEDULA}), com.google.zxing.BarcodeFormat.QR_CODE, 300, 300))]]></imageExpression>
-			</image>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="25" y="44" width="54" height="47" uuid="492596aa-f098-4287-bed4-83afa332137f"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{IMAGEN})]]></imageExpression>
 			</image>
 			<textField>
-				<reportElement x="269" y="246" width="159" height="20" uuid="d3376ff7-eb76-41be-8790-32fd0a6c73f8"/>
+				<reportElement x="269" y="251" width="159" height="15" uuid="d3376ff7-eb76-41be-8790-32fd0a6c73f8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{DIRECTOR}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="269" y="218" width="159" height="28" uuid="6e1f23f6-1966-4310-82e7-eefd5baccc11"/>
+				<reportElement x="269" y="218" width="159" height="33" uuid="6e1f23f6-1966-4310-82e7-eefd5baccc11"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte [])$F{FIRMA} )]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="258" y="331" width="193" height="15" uuid="a163a2c6-da56-4afc-b2e7-1cde42d3fc05"/>
-				<textElement>
-					<font size="5"/>
+				<reportElement x="258" y="331" width="181" height="12" uuid="efe95e45-0822-4327-a17d-8d2ac955a421"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
 				</textElement>
 				<text><![CDATA[https://www.cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
 			</staticText>
+			<componentElement>
+				<reportElement x="25" y="304" width="181" height="27" uuid="646d8477-d45d-43f0-8a77-12cc80aa7b85"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{CEDULA}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<staticText>
+				<reportElement x="25" y="236" width="27" height="20" uuid="b375dbc8-6d33-45cf-81ac-96a9d7cba870"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[RH]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="236" width="154" height="20" uuid="a51e14fb-9f30-410b-bc86-adf71577bdb4"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RH}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="256" width="181" height="15" uuid="4406778e-ef79-4137-ba50-f3797908c2b9"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FORMACION}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

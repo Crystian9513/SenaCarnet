@@ -26,7 +26,7 @@ import javax.persistence.criteria.Root;
 public class AdministradorJpaController implements Serializable {
 
     public AdministradorJpaController( ) {
-         this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
+       this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -142,8 +142,7 @@ public class AdministradorJpaController implements Serializable {
             em.close();
         }
     }
-    
-     public boolean DencryptarClave(String claveHash, String claveLogin) {
+         public boolean DencryptarClave(String claveHash, String claveLogin) {
     // Verifica si la contraseña proporcionada coincide con la contraseña almacenada
     return Password.check(claveLogin, claveHash).addPepper().withScrypt();
 }
@@ -152,5 +151,6 @@ public class AdministradorJpaController implements Serializable {
         Hash hash = Password.hash(clave).addPepper().withScrypt();
         return hash.getResult();
     }
+    
     
 }

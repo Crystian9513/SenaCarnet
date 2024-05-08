@@ -9,7 +9,7 @@
 <%
     // Establecer la conexión a la base de datos
     Connection conexion;
-    try {
+  
         Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
         conexion = DriverManager.getConnection("jdbc:mysql://localhost/senacarnet", "root", "27478426*cP");
 
@@ -24,7 +24,7 @@
         // Obtener la ruta del archivo Jasper
         String reportPath = application.getRealPath("reportes/carnetCompleto.jasper");
 
-    
+      try {
         // Generar el informe PDF con los parámetros
         byte[] bytes = JasperRunManager.runReportToPdf(reportPath, parameters, conexion);
 
@@ -35,6 +35,6 @@
         outputStream.flush();
         outputStream.close();
     } catch (Exception e) {
-        e.printStackTrace();
+        out.println("Se produjo un error al generar el informe: " + e.getMessage());
     } 
 %>

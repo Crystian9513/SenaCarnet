@@ -45,8 +45,6 @@ import javax.servlet.http.Part;
 @WebServlet(name = "estudiantesServlet", urlPatterns = {"/estudiantesServlet"})
 public class estudiantesServlet extends HttpServlet {
 
-   
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -98,6 +96,7 @@ public class estudiantesServlet extends HttpServlet {
         Part part = request.getPart("foto");
 
         String fechaInicio = request.getParameter("vence");
+        String rh = request.getParameter("rh");
         int estado = Integer.parseInt(request.getParameter("estado"));
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha1 = formato.parse(fechaInicio);
@@ -146,6 +145,7 @@ public class estudiantesServlet extends HttpServlet {
             guardarEstudiante.setSedeFk(se);
             guardarEstudiante.setCorreo(correo);
             guardarEstudiante.setVenceCarnet(fecha1);
+            guardarEstudiante.setRh(rh);
             EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
             guardarEstudiante.setEstadoCarnetIdestadoCarnet(car);
             guardarEstudiante.setFotografia(imagenBytes); // Guardar la imagen en el campo BLOB
@@ -220,6 +220,7 @@ public class estudiantesServlet extends HttpServlet {
         int sede = Integer.parseInt(request.getParameter("sede2"));
         String correo = request.getParameter("correo2");
         String vencimiento = request.getParameter("vence2");
+        String rh = request.getParameter("rh2");
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
         int estado = Integer.parseInt(request.getParameter("estado2"));
@@ -266,6 +267,7 @@ public class estudiantesServlet extends HttpServlet {
                 editarEstudiante.setSedeFk(se);
                 editarEstudiante.setCorreo(correo);
                 editarEstudiante.setVenceCarnet(formatoFecha.parse(vencimiento));
+                editarEstudiante.setRh(rh);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
 
@@ -311,6 +313,7 @@ public class estudiantesServlet extends HttpServlet {
         int sede = Integer.parseInt(request.getParameter("sede20"));
         String correo = request.getParameter("correo20");
         String vencimiento = request.getParameter("vence20");
+        String rh = request.getParameter("rh20");
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
         int estado = Integer.parseInt(request.getParameter("estado20"));
@@ -347,6 +350,7 @@ public class estudiantesServlet extends HttpServlet {
                 editarEstudiante.setSedeFk(se);
                 editarEstudiante.setCorreo(correo);
                 editarEstudiante.setVenceCarnet(formatoFecha.parse(vencimiento));
+                editarEstudiante.setRh(rh);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
 
@@ -372,7 +376,6 @@ public class estudiantesServlet extends HttpServlet {
 
     }
 
-
     protected void botonImportar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Part filePart = request.getPart("file5"); // Obtener el archivo cargado desde la solicitud
@@ -395,7 +398,7 @@ public class estudiantesServlet extends HttpServlet {
                 String line;
 
                 // Preparar la consulta para insertar datos en la base de datos
-                String sql = "INSERT INTO estudiantes (CEDULA, TIPO_DOCUMENTO_FK, NOMBRES, APELLIDOS, FORMACION_FK, SEDE_FK, FOTOGRAFIA, CORREO, VENCE_CARNET, ESTADO_CARNET_IDESTADO_CARNET) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO estudiantes (CEDULA, TIPO_DOCUMENTO_FK, NOMBRES, APELLIDOS, FORMACION_FK, SEDE_FK, FOTOGRAFIA, CORREO, VENCE_CARNET, ESTADO_CARNET_IDESTADO_CARNET,RH) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
                 PreparedStatement statement = conn.prepareStatement(sql);
 
                 // Leer el archivo CSV y guardar los datos en la base de datos
@@ -421,6 +424,8 @@ public class estudiantesServlet extends HttpServlet {
 
                         statement.setInt(10, Integer.parseInt(data[9]));
 
+                        statement.setString(11, data[10]);
+
                         statement.executeUpdate();
                         System.out.println("Registro insertado en la base de datos: " + Arrays.toString(data));
                     } else {
@@ -445,8 +450,6 @@ public class estudiantesServlet extends HttpServlet {
             }
         }
     }
-
-   
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

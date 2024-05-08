@@ -89,8 +89,11 @@ public class SedesServlet extends HttpServlet {
                 // El código no existe, proceder con la creación de la sede
                 guardaSede.setIdSede(codigo);
                 guardaSede.setNombre(nombre);
+               
 
                 se.create(guardaSede);
+                
+                 response.setCharacterEncoding("UTF-8");
                 String mensaje = "Guardado";
                 response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
             }

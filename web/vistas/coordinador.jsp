@@ -42,90 +42,6 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-
-        <script>
-            // Espera a que el DOM esté completamente cargado
-            document.addEventListener("DOMContentLoaded", function () {
-                // Encuentra todos los elementos con el atributo data-bs-toggle="popover"
-                var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-
-                // Itera sobre cada elemento y crea un nuevo objeto Popover para él
-                var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-                    return new bootstrap.Popover(popoverTriggerEl);
-                });
-            });
-        </script>
-
-        <script>
-            // Función para obtener los datos de la sede y mostrarlos en el modal
-            function obtenerDatosEstudiantes(Cedula, TipoDocumentoFk, Nombres, Apellidos, FormacionFk, SedeFk, Correo, VenceCarnet, EstadoCarnetIdestadoCarnet)
-            {
-                $('#cedula2').val(Cedula);
-                $('#tipoDocumento2').val(TipoDocumentoFk);
-                $('#nombres2').val(Nombres);
-                $('#apellidos2').val(Apellidos);
-                $('#formacion2').val(FormacionFk);
-                $('#sede2').val(SedeFk);
-                $('#correo2').val(Correo);
-                $('#vence2').val(VenceCarnet);
-                $('#estado2').val(EstadoCarnetIdestadoCarnet);
-
-                $('#cedula2').closest('.input-group').hide();
-                $('#tipoDocumento2').closest('.input-group').hide();
-                $('#nombres2').closest('.input-group').hide();
-                $('#apellidos2').closest('.input-group').hide();
-                $('#formacion2').closest('.input-group').hide();
-                $('#sede2').closest('.input-group').hide();
-                $('#correo2').closest('.input-group').hide();
-                $('#vence2').closest('.input-group').hide();
-                $('#estado2').closest('.input-group').show();
-                $('#foto2').closest('.col-12').hide();
-                $('#foto2').closest('.input-group').show();
-
-                // Realiza las solicitudes AJAX para obtener datos adicionales si es necesario
-                $.ajax({
-                    type: "POST",
-                    url: "../Busquedas/obtenerTipoDocumento.jsp",
-                    data: {tipoDocumento: TipoDocumentoFk},
-                    dataType: "html",
-                    success: function (data) {
-                        $("#tipoDocumento2").empty().append(data);
-                    }
-                });
-
-                $.ajax({
-                    type: "POST",
-                    url: "../Busquedas/obtenerSede.jsp",
-                    data: {idsede: SedeFk},
-                    dataType: "html",
-                    success: function (data) {
-                        $("#sede2").empty().append(data);
-                    }
-                });
-
-                $.ajax({
-                    type: "POST",
-                    url: "../Busquedas/obtenerFormaciones.jsp",
-                    data: {formacionesTipos: FormacionFk},
-                    dataType: "html",
-                    success: function (data) {
-                        $("#formacion2").empty().append(data);
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "../Busquedas/obtenerEstadoCarnet.jsp",
-                    data: {estadoCarnetTipo: EstadoCarnetIdestadoCarnet},
-                    dataType: "html",
-                    success: function (data) {
-                        $("#estado2").empty().append(data);
-                    }
-                });
-            }
-
-        </script>
-
-
     </head>
     <body  style="background-color: #fefafb;">
         <%--MENU INICIO --%>
@@ -154,10 +70,6 @@
                 </div>
             </div>
         </nav>
-
-
-
-
         <%--MENU FINAL --%>
         <%--CONTENIDO INICIO --%>
         <div class="container">
@@ -171,14 +83,11 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12 col-sd-12">
-                                <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Buscar:</b></div>
-                                        <input type="text" class="form-control" id="filtro1">
-                                    </div>
-                                </form>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text col-4"><b>Buscar:</b></div>
+                                    <input type="text" class="form-control" id="filtro1">
+                                </div>
                             </div>
-                            
                         </div>
                     </div>
                     <section class="intro mb-2">
@@ -201,10 +110,7 @@
                                                                 <th scope="col">Apellidos</th>
                                                                 <th scope="col">Formacion</th>
                                                                 <th scope="col">Sede</th>
-                                                                <th scope="col">Correo</th>
-                                                                <th scope="col">Fotografia</th>
                                                                 <th scope="col">Carnet-Vence</th>
-
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -255,14 +161,6 @@
                                                                 <td> <%= est.getApellidos()%> </td>
                                                                 <td> <%= est.getFormacionFk().getNombre()%> </td>
                                                                 <td> <%= est.getSedeFk().getNombre()%> </td>
-                                                                <td> <%= est.getCorreo()%> </td>
-                                                                <td> 
-                                                                    <!-- Utiliza el atributo data-bs-html="true" para que el contenido del popover se interprete como HTML -->
-                                                                    <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-html="true"
-                                                                          data-bs-content='<img src="<%= est.getFotografia()%>" width="120px" height="120px">'
-                                                                          <button class="btn btn-primary btn-md fw-bold" type="button" disabled>Foto</button>
-                                                                    </span>
-                                                                </td>
                                                                 <td> <%= fechaVencimiento%> </td>
 
 
@@ -288,41 +186,19 @@
         </div>
         <%--CONTENIDO FINAL --%>
 
-        <footer class="py-3 mt-2 text-center" style="background-color: #6acd56;">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sd-6 pt-3">
-                    <img src="../img/icon_facebook.png" alt="alt"/>
-                    <a  href="http://www.facebook.com">Facebook</a><br>
-                    <img src="../img/icon_instagram.png" alt="alt"/>
-                    <a href="http://www.instagram.com">Instagram</a><br>
-                    <img src="../img/icon_github.png" alt="alt"/>
-                    <a href="https://github.com/Crystian9513">Github</a>
-                </div>
-                <div class="col-lg-8 col-md-6 col-sd-6">
-
-                    <h5 class="pt-2">Copyright <%= java.time.LocalDate.now().getYear()%>
-                        Crystian Jesus Peralta Arias y Sebastian Navaja. <br>
-                        Desarrollador Web.
-                    </h5>
-                    <h6>Telefono: +57 300 7836674 </h6>
-                    <h6>Correo: crystian_9513@hotmail.com</h6>
-                </div>
-            </div>
-        </footer>
-
-        <!-- MODAL EDITAR INICIO-->
-        <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/CoordinadorServlet" method="post" class="row g-2 "  enctype="multipart/form-data">
-
+        <jsp:include page="../Componentes/footer.jsp" ></jsp:include>
+ 
+            <!-- MODAL EDITAR INICIO-->
+            <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form action="<%=request.getContextPath()%>/CoordinadorServlet" method="post" class="row g-2 "  enctype="multipart/form-data">
                             <h2 class=" text-center">Eliminar Carnet</h2>
                             <div class="col-12">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-text col-6"><b>Cedula:</b></div>
-                                    <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="999999999999" readonly>
+                                    <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="2147483647" readonly>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -400,12 +276,12 @@
                             </div>
                         </form>
                     </div>
-
                 </div>
             </div>
         </div>                           
         <!-- MODAL EDITAR FINAL-->
 
+        <script src="../js/coordinador.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
