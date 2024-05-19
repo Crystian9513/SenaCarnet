@@ -36,14 +36,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Estudiantes</title>
+        <title>Aprendiz</title>
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link href="../css/app.css" rel="stylesheet">
         <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
-
         <link rel="stylesheet" href="../css/tabla.css"/>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+        <script src="../js/alertas.js"></script>
+        <script src="../js/app.js"></script>
+        
         <script>
             function verReporte4(cedula) {
                 // Redirigir al enlace con la cédula como parámetro
@@ -51,382 +53,283 @@
             }
         </script>
 
+        <script>
+            $(document).ready(function () {
+                // Manejador de evento para el botón de guardar en el formulario
+                $('#btnGuardarEst').click(function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData($('#FormularioEstudiantes')[0]);  // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'guardar');  // Agrega la acción como un parámetro adicional
+
+                    enviarPeticion(formData, handleSuccessGuardar, handleError);
+                });
+
+                $('#btnEliminarEst').click(function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData($('#FormularioEstudiantesActualizar')[0]);  // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'eliminar');  // Agrega la acción como un parámetro adicional
+
+                    enviarPeticion(formData, handleSuccessEliminar, handleError);
+                });
+
+                $('#btnActualizarEst').click(function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData($('#FormularioEstudiantesActualizar')[0]);  // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'actualizar');  // Agrega la acción como un parámetro adicional
+
+                    enviarPeticion(formData, handleSuccessActualizar, handleError);
+                });
+
+                $('#btnNuevaFormacion').click(function (event) {
+                    event.preventDefault();
+
+                    var formData = new FormData($('#FormularioNuevaFormacion')[0]);  // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'nuevaFormacion');  // Agrega la acción como un parámetro adicional
+
+                    enviarPeticion(formData, handleSuccessNuevoModal, handleError);
+                });
+
+                // Función para enviar la petición AJAX común
+                function enviarPeticion(formData, successCallback, errorCallback) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '../estudiantesServlet',
+                        data: formData,
+                        processData: false, // Evita que jQuery convierta el objeto FormData en una cadena
+                        contentType: false, // Evita que jQuery establezca automáticamente el encabezado Content-Type
+                        success: function (response) {
+                            successCallback(response);
+                        },
+                        error: function (xhr, status, error) {
+                            errorCallback('Error al conectar con el servlet: ' + error);
+                        }
+                    });
+                }
+
+                // Función para manejar la respuesta exitosa de la solicitud de guardar
+                function handleSuccessGuardar(response) {
+                    if (response.estado === "exito") {
+                        mostrarExito(response.mensaje);
+                        cargarTabla();
+                    } else {
+                        mostrarError(response.mensaje);
+                    }
+                }
+
+                // Función para manejar la respuesta exitosa de la solicitud de eliminar
+                function handleSuccessEliminar(response) {
+                    if (response.estado === "exito") {
+                        mostrarExito(response.mensaje);
+                        cargarTabla();
+                    } else {
+                        mostrarError(response.mensaje);
+                    }
+                }
+
+                // Función para manejar la respuesta exitosa de la solicitud de actualizar
+                function handleSuccessActualizar(response) {
+                    if (response.estado === "exito") {
+                        mostrarExito(response.mensaje);
+                        cargarTabla();
+                    } else {
+                        mostrarError(response.mensaje);
+                    }
+                }
+
+                // Función para manejar la respuesta exitosa de la solicitud de nueva formacion
+                function handleSuccessNuevoModal(response) {
+                    if (response.estado === "exito") {
+                        mostrarExito(response.mensaje);
+                        cargarTabla();
+                    } else {
+                        mostrarError(response.mensaje);
+                    }
+                }
+                
+                $('#btnLimpiarModalEstudinates').click(function () {
+                    limpiarFormulario('FormularioEstudiantes');
+                });
+
+                // Manejador de evento para limpiar los campos del modal cuando se oculta
+                $('#ModalEstudiantes').on('hidden.bs.modal', function () {
+                    $('#FormularioEstudiantes').trigger('reset');
+                });
+
+                // Función para manejar el error de la solicitud AJAX
+                function handleError(errorMessage) {
+                    mostrarError(errorMessage);
+                }
+
+                function cargarTabla() {
+                    $.ajax({
+                        type: 'GET',
+                        url: '../ConsultaEstudinates',
+                        dataType: 'json',
+                        success: function (data) {
+                            $('#tablaEstudiantes tbody').empty();
+
+                            if (data.length === 0) {
+                                // Si no hay datos, agregar una fila indicando que no se encontraron estudiantes
+                                $('#tablaEstudiantes tbody').append('<tr><td colspan="13" class="text-center">No se encontraron estudiantes en la base de datos.</td></tr>');
+                            } else {
+                                // Iterar sobre los datos recibidos y agregar cada estudiante a la tabla
+                                $.each(data, function (index, estudiante) {
+                                    var row = '<tr>' +
+                                            '<td>' + estudiante.cedula + '</td>' +
+                                            '<td>' + estudiante.tipoDocumentoNombre + '</td>' +
+                                            '<td>' + estudiante.nombres + '</td>' +
+                                            '<td>' + estudiante.apellidos + '</td>' +
+                                            '<td>' + estudiante.formacionNombre + '</td>' +
+                                            '<td>' + estudiante.sedeNombre + '</td>' +
+                                            '<td>' + estudiante.correo + '</td>' +
+                                            '<td>' + estudiante.fechaVencimientoCarnet + '</td>' +
+                                            '<td>' + estudiante.rh + '</td>' +
+                                            '<td>' + estudiante.estadoCarnetNombre + '</td>' +
+                                            '<td>' +
+                                            '<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" ' +
+                                            'data-bs-target="#ModalEstudiantesActualizar" onclick="obtenerDatosEstudiantes(\'' +
+                                            estudiante.cedula + '\', \'' + estudiante.tipoDocumentoId + '\', \'' +
+                                            estudiante.nombres + '\', \'' + estudiante.apellidos + '\', \'' +
+                                            estudiante.formacionId + '\', \'' + estudiante.sedeId + '\', \'' +
+                                            estudiante.correo + '\', \'' + estudiante.fechaVencimientoCarnet + '\', \'' +
+                                            estudiante.rh + '\', \'' + estudiante.estadoCarnetId + '\')">Actualizar</button>' +
+                                            '</td>' +
+                                            '<td>' +
+                                            '<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" ' +
+                                            'data-bs-target="#ModalNuevaFormacion" onclick="obtenerDatosEstudiantes2(\'' +
+                                            estudiante.cedula + '\', \'' + estudiante.tipoDocumentoId + '\', \'' +
+                                            estudiante.nombres + '\', \'' + estudiante.apellidos + '\', \'' +
+                                            estudiante.formacionId + '\', \'' + estudiante.sedeId + '\', \'' +
+                                            estudiante.correo + '\', \'' + estudiante.fechaVencimientoCarnet + '\', \'' +
+                                            estudiante.rh + '\', \'' + estudiante.estadoCarnetId + '\')">Nueva Formacion</button>' +
+                                            '</td>' +
+                                            '<td>' +
+                                            '<button type="button" class="btn btn-outline-danger btn-sm" ' +
+                                            'onclick="verReporte4(\'' + estudiante.cedula + '\')">Ver</button>' +
+                                            '</td>' +
+                                            '</tr>';
+                                    $('#tablaEstudiantes tbody').append(row);
+                                });
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            handleError('Error al obtener los datos: ' + error);
+                        }
+                    });
+                }
+                // Se llama a la función cargarTabla para cargar y mostrar la tabla al cargar la página por primera vez
+                cargarTabla();
+            });
+        </script>
+
     </head>
     <body  style="background-color: #fefafb;">
-        <%--MENU INICIO --%>
-        <jsp:include page="../Componentes/menu.jsp" ></jsp:include>
-        <%--CONTENIDO INICIO --%>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
 
-                    <h1 class="letra text-center pt-3 pb-3">Informacion del Aprendiz</h1>
+        <div class="wrapper">
 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-6 col-12">
-                                <form action="<%=request.getContextPath()%>" method="post" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-md-9 col-8"><b>Nuevo estudiante:</b></div>
-                                        <button id="" type="button" class="btn" style="background-color: #6acd56;" data-bs-toggle="modal" data-bs-target="#formularioModalEstudiante"><b>Formulario</b></button>
+            <jsp:include page="../Componentes/Sidebar.jsp" ></jsp:include>
+                <div class="main">
+                <jsp:include page="../Componentes/nav.jsp" ></jsp:include>
+                    <main class="content">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-10 col-md-10 col-sd-12"><h1 class="letra  pb-3">Informacion del Aprendiz</h1></div>
+                                            <div class="col-lg-2 col-md-2 col-sd-12"><img class="float-end" src="../img/inicioSesion_sena.jpg" width="70px" height="70px" alt="alt"/></div>
+                                        </div>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <div class="input-group mb-2 pt-2">
-                                    <div class="input-group-text col-4"><b>Buscar:</b></div>
-                                    <input type="text" class="form-control" id="filtro1">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-6 col-12">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-text col-md-8 col-8"><b>Nuevo estudiante:</b></div>
+                                                    <button id="" type="button" class="btn text-white" style="background-color: #018E42;" data-bs-toggle="modal" data-bs-target="#ModalEstudiantes"><b>Formulario</b></button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-text col-4"><b>Buscar:</b></div>
+                                                    <input type="text" class="form-control" id="filtroEstudiantes">
+                                                </div>
+                                            </div>
+                                        <%--   <div class="col-md-6 col-12">
+                                               <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" enctype="multipart/form-data" class="pt-2">
+                                                   <div class="input-group mb-2">
+                                                       <div class="input-group-text col-4"><b>Aprendices:</b></div>
+                                                       <input type="file" class="form-control" name="file5" id="fileInput2" required="1" accept=".csv">
+                                                       <button type="submit" class="btn text-white" name="action" value="Importar2" style="background-color: #018E42;"><b>Importar</b></button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="col-md-6 col-12">
+                                            <form action="<%=request.getContextPath()%>/usuarioServlet" method="post" enctype="multipart/form-data" class="pt-2">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-text col-4"><b>Usuarios:</b></div>
+                                                    <input type="file" class="form-control" name="file3" id="fileInput3" required="1" accept=".csv">
+                                                    <button type="submit" class="btn"  name="action text-white" value="Importar" style="background-color: #018E42;"><b>Importar</b></button>
+                                                </div>
+                                            </form>
+                                        </div>--%>
+                                    </div>
                                 </div>
-                            </div>
-                            <%--   <div class="col-md-6 col-12">
-                                   <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                       <div class="input-group mb-2">
-                                           <div class="input-group-text col-4"><b>Aprendices:</b></div>
-                                           <input type="file" class="form-control" name="file5" id="fileInput2" required="1" accept=".csv">
-                                           <button type="submit" class="btn" name="action" value="Importar2" style="background-color: #6acd56;"><b>Importar</b></button>
-
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-md-6 col-12">
-                                <form action="<%=request.getContextPath()%>/usuarioServlet" method="post" enctype="multipart/form-data" class="pt-2">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Usuarios:</b></div>
-                                        <input type="file" class="form-control" name="file3" id="fileInput3" required="1" accept=".csv">
-                                        <button type="submit" class="btn"  name="action" value="Importar" style="background-color: #6acd56;"><b>Importar</b></button>
-                                    </div>
-                                </form>
-                            </div>--%>
-
-                        </div>
-                    </div>
-                    <section class="intro mb-5">
-                        <div class="bg-image" >
-                            <div class="mask d-flex align-items-center h-100">
-                                <div class="container tableContenido">
-                                    <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
-                                        <div class="col-12 tableContenido"> 
-                                            <div class="card-body p-0 ">
-                                                <%--TABLA INICIO --%>
-                                                <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
-                                                    <table id="tablaEstudiantes" class="table table-striped table-sm mb-0 text-center ">
-                                                        <thead class="" style="background-color: #263642;">
-                                                            <tr>
-                                                                <th scope="col">Cedula</th>
-                                                                <th scope="col">Tipo de Documento</th>
-                                                                <th scope="col">Nombres</th>
-                                                                <th scope="col">Apellidos</th>
-                                                                <th scope="col">Formacion</th>
-                                                                <th scope="col">Sede</th>
-                                                                <th scope="col">Correo</th>
-                                                                <th scope="col">Carnet-Vence</th>
-                                                                <th scope="col">RH</th>
-                                                                <th scope="col">Estado-Carnet</th>
-                                                                <th scope="col">Actualizar</th>
-                                                                <th scope="col">Nueva Formacion</th>
-                                                                <th scope="col">Carnet</th>
-
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <%
-                                                                EstudiantesJpaController controlador = new EstudiantesJpaController();
-                                                                List<Estudiantes> estudi = controlador.findEstudiantesEntities();
-
-                                                                if (estudi.isEmpty()) {
-
-
-                                                            %>
-
-                                                            <tr>
-                                                                <td colspan="11" class="text-center">No se encontraron Aprendiz en la base de datos.</td>
-                                                            </tr>
-                                                            <%                                                                } else {
-
-                                                                for (Estudiantes est : estudi) {
-                                                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                                                                    String fechaVencimiento = est.getVenceCarnet() != null ? dateFormat.format(est.getVenceCarnet()) : "Sin fecha";
-
-                                                            %>
-
-                                                            <tr>
-                                                                <td> <%= est.getCedula()%> </td>
-                                                                <td> <%= est.getTipoDocumentoFk().getNombre()%> </td>
-                                                                <td> <%= est.getNombres()%> </td>
-                                                                <td> <%= est.getApellidos()%> </td>
-                                                                <td> <%= est.getFormacionFk().getNombre()%> </td>
-                                                                <td> <%= est.getSedeFk().getNombre()%> </td>
-                                                                <td> <%= est.getCorreo()%> </td>
-                                                                <td> <%= fechaVencimiento%> </td>
-                                                                <td> <%= est.getRh()%> </td>
-                                                                <td> <%= est.getEstadoCarnetIdestadoCarnet()%> </td>
-                                                                <td> 
-                                                                    <% SimpleDateFormat dateFormatInput2 = new SimpleDateFormat("yyyy-MM-dd");
-                                                                        Date venceCarnet2 = est.getVenceCarnet();
-                                                                        String fechaVencimiento22 = venceCarnet2 != null ? dateFormatInput2.format(venceCarnet2) : "Sin fecha";%>
-                                                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" 
-                                                                            data-bs-target="#formularioModal2" onclick="obtenerDatosEstudiantes('<%= est.getCedula()%>',
-                                                                                            '<%= est.getTipoDocumentoFk().getIdTipoDocumento()%>',
-                                                                                            '<%= est.getNombres()%>',
-                                                                                            '<%= est.getApellidos()%>',
-                                                                                            '<%= est.getFormacionFk().getIdFormacion()%>',
-                                                                                            '<%= est.getSedeFk().getIdSede()%>',
-                                                                                            '<%= est.getCorreo()%>',
-                                                                                            '<%= fechaVencimiento22%>',
-                                                                                            '<%= est.getRh()%>',
-                                                                                            '<%= est.getEstadoCarnetIdestadoCarnet().getIdestadoCarnet()%>')">
-                                                                        Actualizar
-                                                                    </button>
-
-                                                                </td>
-                                                                <td> 
-                                                                    <% SimpleDateFormat dateFormatInput = new SimpleDateFormat("yyyy-MM-dd");
-                                                                        Date venceCarnet = est.getVenceCarnet();
-                                                                        String fechaVencimiento2 = venceCarnet != null ? dateFormatInput.format(venceCarnet) : "Sin fecha";%>
-                                                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" 
-                                                                            data-bs-target="#formularioModal3" onclick="obtenerDatosEstudiantes2('<%= est.getCedula()%>',
-                                                                                            '<%= est.getTipoDocumentoFk().getIdTipoDocumento()%>',
-                                                                                            '<%= est.getNombres()%>',
-                                                                                            '<%= est.getApellidos()%>',
-                                                                                            '<%= est.getFormacionFk().getIdFormacion()%>',
-                                                                                            '<%= est.getSedeFk().getIdSede()%>',
-                                                                                            '<%= est.getCorreo()%>',
-                                                                                            '<%= fechaVencimiento2%>',
-                                                                                            '<%= est.getRh()%>',
-                                                                                            '<%= est.getEstadoCarnetIdestadoCarnet().getIdestadoCarnet()%>')">
-                                                                        Nueva Formacion
-                                                                    </button>
-
-                                                                </td>
-                                                                <td> 
-                                                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="verReporte4('<%= est.getCedula()%>')">
-                                                                        Ver
-                                                                    </button>
-                                                                </td>
-
-                                                            </tr>
-                                                            <%
-                                                                    }
-
-                                                                }
-                                                            %>
-
-                                                        </tbody>
-                                                    </table>
-                                                    <%--CONTENIDO FINAL --%>
+                                <section class="intro mb-5">
+                                    <div class="bg-image" >
+                                        <div class="mask d-flex align-items-center h-100">
+                                            <div class="container tableContenido">
+                                                <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
+                                                    <div class="col-12 tableContenido"> 
+                                                        <div class="card-body p-0 ">
+                                                            <%--TABLA INICIO --%>
+                                                            <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+                                                                <table id="tablaEstudiantes" class="table table-striped table-sm mb-0 text-center ">
+                                                                    <thead class="" style="background-color: #018E42;">
+                                                                        <tr>
+                                                                            <th class="text-white">Cedula</th>
+                                                                            <th class="text-white">Tipo de Documento</th>
+                                                                            <th class="text-white">Nombres</th>
+                                                                            <th class="text-white">Apellidos</th>
+                                                                            <th class="text-white">Formacion</th>
+                                                                            <th class="text-white">Sede</th>
+                                                                            <th class="text-white">Correo</th>
+                                                                            <th class="text-white">Carnet-Vence</th>
+                                                                            <th class="text-white">RH</th>
+                                                                            <th class="text-white">Estado-Carnet</th>
+                                                                            <th class="text-white">Actualizar</th>
+                                                                            <th class="text-white">Nueva Formacion</th>
+                                                                            <th class="text-white">Carnet</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </section>
                             </div>
-                        </div>
-                    </section>
+                        </div>  
+                    </div>
+                    <%--CONTENIDO FINAL --%>
+
+                </main>
+                <jsp:include page="../Componentes/footer2.jsp" ></jsp:include>
+
                 </div>
-            </div>  
-        </div>
-        <%--CONTENIDO FINAL --%>
-        <jsp:include page="../Componentes/footer.jsp" ></jsp:include>
+            </div>
+        <jsp:include page="../Componentes/modalesEditar.jsp" ></jsp:include>  
         <jsp:include page="../Componentes/modales.jsp" ></jsp:include>
 
-            <!-- MODAL EDITAR INICIO-->
-            <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" class="row g-2 "  enctype="multipart/form-data">
-                            <h2 class="pt-5 pb-4 text-center">Aprendiz</h2>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Cedula:</b></div>
-                                    <input type="number" class="form-control" id="cedula2" name="cedula2" required min="1" max="2147483647" readonly>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Tipo de Documento:</b></div>
-                                    <select name="tipoDocumento2" id="tipoDocumento2"
-                                            class="from-selec-sm col-6" required>
-                                        <option value="" disabled selected hidden>-- Elija --</option>
 
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Nombres: </b></div>
-                                    <input type="text" class="form-control" id="nombres2" name="nombres2" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Apellidos:</b></div>
-                                    <input type="text" class="form-control" id="apellidos2" name="apellidos2" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Formacion:</b></div>
-                                    <select name="formacion2" id="formacion2"
-                                            class="from-selec col-6 " required min="1">
-                                        <option value="" disabled selected hidden>-- Elija --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Sede:</b></div>
-                                    <select name="sede2" id="sede2"
-                                            class="from-selec col-6" required min="1">
-                                        <option value="" disabled selected hidden>-- Elija --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Correo: </b></div>
-                                    <input type="email" class="form-control" id="correo2" name="correo2" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Fotografia:</b></div>
-                                    <input type="file" class="form-control" id="foto2" name="foto2" accept="image/*" >
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Fecha de Vencimiento del carnet:</b></div>
-                                    <input type="date" class="form-control" id="vence2" name="vence2" >
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>RH:</b></div>
-                                    <input type="text" class="form-control" id="rh2" name="rh2" required>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Estado del Carnet:</b></div>
-                                    <select name="estado2" id="estado2"
-                                            class="from-selec col-6" required min="1" >
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12 text-center py-5 pt-5"><!--bottones-->
-                                <button type="submit" class="btn botones  px-4"
-                                        name="action" value="Editar" style="background-color: #6acd56;"><b>Actualizar</b></button>
-                                <button type="submit" class="btn " name="action" value="Eliminar" style="background-color: #6acd56;"><b>Eliminar</b></button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>                           
-        <!-- MODAL EDITAR FINAL-->
-
-        <!-- MODAL EDITAR INICIO-->
-        <div class="modal fade" id="formularioModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-
-                    <div class="modal-body">
-                        <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" class="row g-2 "  enctype="multipart/form-data">
-
-                            <h2 class="pt-5 text-center">Aprendiz</h2>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Cedula:</b></div>
-                                    <input type="number" class="form-control" id="cedula20" name="cedula20" required min="1" max="2147483647" readonly>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Tipo de Documento:</b></div>
-                                    <select name="tipoDocumento20" id="tipoDocumento20"
-                                            class="from-selec-sm col-6" required>
-                                        <option value="" disabled selected hidden>-- Elija --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Nombres: </b></div>
-                                    <input type="hidden" class="form-control" id="nombres20" name="nombres20" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Apellidos:</b></div>
-                                    <input type="text" class="form-control" id="apellidos20" name="apellidos20" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Sede:</b></div>
-                                    <select name="sede20" id="sede20"
-                                            class="from-selec col-6" required min="1">
-                                        <option value="" disabled selected hidden>-- Elija --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Correo: </b></div>
-                                    <input type="email" class="form-control" id="correo20" name="correo20" required min="1" maxlength="45">
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Formacion:</b></div>
-                                    <select name="formacion20" id="formacion20"
-                                            class="from-selec col-6 " required min="1">
-                                        <option value="" disabled selected hidden>-- Elija --</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Fotografia:</b></div>
-                                    <input type="file" class="form-control" id="foto20" name="foto20" accept="image/*" >
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Fecha de Vencimiento del carnet:</b></div>
-                                    <input type="date" class="form-control" id="vence20" name="vence20" >
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>RH:</b></div>
-                                    <input type="text" class="form-control" id="rh20" name="rh20" required>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text col-6"><b>Estado del Carnet:</b></div>
-                                    <select name="estado20" id="estado20"
-                                            class="from-selec col-6" required min="1" >
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-12 text-center py-5 pt-5"><!--bottones-->
-                                <button type="submit" class="btn botones  px-4"
-                                        name="action" value="NuevaFormacion" style="background-color: #6acd56;"><b>Actualizar</b></button>
-                                <!--   <button type="submit" class="btn " name="action" value="Eliminar" style="background-color: #6acd56;"><b>Eliminar</b></button>-->  
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>                           
-        <!-- MODAL EDITAR FINAL-->
-        <script src="../js/estudiantes.js"></script>
+        <script src="../js/DatosTablas.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -434,129 +337,18 @@
         crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
     </body>
 </html>
+<script>
+            $(document).ready(function () {
+                // Manejador de evento para el cambio en el campo de búsqueda
+                $('#filtroEstudiantes').on('input', function () {
+                    var valorFiltro = $(this).val().toLowerCase(); // Obtener el valor del campo de búsqueda y convertirlo a minúsculas
 
-<%
-    String mensaje = request.getParameter("respuesta");
-
-    if (mensaje != null) {
-
-        switch (mensaje) {
-            case "Existe":
-%>
-<script>
-                                                                        Swal.fire(
-                                                                                '¡Oops!',
-                                                                                '¡La cedula ya existe en la base de datos!',
-                                                                                'warning'
-                                                                                );
+                    // Iterar sobre cada fila de la tabla
+                    $('#tablaEstudiantes tbody tr').filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(valorFiltro) > -1); // Mostrar u ocultar la fila según el filtro
+                    });
+                });
+            });
 </script>
-<%
-        break;
-    case "guardar":
-%>
-<script>
-    Swal.fire(
-            '¡Éxito!',
-            '¡El estudiante ha sido guardado!',
-            'success'
-            );
-</script>
-<%
-        break;
-    case "errorAlguardarr":
-%>
-<script>
-    Swal.fire(
-            '¡Oops!',
-            '¡Error al guardar!',
-            'warning'
-            );
-</script>
-<%
-        break;
-    case "eliminado":
-%>
-<script>
-    Swal.fire(
-            '¡Éxito!',
-            '¡El estudiante ha sido eliminado!',
-            'success'
-            );
-</script>
-<%
-        break;
-    case "errorEliminar":
-%>
-<script>
-    Swal.fire(
-            '¡Oops!',
-            '¡Error al guardar!',
-            'warning'
-            );
-</script>
-<%
-        break;
-    case "edicionGuardad":
-%>
-<script>
-    Swal.fire(
-            '¡Éxito!',
-            '¡El estudiante ha sido actualizado!',
-            'success'
-            );
-</script>
-<%
-        break;
-    case "erroreditarr":
-%>
-<script>
-    Swal.fire(
-            '¡Oops!',
-            '¡Error al Actualizar!',
-            'warning'
-            );
-</script>
-<%
-        break;
-    case "guardarImportacion2":
-%>
-<script>
-    Swal.fire(
-            '¡Éxito!',
-            '¡Importacion de Usuarios Exitosa!',
-            'success'
-            );
-</script>
-<%
-        break;
-    case "guardarAprendiz":
-%>
-<script>
-    Swal.fire(
-            '¡Éxito!',
-            '¡Importacion de Aprendices Exitosa!',
-            'success'
-            );
-</script>
-<%
-        break;
-    case "ErrorImportacion":
-%>
-<script>
-    Swal.fire(
-            '¡Oops!',
-            '¡Error al Importar!',
-            'warning'
-            );
-</script>
-<%break;
-            default:
-
-        }
-    }
-
-%>
-

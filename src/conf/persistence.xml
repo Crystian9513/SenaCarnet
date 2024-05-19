@@ -12,6 +12,9 @@
     <class>entidades.InformacionCarnet</class>
     <class>entidades.Logo</class>
     <class>entidades.Administrador</class>
+    <class>entidades.RolFuncionario</class>
+    <class>entidades.Funcionarios</class>
+    <class>entidades.AreaTrabajo</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/senacarnet?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

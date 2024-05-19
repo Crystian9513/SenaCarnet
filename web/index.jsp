@@ -42,13 +42,13 @@
                                                            placeholder="Contraseña" required min="1" maxlength="20">
                                                 </div>
                                             </div>
-                                          <!--<div class="col-12 ">
-                                                <a href="#" class="float-end text-primary " data-bs-toggle="modal" data-bs-target="#formularioModal2" > 
-                                                    <strong>Olvido su Contraseña? </strong> 
-                                                </a>
-                                            </div>--> 
+                                            <!--<div class="col-12 ">
+                                                  <a href="#" class="float-end text-primary " data-bs-toggle="modal" data-bs-target="#formularioModal2" > 
+                                                      <strong>Olvido su Contraseña? </strong> 
+                                                  </a>
+                                              </div>--> 
                                             <div class="col-12 d-flex justify-content-center align-items-center">
-                                                <button type="submit" name="btninicio" class="btn mx-auto mt-2" style="background-color: #6acd56;"
+                                                <button type="submit" name="btninicio" class="btn mx-auto mt-2 text-white" style="background-color: #018E42;"
                                                         >
                                                     <strong>Iniciar Sesion </strong></button>
                                             </div>
@@ -62,13 +62,10 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-
-
         <!-- MODALES INICIO -->
         <div class="modal fade" id="formularioModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -85,8 +82,8 @@
                             </div>
 
                             <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
-                                <button type="submit" class="btn botones  px-4"
-                                        name="action" value="Enviar" style="background-color: #6acd56;"><b>Enviar</b></button>
+                                <button type="submit" class="btn botones  px-4 text-danger"
+                                        name="action" value="Enviar" style="background-color: #018E42;"><b>Enviar</b></button>
                             </div>
                         </form>
                     </div>
@@ -104,7 +101,6 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </body>
 </html>
-
 
 <%
     String boton = request.getParameter("btninicio");
@@ -128,38 +124,47 @@
                 int estadoClave = usuario.getEstadoClave();
                 String contraseñaUsuario = usuario.getClaves(); // Obtener la contraseña del usuario
 
+                // Mensaje de depuración
+                System.out.println("Rol del usuario: " + rol);
+                System.out.println("Estado de la clave: " + estadoClave);
+
                 // Verificamos si la contraseña coincide con la almacenada en la base de datos
                 if (usuarioController.DencryptarClave(contraseñaUsuario, clave)) {
-
-                    // Verificamos el rol y el estado de la clave para redirigir correctamente
-                    if (rol == 1) {
-                        // Si el usuario tiene rol 1, verificamos el estado de la clave
-                        if (estadoClave == 1) {
-                            HttpSession sessionActual = request.getSession();
+                    HttpSession sessionActual = request.getSession();
+                    switch (rol) {
+                        case 1:
                             sessionActual.setAttribute("estudiante", usuario);
-                            // Si la clave está en estado 1, redirigimos a la página de cambio de contraseña
-                            String mensaje = "cambioClavesPrimeraVez";
-                            response.sendRedirect("vistas/cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
-                        } else {
-                            // Si la clave no está en estado 1, redirigimos a la página de usuario
-                            HttpSession sessionActual = request.getSession();
-                            sessionActual.setAttribute("estudiante", usuario);
-                            response.sendRedirect("vistas/usuario.jsp");
-                        }
-                    } else if (rol == 2) {
-                        // Si el usuario tiene rol 2, lo redirigimos al menú principal
-                        HttpSession sessionActual = request.getSession();
-                        sessionActual.setAttribute("user", usuario);
-                        response.sendRedirect("vistas/menuPrincipal.jsp");
-                    } else if (rol == 3) {
-                        // Si el usuario tiene rol 3, lo redirigimos a otra página
-                        HttpSession sessionActual = request.getSession();
-                        sessionActual.setAttribute("coordinador", usuario);
-                        response.sendRedirect("vistas/coordinador.jsp");
-                    } else {
-                        // Si el usuario tiene otro rol, redirigimos a la página de inicio de sesión con un mensaje de error
-                        String mensaje = "usuarioSinAcceso";
-                        response.sendRedirect("index.jsp?respuesta=" + mensaje);
+                            if (estadoClave == 1) {
+                                System.out.println("Redirigiendo a cambioContrasenaUsuario.jsp para el rol 1");
+                                String mensaje = "cambioClavesPrimeraVez";
+                                response.sendRedirect("vistas/cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
+                            } else {
+                                response.sendRedirect("vistas/usuario.jsp");
+                            }
+                            break;
+                        case 2:
+                            sessionActual.setAttribute("user", usuario);
+                            response.sendRedirect("vistas/menuPrincipal.jsp");
+                            break;
+                        case 3:
+                            sessionActual.setAttribute("coordinador", usuario);
+                            response.sendRedirect("vistas/coordinador.jsp");
+                            break;
+                        case 4:
+                            sessionActual.setAttribute("funcionario", usuario);
+                            if (estadoClave == 1) {
+                                System.out.println("Redirigiendo a cambioContrasenaUsuario.jsp para el rol 4");
+                                String mensaje = "cambioClavesPrimeraVez";
+                                response.sendRedirect("vistas/cambioContrasenaUsuario.jsp?respuesta=" + mensaje);
+                            } else {
+                                System.out.println("Redirigiendo a usuarioFuncionario.jsp para el rol 4");
+                                response.sendRedirect("vistas/usuarioFuncionario.jsp");
+                            }
+                            break;
+                        default:
+                            String mensaje = "usuarioSinAcceso";
+                            response.sendRedirect("index.jsp?respuesta=" + mensaje);
+                            break;
                     }
                 } else {
                     // Si la contraseña no coincide, redirigimos a la página de inicio de sesión con un mensaje de error
@@ -168,6 +173,7 @@
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace(); // Imprimir el error en la consola para depuración
             String mensaje = "error";
             response.sendRedirect("index.jsp?respuesta=" + mensaje);
         }

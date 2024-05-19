@@ -5,18 +5,21 @@
 <%
     HttpSession sesion = request.getSession();
 
-    Usuarios usuario = (Usuarios) sesion.getAttribute("estudiante");
+    Usuarios usuarioEstudiante = (Usuarios) sesion.getAttribute("estudiante");
+    Usuarios usuarioFuncionario = (Usuarios) sesion.getAttribute("funcionario");
+    Usuarios usuario = (usuarioEstudiante != null) ? usuarioEstudiante : usuarioFuncionario;
 
-    // Verificar si la sesión está activa y si el estudiante está en sesión
+    // Verificar si la sesión está activa y si el usuario (estudiante o funcionario) está en sesión
     if (sesion != null && usuario != null) {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
         response.setHeader("Pragma", "no-cache"); // HTTP 1.0
         response.setHeader("Expires", "0"); // Proxies
     } else {
-        // Si la sesión no está activa o el estudiante no está en sesión, redirigir al inicio
+        // Si la sesión no está activa o el usuario no está en sesión, redirigir al inicio
         response.sendRedirect("../index.jsp");
     }
 %>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -38,20 +41,17 @@
                         <div class="bg-white shadow rounded bg-light bg-opacity-75">
                             <div class="row">
                                 <div class="col-md-6 pe-0">
-                                    <h1 class=" pt-5 text-center">Nueva Contraseña</h1>
-                                    <div class="form-left h-100 py-4 px-5">
+                                    <h1 class="pt-5 text-center">Nueva Contraseña</h1>
+                                    <div class="form-left h-100 py-2 px-5">
                                         <form action="<%=request.getContextPath()%>/CambioContrasenaPrimeraVezServlet" class="row g-4">
                                             <div class="col-12">
-                                                <label><strong>Numero de Cedula</strong><span class="text-danger">*</span></label>
                                                 <div class="input-group">
-                                                    <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
                                                     <!-- Aquí se establece el valor por defecto obtenido de la sesión -->
-                                                    <input type="number" id="cedula" name="cedula" class="form-control"
+                                                    <input type="hidden" id="cedula" name="cedula" class="form-control"
                                                            placeholder="Numero de Cedula" required min="1" maxlength="25"
                                                            value="<%= usuario != null ? usuario.getCedula() : ""%>">
                                                 </div>
                                             </div>
-
                                             <div class="col-12">
                                                 <label><strong>Contraseña Nueva</strong><span class="text-danger">*</span></label>
                                                 <div class="input-group">
@@ -69,7 +69,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-center align-items-center">
-                                                <button type="submit" name="action" value="Guardar" class="btn mx-auto mt-2" style="background-color: #6acd56;">
+                                                <button type="submit" name="action" value="Guardar" class="btn mx-auto mt-2 text-white" style="background-color: #018E42;">
                                                     <strong>Guardar</strong>
                                                 </button>
                                             </div>

@@ -1,3 +1,5 @@
+<%@page import="entidades.Funcionarios"%>
+<%@page import="controladores.FuncionariosJpaController"%>
 <%@page import="entidades.EstadoCarnet"%>
 <%@page import="entidades.Estudiantes"%>
 <%@page import="controladores.EstudiantesJpaController"%>
@@ -64,34 +66,42 @@
     </body>
 </html>
 
-
 <%
     String boton = request.getParameter("verificar");
 
     if (boton != null) {
-
         String codigoUnico = request.getParameter("codigo");
+
+        // Verificar en la tabla Estudiantes
         EstudiantesJpaController estudianteController = new EstudiantesJpaController();
-        Object[] resultado = estudianteController.findEstudianteYEstadoCarnetPorIdentificadorUnico(codigoUnico);
+        Object[] resultadoEstudiante = estudianteController.findEstudianteYEstadoCarnetPorIdentificadorUnico(codigoUnico);
 
-        if (resultado != null) {
-            Estudiantes estudiante = (Estudiantes) resultado[0];
-            EstadoCarnet estadoCarnet = (EstadoCarnet) resultado[1];
-            String estado = estadoCarnet.getNombre(); // Suponiendo que el estado del carnet tiene un atributo "nombreEstado"
-
-            if (estado.equals("ELIMINADO")) {
-                String mensaje = "carnetEliminado";
-                response.sendRedirect("verificacionCarnet.jsp?respuesta=" + mensaje);
+        if (resultadoEstudiante != null) {
+            EstadoCarnet estadoCarnet = (EstadoCarnet) resultadoEstudiante[1];
+            if (estadoCarnet.getIdestadoCarnet() == 31) { // Verifica si el estado es "ELIMINADO"
+                response.sendRedirect("verificacionCarnet.jsp?respuesta=carnetEliminado");
             } else {
-                String mensaje = "carnetActivo";
-                response.sendRedirect("verificacionCarnet.jsp?respuesta=" + mensaje);
+                response.sendRedirect("verificacionCarnet.jsp?respuesta=carnetActivo");
             }
         } else {
-            String mensaje = "codigoInvalido";
-            response.sendRedirect("verificacionCarnet.jsp?respuesta=" + mensaje);
+            // Verificar en la tabla Funcionarios
+            FuncionariosJpaController funcionarioController = new FuncionariosJpaController();
+            Object[] resultadoFuncionario = funcionarioController.findFuncionarioYEstadoCarnetPorIdentificadorUnico(codigoUnico);
+
+            if (resultadoFuncionario != null) {
+                EstadoCarnet estadoCarnet = (EstadoCarnet) resultadoFuncionario[1];
+                if (estadoCarnet.getIdestadoCarnet() == 31) { // Verifica si el estado es "ELIMINADO"
+                    response.sendRedirect("verificacionCarnet.jsp?respuesta=carnetEliminado");
+                } else {
+                    response.sendRedirect("verificacionCarnet.jsp?respuesta=carnetActivo");
+                }
+            } else {
+                response.sendRedirect("verificacionCarnet.jsp?respuesta=codigoInvalido");
+            }
         }
     }
 %>
+
 
 <%
     String mensaje2 = request.getParameter("respuesta");

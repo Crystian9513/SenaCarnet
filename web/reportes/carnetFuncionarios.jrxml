@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="464" pageHeight="464" columnWidth="464" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="826d2312-ab66-4126-a039-facc0f42ec7b">
+	<property name="ireport.zoom" value="1.6105100000000012"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT 
+    f.NOMBRES, 
+    f.APELLIDOS,
+    f.CEDULA,
+    f.FOTOGRAFIA,
+    f.RH,
+    f.VENCE_CARNET,
+    f.IDENTIFICADOR_UNICO, 
+    td.NOMBRE AS TIPO_DOCUMENTO, 
+    rf.NOMBRE AS ROL_FUNCIONARIO, 
+    ec.NOMBRE AS ESTADO_CARNET,
+    at.NOMBRE AS AREA_TRABAJO,
+    logo.IDLOGO,
+    logo.IMAGEN,
+    logo.DIRECTOR, 
+    logo.FIRMA
+FROM 
+    funcionarios f
+INNER JOIN 
+    tipodocumento td ON f.tipodocumento_ID_TIPO_DOCUMENTO = td.ID_TIPO_DOCUMENTO
+INNER JOIN 
+    rol_funcionario rf ON f.rol_funcionario_CODIGO = rf.CODIGO
+INNER JOIN 
+    estado_carnet ec ON f.estado_carnet_IDESTADO_CARNET = ec.IDESTADO_CARNET
+INNER JOIN 
+    area_trabajo at ON f.area_trabajo_CODIGO = at.CODIGO
+CROSS JOIN 
+    (SELECT IDLOGO, DIRECTOR, IMAGEN, FIRMA FROM logo LIMIT 1) AS logo
+WHERE 
+    f.CEDULA = $P{id}]]>
+	</queryString>
+	<field name="NOMBRES" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="APELLIDOS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CEDULA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FOTOGRAFIA" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RH" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="VENCE_CARNET" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IDENTIFICADOR_UNICO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TIPO_DOCUMENTO" class="java.lang.String"/>
+	<field name="ROL_FUNCIONARIO" class="java.lang.String"/>
+	<field name="ESTADO_CARNET" class="java.lang.String"/>
+	<field name="AREA_TRABAJO" class="java.lang.String"/>
+	<field name="IDLOGO" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IMAGEN" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DIRECTOR" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="FIRMA" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="370" splitType="Stretch">
+			<rectangle radius="12">
+				<reportElement x="6" y="20" width="211" height="337" uuid="04382f27-9b11-4ecf-bb82-83cb1cd2f6f9"/>
+			</rectangle>
+			<line>
+				<reportElement x="19" y="160" width="181" height="1" uuid="9ff63827-f853-48c6-9777-66e6cb855eac"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineColor="#009900"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="21" y="171" width="181" height="20" forecolor="#009900" uuid="d5b25cb2-9450-4d35-9261-b2eb7a67123d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="75" y="211" width="125" height="20" uuid="ce52bffd-c1f7-40b4-932c-803dc5b26616"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="48" y="211" width="26" height="20" uuid="81937735-eedc-4ad9-be0c-665a73d2dcad"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="21" y="211" width="27" height="20" uuid="23cb0ea5-b38e-46f8-9989-013fbf45052d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="21" y="288" width="181" height="20" uuid="6d2b6433-2fc8-4f83-a198-f2013b80dd60"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[REGIONAL SUCRE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="21" y="191" width="181" height="20" forecolor="#009900" uuid="1998694d-310b-45b2-a4f5-b15d714f82c5"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="189" y="20" width="28" height="131" uuid="d8480525-5523-4554-9804-de6340d44228"/>
+				<textElement rotation="Left">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ROL_FUNCIONARIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="21" y="231" width="27" height="20" uuid="3f169402-fd52-4201-a79a-73f05aef03ee"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[RH]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="48" y="231" width="154" height="20" uuid="f3a7e949-6a20-467c-811f-ee1fa5d3200d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{RH}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="21" y="277" width="39" height="1" uuid="5efcbfd0-5d06-4229-9b1a-47bafdd863a5"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineColor="#009900"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="19" y="308" width="181" height="15" forecolor="#009900" uuid="912b575b-f1fc-49d0-9821-8aaff010e2cd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="19" y="323" width="181" height="15" forecolor="#009900" uuid="4df6225f-0bfd-48d5-81eb-f91218449915"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="19" y="337" width="181" height="20" uuid="3c41fc7e-5ffe-4bd6-a55f-b383f83b7519"/>
+				<textFieldExpression><![CDATA[$F{AREA_TRABAJO}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="75" y="29" width="114" height="130" uuid="b3f3b08f-b830-432a-a21e-32a7fa09ee8c"/>
+				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{FOTOGRAFIA})]]></imageExpression>
+			</image>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="21" y="54" width="54" height="47" uuid="be243a4a-e371-45e5-b156-a7f2e3660e6b"/>
+				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{IMAGEN})]]></imageExpression>
+			</image>
+			<componentElement>
+				<reportElement x="21" y="249" width="179" height="24" uuid="592d418d-e3f6-4909-9b8f-64e7059c79c4"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
+					<jr:codeExpression><![CDATA[$F{CEDULA}]]></jr:codeExpression>
+				</jr:barbecue>
+			</componentElement>
+			<rectangle radius="12">
+				<reportElement x="239" y="20" width="211" height="337" uuid="2f62fc53-6719-466b-95c9-1d2bdbd13bdc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="254" y="296" width="58" height="20" uuid="1f5b91ad-ae22-488a-95e0-c9c77ce152e3"/>
+				<textElement>
+					<font size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[VENCE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="88" width="159" height="25" uuid="42e28e31-2324-4218-9345-9fd656c9c77f"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Este carnet es de caracter personal e intransferible]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="324" y="319" width="123" height="15" uuid="ff7bac29-958a-4d09-9266-26e5eb9831d4"/>
+				<textFieldExpression><![CDATA[$F{IDENTIFICADOR_UNICO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="265" y="151" width="159" height="40" uuid="40ce305f-1b73-4a5d-a86c-fc091577798c"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[En caso de encontrar este carnet, agradecemos devolverlo al SENA y/o avisar al telefono 2804016 - 2800596.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="265" y="257" width="159" height="15" uuid="f70e157a-fa26-4eb0-b4f4-f2ab40b55b1d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{DIRECTOR}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="265" y="224" width="159" height="33" uuid="6bebe44c-f1f2-4f5d-bd44-a65d8663ac75"/>
+				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte [])$F{FIRMA} )]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="312" y="296" width="123" height="20" uuid="bd96615f-0fc1-4bb6-b191-00e758e877b4"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{VENCE_CARNET}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="254" y="334" width="181" height="12" uuid="0289b4a3-0617-4061-8f0c-74358255bba8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[https://www.cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="254" y="319" width="70" height="15" uuid="626154fa-09b8-45cc-88e0-e176c38c17ff"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Codigo-Unico:]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="318" y="29" width="53" height="47" uuid="bea73bb7-3e48-49bb-adbe-cc9718dfe8fb"/>
+				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{IMAGEN})]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="265" y="113" width="159" height="38" uuid="1cdfb8dd-5869-4e9c-b7f9-15bc4846ac61"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Debe portarse en un lugar visible en caso de perdida, debe denunciarse y darse aviso de inmediato]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="189" width="159" height="22" uuid="276b0308-d955-4b1a-8bed-fb12aeed95d6"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Email. megomez@sena.edu.co]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

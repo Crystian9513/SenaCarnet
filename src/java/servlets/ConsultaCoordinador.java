@@ -5,8 +5,8 @@
 package servlets;
 
 import com.google.gson.Gson;
-import controladores.SedeJpaController;
-import entidades.Sede;
+import controladores.CoordinadorJpaController;
+import entidades.Coordinador;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Peralta
  */
-@WebServlet(name = "ConsultaServlet", urlPatterns = {"/ConsultaServlet"})
-public class ConsultaServlet extends HttpServlet {
+@WebServlet(name = "ConsultaCoordinador", urlPatterns = {"/ConsultaCoordinador"})
+public class ConsultaCoordinador extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,24 +34,23 @@ public class ConsultaServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        cargarTabla(request, response);
+         cargarTabla(request, response);
     }
 
-    protected void cargarTabla(HttpServletRequest request, HttpServletResponse response)
+     protected void cargarTabla(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
 
         // Lógica para consultar los datos
-        SedeJpaController controlador = new SedeJpaController();
-        List<Sede> sedes = controlador.findSedeEntities();
+        CoordinadorJpaController controlador = new CoordinadorJpaController();
+        List<Coordinador> coordinador = controlador.findCoordinadorEntities();
 
         // Crear la respuesta JSON
-        String json = new Gson().toJson(sedes);
+        String json = new Gson().toJson(coordinador);
 
         // Enviar la respuesta JSON al cliente
         response.getWriter().write(json);
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

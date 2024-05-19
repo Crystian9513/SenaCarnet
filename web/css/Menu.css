@@ -1,3 +1,8 @@
+a,p,b,li,ul,strong,p,h1,h2,h3,h4,h5,b{
+    font-family: monospace;
+}
+
+
 .fondo{
     width: 100%;
     height: 100%;
@@ -8,14 +13,15 @@
 }
 
 .letra {
-    font-family: Georgia, serif; /* Definición de la fuente */
-    font-size: 350%; /* Definición del tamaño de la fuente */
+    font-family: monospace; /* Definición de la fuente */
+    font-size: 250%; /* Definición del tamaño de la fuente */
     font-weight: bold; /* Definición del grosor de la fuente */
     font-style: italic; /* Definición del estilo de la fuente */
 }
 
 .card {
- width: 490px;
+ 
+ max-width: 490px;
  height: 454px;
  border-radius: 20px;
  background: #6acd56;
@@ -39,7 +45,7 @@
  width: 60%;
  border-radius: 1rem;
  border: none;
- background-color: #6acd56;
+ background-color: #018E42;
  color: #fff;
  font-size: 1rem;
  padding: .5rem 1rem;

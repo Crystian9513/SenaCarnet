@@ -5,6 +5,7 @@
 package entidades;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -170,6 +171,8 @@ public class Estudiantes implements Serializable {
     public void setTipoDocumentoFk(Tipodocumento tipoDocumentoFk) {
         this.tipoDocumentoFk = tipoDocumentoFk;
     }
+    
+   
 
     @Override
     public int hashCode() {

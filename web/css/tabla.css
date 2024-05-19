@@ -1,15 +1,16 @@
-
-
+a,p,b{
+    font-family: monospace;
+}
 
 .letra {
-    font-family: Georgia, serif; /* Definición de la fuente */
-    font-size: 350%; /* Definición del tamaño de la fuente */
+    font-family: monospace; /* Definición de la fuente */
+    font-size: 250%; /* Definición del tamaño de la fuente */
     font-weight: bold; /* Definición del grosor de la fuente */
     font-style: italic; /* Definición del estilo de la fuente */
 }
 
 .letra2 {
-    font-family: Georgia, serif; /* Definición de la fuente */
+    font-family: monospace; /* Definición de la fuente */
     font-size: 150%; /* Definición del tamaño de la fuente */
     font-weight: bold; /* Definición del grosor de la fuente */
     font-style: italic; /* Definición del estilo de la fuente */
@@ -17,35 +18,36 @@
 
 table td,
 table th {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+    font-family: monospace;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 thead th {
-  color: #fff;
+    color: white;
 }
 
 .card {
-  border-radius: .5rem;
+    border-radius: .5rem;
 }
 
 .table-scroll {
-  border-radius: .5rem;
+    border-radius: .5rem;
 }
 
 .table-scroll table thead th {
-  font-size: 1.25rem;
+    font-size: 1.25rem;
 }
 thead {
-  top: 0;
-  position: sticky;
+    top: 0;
+    position: sticky;
 }
 
 .table-responsive {
-  max-height: 400px;
-  overflow-x: auto;
-  
+    max-height: 400px;
+    overflow-x: auto;
+
 }
 
 

@@ -4,12 +4,15 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
 import controladores.AdministradorJpaController;
 import controladores.UsuariosJpaController;
 import controladores.exceptions.NonexistentEntityException;
 import entidades.Administrador;
 import entidades.Usuarios;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -37,20 +40,22 @@ public class administradoresServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NonexistentEntityException {
 
-        String boton = request.getParameter("action");
-
-        switch (boton) {
-            case "Guardar":
-                botonGuardar(request, response);
-                break;
-            case "Eliminar":
-                botonEliminar(request, response);
-                break;
-            case "Editar":
-                botonEditar(request, response);
-                break;
-            default:
-                throw new AssertionError();
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "guardar":
+                    botonGuardar(request, response);
+                    break;
+                case "actualizar":
+                    botonEditar(request, response);
+                    break;
+                case "eliminar":
+                    botonEliminar(request, response);
+                    break;
+                default:
+                    // Acción no válida
+                    break;
+            }
         }
 
     }
@@ -58,23 +63,22 @@ public class administradoresServlet extends HttpServlet {
     public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
-        int cedula = Integer.parseInt(request.getParameter("cedula"));
-        String correo = request.getParameter("correo");
+        String nombre = request.getParameter("nombreGd");
+        String apellido = request.getParameter("apellidoGd");
+        int cedula = Integer.parseInt(request.getParameter("cedulaGd"));
+        String correo = request.getParameter("correoGd");
 
         AdministradorJpaController controladorAdm = new AdministradorJpaController();
         Administrador guardarAdmin = new Administrador();
         UsuariosJpaController controlUsuario = new UsuariosJpaController();
         Usuarios guardaUsuario = new Usuarios();
 
-        String clave = request.getParameter("clave");
+        String clave = request.getParameter("claveGd");
         String claveEncriptada = controladorAdm.EncryptarClave(clave);
 
         try {
             if (controladorAdm.findAdministrador(cedula) != null && controlUsuario.findUsuarios(cedula) != null) {
-                String mensaje = "existe";
-                response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+               enviarRespuestaError(response, "¡Error! Ya existe un registro con esa cédula.");
                 return; // Se agrega un return para terminar la ejecución del método
             }
 
@@ -93,38 +97,38 @@ public class administradoresServlet extends HttpServlet {
             guardaUsuario.setEstadoClave(2);
             controlUsuario.create(guardaUsuario);
 
-            String mensaje = "guardado";
-            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+             enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
         } catch (Exception e) {
-            String mensaje = "errorAlguardar";
-            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+            enviarRespuestaError(response, "¡Error!");
         }
     }
 
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NonexistentEntityException {
 
-        String mensaje;
-        int cedula = Integer.parseInt(request.getParameter("cedula2"));
+        int cedula = Integer.parseInt(request.getParameter("cedulaEd"));
 
-        AdministradorJpaController controlador = new AdministradorJpaController();
+        try {
+              AdministradorJpaController controlador = new AdministradorJpaController();
         controlador.destroy(cedula);
 
         UsuariosJpaController controlUsuario = new UsuariosJpaController();
         controlUsuario.destroy(cedula);
 
-        mensaje = "eliminado";
-        response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+        enviarRespuestaExito(response, "¡Registro Eliminado exitosamente!");
+        } catch (Exception e) {
+            enviarRespuestaError(response, "¡Error!");
+        }
 
     }
 
     public void botonEditar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int cedula = Integer.parseInt(request.getParameter("cedula2"));
-        String nombre = request.getParameter("nombre2");
-        String apellido = request.getParameter("apellido2");
-        String correo = request.getParameter("correo2");
+        int cedula = Integer.parseInt(request.getParameter("cedulaEd"));
+        String nombre = request.getParameter("nombreEd");
+        String apellido = request.getParameter("apellidoEd");
+        String correo = request.getParameter("correoEd");
 
         AdministradorJpaController controladorAdm = new AdministradorJpaController();
         Administrador adminExistente = controladorAdm.findAdministrador(cedula);
@@ -152,19 +156,37 @@ public class administradoresServlet extends HttpServlet {
                 controladorAdm.edit(adminExistente);
                 controladorUsuario.edit(usuarioExistente);
 
-                String mensaje = "editado";
-                response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+                 enviarRespuestaExito(response, "¡Registro Editado exitosamente!");
             } else {
-                // Si el administrador o el usuario no existen, manejar el error
-                String mensaje = "Error al editar: no se encontró el administrador o el usuario";
-                response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+                enviarRespuestaError(response, "¡Error!");
             }
         } catch (Exception e) {
-            // Imprimir el seguimiento de la pila para depuración
-            e.printStackTrace();
-            String mensaje = "Error al editar: " + e.getMessage();
-            response.sendRedirect("vistas/administrador.jsp?respuesta=" + mensaje);
+             enviarRespuestaError(response, "¡Error!");
         }
+    }
+    
+     // Método para enviar una respuesta JSON de éxito
+    private void enviarRespuestaExito(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "exito");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
+
+    // Método para enviar una respuesta JSON de error
+    private void enviarRespuestaError(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "error");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

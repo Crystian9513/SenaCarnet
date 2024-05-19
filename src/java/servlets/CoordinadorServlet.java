@@ -4,6 +4,7 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
 import controladores.EstadoCarnetJpaController;
 import controladores.EstudiantesJpaController;
 import controladores.FormacionJpaController;
@@ -23,6 +24,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -50,15 +53,16 @@ public class CoordinadorServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String boton = request.getParameter("action");
-
-        switch (boton) {
-
-            case "Editar":
-                botonEditar(request, response);
-                break;
-            default:
-                throw new AssertionError();
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "EliminarEstudiante":
+                    botonEditar(request, response);
+                    break;
+                default:
+                    // Acción no válida
+                    break;
+            }
         }
 
     }
@@ -66,24 +70,22 @@ public class CoordinadorServlet extends HttpServlet {
     public void botonEditar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String mensaje;
-
-        int cedula = Integer.parseInt(request.getParameter("cedula2"));
-        int tpdocumento = Integer.parseInt(request.getParameter("tipoDocumento2"));
-        String nombres = request.getParameter("nombres2");
-        String apellidos = request.getParameter("apellidos2");
-        int formacion = Integer.parseInt(request.getParameter("formacion2"));
-        int sede = Integer.parseInt(request.getParameter("sede2"));
-        String correo = request.getParameter("correo2");
-        String vencimiento = request.getParameter("vence2");
+        int cedula = Integer.parseInt(request.getParameter("cedulaEE"));
+        int tpdocumento = Integer.parseInt(request.getParameter("tipoDocumentoEE"));
+        String nombres = request.getParameter("nombresEE");
+        String apellidos = request.getParameter("apellidosEE");
+        int formacion = Integer.parseInt(request.getParameter("formacionEE"));
+        int sede = Integer.parseInt(request.getParameter("sedeEE"));
+        String correo = request.getParameter("correoEE");
+        String vencimiento = request.getParameter("venceEE");
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
-        int estado = Integer.parseInt(request.getParameter("estado2"));
+        int estado = Integer.parseInt(request.getParameter("estadoEE"));
 
-        int cedula2 = Integer.parseInt(request.getParameter("cedula2"));//TABLA DE USUARIO
-        String nombres2 = request.getParameter("nombres2");//TABLA DE USUARIO
-        String apellidos2 = request.getParameter("apellidos2");//TABLA DE
-        String clave = request.getParameter("cedula2");//TABLA DE USUARIO
+        int cedula2 = Integer.parseInt(request.getParameter("cedulaEE"));//TABLA DE USUARIO
+        String nombres2 = request.getParameter("nombresEE");//TABLA DE USUARIO
+        String apellidos2 = request.getParameter("apellidosEE");//TABLA DE
+        String clave = request.getParameter("cedulaEE");//TABLA DE USUARIO
 
         UsuariosJpaController controladorUsuario = new UsuariosJpaController();//TABLA DE USUARIO
         Usuarios guardarUsuario = new Usuarios();//TABLA DE USUARIO
@@ -118,7 +120,6 @@ public class CoordinadorServlet extends HttpServlet {
                 Sede se = tipoSede.findSede(sede);
                 editarEstudiante.setSedeFk(se);
                 editarEstudiante.setCorreo(correo);
-                editarEstudiante.setVenceCarnet(formatoFecha.parse(vencimiento));
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
 
@@ -139,18 +140,40 @@ public class CoordinadorServlet extends HttpServlet {
 
                 controladorUsuario.edit(guardarUsuario);
                 controlador.edit(editarEstudiante);
-                mensaje = "edicionGuardad";
-
-                response.sendRedirect("vistas/coordinador.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro editado exitosamente!");
             }
 
         } catch (Exception e) {
 
-            mensaje = "erroreditarr";
-            response.sendRedirect("vistas/coordinador.jsp?respuesta=" + mensaje);
+            enviarRespuestaError(response, "¡Error al Editar el registro!");
         }
 
     }
+    
+     // Método para enviar una respuesta JSON de éxito
+    private void enviarRespuestaExito(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "exito");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
+
+    // Método para enviar una respuesta JSON de error
+    private void enviarRespuestaError(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "error");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
+
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -61,6 +61,11 @@ public class LogoServlet extends HttpServlet {
         String nombre = request.getParameter("nombre");
         Part firma = request.getPart("firma");
 
+        System.out.println("ID del logo: " + idLogo); // Agregar estos mensajes para ver los valores recibidos
+        System.out.println("logo: " + logo);
+        System.out.println("Nombre: " + nombre);
+        System.out.println("firma: " + firma);
+
         LogoJpaController controlador = new LogoJpaController();
         Logo actualizar;
 

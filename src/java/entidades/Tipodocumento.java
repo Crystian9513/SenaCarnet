@@ -36,8 +36,8 @@ public class Tipodocumento implements Serializable {
     @Basic(optional = false)
     @Column(name = "NOMBRE")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoDocumentoFk")
-    private List<Estudiantes> estudiantesList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipodocumentoIDTIPODOCUMENTO")
+    private List<Funcionarios> funcionariosList;
 
     public Tipodocumento() {
     }
@@ -67,12 +67,12 @@ public class Tipodocumento implements Serializable {
         this.nombre = nombre;
     }
 
-    public List<Estudiantes> getEstudiantesList() {
-        return estudiantesList;
+    public List<Funcionarios> getFuncionariosList() {
+        return funcionariosList;
     }
 
-    public void setEstudiantesList(List<Estudiantes> estudiantesList) {
-        this.estudiantesList = estudiantesList;
+    public void setFuncionariosList(List<Funcionarios> funcionariosList) {
+        this.funcionariosList = funcionariosList;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class Tipodocumento implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "entidades.Tipodocumento[ idTipoDocumento=" + idTipoDocumento + " ]";
     }
     
 }

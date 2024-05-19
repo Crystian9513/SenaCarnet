@@ -13,11 +13,12 @@
         <link rel="stylesheet" href="../css/Menu.css"/>
         <link rel="stylesheet" href="../css/tabla.css"/>
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link href="../css/app.css" rel="stylesheet">
         <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+         <script src="../js/app.js"></script>
         <% HttpSession sesion = request.getSession();
 
             Usuarios usuario = (Usuarios) sesion.getAttribute("user");
@@ -37,149 +38,106 @@
     </head>
     <body  style="background-color: #fefafb;">
 
-        <%--MENU INICIO --%>
-        <nav class="navbar text-l navbar-expand-lg " style="background-color: #6acd56;">
-            <div class="container justify-content-center align-items-center">
-              
-                    <div class="col-md-2 col-12 text-center">
+        <div class="wrapper">
 
-                        <img class="" src="../img/inicioSesion_sena.jpg" alt="" height="80px" width="80px">
-
-                    </div>
-
-                    <div class="col-md-2 col-12 text-center">
-                        <h2 class="mt-3 letras"> SENA </h2>
-                    </div>
-                    <div class="col-md-8 col-12 text-center">
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
-                                aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse mt-2" id="navbarNavDropdown">
-                            <ul class="navbar-nav ms-auto navbar-brand">
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Aprendiz
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="estudiantes.jsp">Ingresar</a></li>
-                                        <li><a class="dropdown-item" href="#">Carnet Eliminado</a></li>
-                                    </ul>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="administrador.jsp">Administrador</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="coordinadorDatos.jsp">Coordinador</a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="sedesFormaciones.jsp">Sede-Formacion</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Menu Principal</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="cerrarSesionAdministrador.jsp">Salir</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-            </div>
-        </nav>
-        <%--MENU FINAL --%>
-
-        <%--CONTENIDO INICIO --%>
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <h1 class="letra text-center pt-3 ">Carnet Eliminados</h1>
+            <jsp:include page="../Componentes/Sidebar.jsp" ></jsp:include>
+                <div class="main">
+                <jsp:include page="../Componentes/nav.jsp" ></jsp:include>
+                    <main class="content">
+                    <%--CONTENIDO INICIO --%>
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-12 col-sd-12">
-                                <form action="<%=request.getContextPath()%>" method="post" class="pt-1">
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-text col-4"><b>Buscar:</b></div>
-                                        <input type="text" class="form-control" id="filtro1">
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <section class="intro mb-2">
-                        <div class="bg-image" >
-                            <div class="mask d-flex align-items-center pt-1">
+                            <div class="col-12">
                                 <div class="container">
-                                    <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
-                                        <div class="col-12"> 
-                                            <div class="card-body p-0 ">
-                                                <%--TABLA INICIO --%>
-                                                <div class="table-responsive table-scroll table-sm" data-mdb-perfect-scrollbar="true" style="position: relative; height: 210px">
-                                                    <table id="tablaCarnet" class="table table-striped table-sm  mb-0 text-center ">
-                                                        <thead class="" style="background-color: #263642;">
-                                                            <tr class="text-light">
-                                                                <th scope="col">Cedula</th>
-                                                                <th scope="col">Formacion</th>
-                                                                <th scope="col">Nombres</th>
-                                                                <th scope="col">Apellidos</th>
-                                                                <th scope="col">Fecha de Eliminacion</th>
+                                    <div class="row">
+                                        <div class="col-lg-10 col-md-10 col-sd-12"><h1 class="letra">Carnet Eliminados</h1></div>
+                                        <div class="col-lg-2 col-md-2 col-sd-12"><img class="float-end" src="../img/inicioSesion_sena.jpg" width="70px" height="70px" alt="alt"/></div>
+                                    </div>
+                                </div>
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sd-12">
+                                            <form action="<%=request.getContextPath()%>" method="post" class="pt-1">
+                                                <div class="input-group mb-2">
+                                                    <div class="input-group-text col-4"><b>Buscar:</b></div>
+                                                    <input type="text" class="form-control" id="filtro1">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <section class="intro mb-2">
+                                    <div class="bg-image" >
+                                        <div class="mask d-flex align-items-center pt-1">
+                                            <div class="container">
+                                                <div class="row justify-content-center" data-aos="zoom-in"  data-aos-duration="500">
+                                                    <div class="col-12"> 
+                                                        <div class="card-body p-0 ">
+                                                            <%--TABLA INICIO --%>
+                                                            <div class="table-responsive table-scroll table-sm" data-mdb-perfect-scrollbar="true" style="position: relative; height: 310px">
+                                                                <table id="tablaCarnet" class="table table-striped table-sm  mb-0 text-center ">
+                                                                    <thead class="" style="background-color: #018E42;">
+                                                                        <tr class="text-light">
+                                                                            <th class="text-white">Cedula</th>
+                                                                            <th class="text-white">Formacion</th>
+                                                                            <th class="text-white">Nombres</th>
+                                                                            <th class="text-white">Apellidos</th>
+                                                                            <th class="text-white">Fecha de Eliminacion</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <%
+                                                                            InformacionCarnetJpaController controlador = new InformacionCarnetJpaController();
+                                                                            List<InformacionCarnet> info = controlador.findInformacionCarnetEntities();
+
+                                                                            if (info.isEmpty()) {
 
 
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
+                                                                        %>
 
-                                                            <%
-                                                                InformacionCarnetJpaController controlador = new InformacionCarnetJpaController();
-                                                                List<InformacionCarnet> info = controlador.findInformacionCarnetEntities();
+                                                                        <tr>
+                                                                            <td colspan="5" class="text-center">No se encontraron carnet eliminados en la base de datos.</td>
+                                                                        </tr>
+                                                                        <%                                                                } else {
 
-                                                                if (info.isEmpty()) {
+                                                                            for (InformacionCarnet adm : info) {
+                                                                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                                                                String fechaeEliminado = adm.getFechaEliminacion() != null ? dateFormat.format(adm.getFechaEliminacion()) : "Sin fecha";
 
+                                                                        %>
+                                                                        <tr>
+                                                                            <td> <%= adm.getCedula()%> </td>
+                                                                            <td> <%= adm.getFormacion()%></td>
+                                                                            <td> <%= adm.getNombres()%> </td>
+                                                                            <td> <%= adm.getApellidos()%> </td>
+                                                                            <td> <%= fechaeEliminado%> </td>
 
-                                                            %>
+                                                                            <%
+                                                                                    }
 
-                                                            <tr>
-                                                                <td colspan="5" class="text-center">No se encontraron carnet eliminados en la base de datos.</td>
-                                                            </tr>
-                                                            <%                                                                } else {
-
-                                                                for (InformacionCarnet adm : info) {
-                                                                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                                                                    String fechaeEliminado = adm.getFechaEliminacion() != null ? dateFormat.format(adm.getFechaEliminacion()) : "Sin fecha";
-
-                                                            %>
-                                                            <tr>
-                                                                <td> <%= adm.getCedula()%> </td>
-                                                                <td> <%= adm.getFormacion()%></td>
-                                                                <td> <%= adm.getNombres()%> </td>
-                                                                <td> <%= adm.getApellidos()%> </td>
-                                                                <td> <%= fechaeEliminado%> </td>
-
-                                                                <%
-                                                                        }
-
-                                                                    }
-                                                                %>
-                                                        </tbody>
-                                                    </table>
-                                                    <%--CONTENIDO FINAL --%>
+                                                                                }
+                                                                            %>
+                                                                    </tbody>
+                                                                </table>
+                                                                <%--CONTENIDO FINAL --%>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </section>
                             </div>
-                        </div>
-                    </section>
-                </div>
-            </div>  
+                        </div>  
+                    </div>
+                    <%--CONTENIDO FINAL --%>
+                </main>
+                <jsp:include page="../Componentes/footer2.jsp" ></jsp:include>
+            </div>
         </div>
 
-        <%--CONTENIDO FINAL --%>
-
-       <jsp:include page="../Componentes/footer.jsp" ></jsp:include>
 
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
@@ -203,4 +161,4 @@
                         fila.style.display = "none";
                     }
                 });
-});</script>
+            });</script>

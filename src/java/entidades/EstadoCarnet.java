@@ -28,9 +28,6 @@ import javax.persistence.Table;
     @NamedQuery(name = "EstadoCarnet.findByNombre", query = "SELECT e FROM EstadoCarnet e WHERE e.nombre = :nombre")})
 public class EstadoCarnet implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoCarnetIdestadoCarnet")
-    private List<Estudiantes> estudiantesList;
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -39,6 +36,8 @@ public class EstadoCarnet implements Serializable {
     @Basic(optional = false)
     @Column(name = "NOMBRE")
     private String nombre;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadocarnetIDESTADOCARNET")
+    private List<Funcionarios> funcionariosList;
 
     public EstadoCarnet() {
     }
@@ -68,6 +67,14 @@ public class EstadoCarnet implements Serializable {
         this.nombre = nombre;
     }
 
+    public List<Funcionarios> getFuncionariosList() {
+        return funcionariosList;
+    }
+
+    public void setFuncionariosList(List<Funcionarios> funcionariosList) {
+        this.funcionariosList = funcionariosList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -91,14 +98,6 @@ public class EstadoCarnet implements Serializable {
     @Override
     public String toString() {
         return nombre;
-    }
-
-    public List<Estudiantes> getEstudiantesList() {
-        return estudiantesList;
-    }
-
-    public void setEstudiantesList(List<Estudiantes> estudiantesList) {
-        this.estudiantesList = estudiantesList;
     }
     
 }

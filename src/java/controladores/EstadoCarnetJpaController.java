@@ -13,7 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entidades.Estudiantes;
+import entidades.Funcionarios;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -36,27 +36,27 @@ public class EstadoCarnetJpaController implements Serializable {
     }
 
     public void create(EstadoCarnet estadoCarnet) throws PreexistingEntityException, Exception {
-        if (estadoCarnet.getEstudiantesList() == null) {
-            estadoCarnet.setEstudiantesList(new ArrayList<Estudiantes>());
+        if (estadoCarnet.getFuncionariosList() == null) {
+            estadoCarnet.setFuncionariosList(new ArrayList<Funcionarios>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Estudiantes> attachedEstudiantesList = new ArrayList<Estudiantes>();
-            for (Estudiantes estudiantesListEstudiantesToAttach : estadoCarnet.getEstudiantesList()) {
-                estudiantesListEstudiantesToAttach = em.getReference(estudiantesListEstudiantesToAttach.getClass(), estudiantesListEstudiantesToAttach.getCedula());
-                attachedEstudiantesList.add(estudiantesListEstudiantesToAttach);
+            List<Funcionarios> attachedFuncionariosList = new ArrayList<Funcionarios>();
+            for (Funcionarios funcionariosListFuncionariosToAttach : estadoCarnet.getFuncionariosList()) {
+                funcionariosListFuncionariosToAttach = em.getReference(funcionariosListFuncionariosToAttach.getClass(), funcionariosListFuncionariosToAttach.getCedula());
+                attachedFuncionariosList.add(funcionariosListFuncionariosToAttach);
             }
-            estadoCarnet.setEstudiantesList(attachedEstudiantesList);
+            estadoCarnet.setFuncionariosList(attachedFuncionariosList);
             em.persist(estadoCarnet);
-            for (Estudiantes estudiantesListEstudiantes : estadoCarnet.getEstudiantesList()) {
-                EstadoCarnet oldEstadoCarnetIdestadoCarnetOfEstudiantesListEstudiantes = estudiantesListEstudiantes.getEstadoCarnetIdestadoCarnet();
-                estudiantesListEstudiantes.setEstadoCarnetIdestadoCarnet(estadoCarnet);
-                estudiantesListEstudiantes = em.merge(estudiantesListEstudiantes);
-                if (oldEstadoCarnetIdestadoCarnetOfEstudiantesListEstudiantes != null) {
-                    oldEstadoCarnetIdestadoCarnetOfEstudiantesListEstudiantes.getEstudiantesList().remove(estudiantesListEstudiantes);
-                    oldEstadoCarnetIdestadoCarnetOfEstudiantesListEstudiantes = em.merge(oldEstadoCarnetIdestadoCarnetOfEstudiantesListEstudiantes);
+            for (Funcionarios funcionariosListFuncionarios : estadoCarnet.getFuncionariosList()) {
+                EstadoCarnet oldEstadocarnetIDESTADOCARNETOfFuncionariosListFuncionarios = funcionariosListFuncionarios.getEstadocarnetIDESTADOCARNET();
+                funcionariosListFuncionarios.setEstadocarnetIDESTADOCARNET(estadoCarnet);
+                funcionariosListFuncionarios = em.merge(funcionariosListFuncionarios);
+                if (oldEstadocarnetIDESTADOCARNETOfFuncionariosListFuncionarios != null) {
+                    oldEstadocarnetIDESTADOCARNETOfFuncionariosListFuncionarios.getFuncionariosList().remove(funcionariosListFuncionarios);
+                    oldEstadocarnetIDESTADOCARNETOfFuncionariosListFuncionarios = em.merge(oldEstadocarnetIDESTADOCARNETOfFuncionariosListFuncionarios);
                 }
             }
             em.getTransaction().commit();
@@ -78,36 +78,36 @@ public class EstadoCarnetJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             EstadoCarnet persistentEstadoCarnet = em.find(EstadoCarnet.class, estadoCarnet.getIdestadoCarnet());
-            List<Estudiantes> estudiantesListOld = persistentEstadoCarnet.getEstudiantesList();
-            List<Estudiantes> estudiantesListNew = estadoCarnet.getEstudiantesList();
+            List<Funcionarios> funcionariosListOld = persistentEstadoCarnet.getFuncionariosList();
+            List<Funcionarios> funcionariosListNew = estadoCarnet.getFuncionariosList();
             List<String> illegalOrphanMessages = null;
-            for (Estudiantes estudiantesListOldEstudiantes : estudiantesListOld) {
-                if (!estudiantesListNew.contains(estudiantesListOldEstudiantes)) {
+            for (Funcionarios funcionariosListOldFuncionarios : funcionariosListOld) {
+                if (!funcionariosListNew.contains(funcionariosListOldFuncionarios)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Estudiantes " + estudiantesListOldEstudiantes + " since its estadoCarnetIdestadoCarnet field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Funcionarios " + funcionariosListOldFuncionarios + " since its estadocarnetIDESTADOCARNET field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Estudiantes> attachedEstudiantesListNew = new ArrayList<Estudiantes>();
-            for (Estudiantes estudiantesListNewEstudiantesToAttach : estudiantesListNew) {
-                estudiantesListNewEstudiantesToAttach = em.getReference(estudiantesListNewEstudiantesToAttach.getClass(), estudiantesListNewEstudiantesToAttach.getCedula());
-                attachedEstudiantesListNew.add(estudiantesListNewEstudiantesToAttach);
+            List<Funcionarios> attachedFuncionariosListNew = new ArrayList<Funcionarios>();
+            for (Funcionarios funcionariosListNewFuncionariosToAttach : funcionariosListNew) {
+                funcionariosListNewFuncionariosToAttach = em.getReference(funcionariosListNewFuncionariosToAttach.getClass(), funcionariosListNewFuncionariosToAttach.getCedula());
+                attachedFuncionariosListNew.add(funcionariosListNewFuncionariosToAttach);
             }
-            estudiantesListNew = attachedEstudiantesListNew;
-            estadoCarnet.setEstudiantesList(estudiantesListNew);
+            funcionariosListNew = attachedFuncionariosListNew;
+            estadoCarnet.setFuncionariosList(funcionariosListNew);
             estadoCarnet = em.merge(estadoCarnet);
-            for (Estudiantes estudiantesListNewEstudiantes : estudiantesListNew) {
-                if (!estudiantesListOld.contains(estudiantesListNewEstudiantes)) {
-                    EstadoCarnet oldEstadoCarnetIdestadoCarnetOfEstudiantesListNewEstudiantes = estudiantesListNewEstudiantes.getEstadoCarnetIdestadoCarnet();
-                    estudiantesListNewEstudiantes.setEstadoCarnetIdestadoCarnet(estadoCarnet);
-                    estudiantesListNewEstudiantes = em.merge(estudiantesListNewEstudiantes);
-                    if (oldEstadoCarnetIdestadoCarnetOfEstudiantesListNewEstudiantes != null && !oldEstadoCarnetIdestadoCarnetOfEstudiantesListNewEstudiantes.equals(estadoCarnet)) {
-                        oldEstadoCarnetIdestadoCarnetOfEstudiantesListNewEstudiantes.getEstudiantesList().remove(estudiantesListNewEstudiantes);
-                        oldEstadoCarnetIdestadoCarnetOfEstudiantesListNewEstudiantes = em.merge(oldEstadoCarnetIdestadoCarnetOfEstudiantesListNewEstudiantes);
+            for (Funcionarios funcionariosListNewFuncionarios : funcionariosListNew) {
+                if (!funcionariosListOld.contains(funcionariosListNewFuncionarios)) {
+                    EstadoCarnet oldEstadocarnetIDESTADOCARNETOfFuncionariosListNewFuncionarios = funcionariosListNewFuncionarios.getEstadocarnetIDESTADOCARNET();
+                    funcionariosListNewFuncionarios.setEstadocarnetIDESTADOCARNET(estadoCarnet);
+                    funcionariosListNewFuncionarios = em.merge(funcionariosListNewFuncionarios);
+                    if (oldEstadocarnetIDESTADOCARNETOfFuncionariosListNewFuncionarios != null && !oldEstadocarnetIDESTADOCARNETOfFuncionariosListNewFuncionarios.equals(estadoCarnet)) {
+                        oldEstadocarnetIDESTADOCARNETOfFuncionariosListNewFuncionarios.getFuncionariosList().remove(funcionariosListNewFuncionarios);
+                        oldEstadocarnetIDESTADOCARNETOfFuncionariosListNewFuncionarios = em.merge(oldEstadocarnetIDESTADOCARNETOfFuncionariosListNewFuncionarios);
                     }
                 }
             }
@@ -141,12 +141,12 @@ public class EstadoCarnetJpaController implements Serializable {
                 throw new NonexistentEntityException("The estadoCarnet with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Estudiantes> estudiantesListOrphanCheck = estadoCarnet.getEstudiantesList();
-            for (Estudiantes estudiantesListOrphanCheckEstudiantes : estudiantesListOrphanCheck) {
+            List<Funcionarios> funcionariosListOrphanCheck = estadoCarnet.getFuncionariosList();
+            for (Funcionarios funcionariosListOrphanCheckFuncionarios : funcionariosListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This EstadoCarnet (" + estadoCarnet + ") cannot be destroyed since the Estudiantes " + estudiantesListOrphanCheckEstudiantes + " in its estudiantesList field has a non-nullable estadoCarnetIdestadoCarnet field.");
+                illegalOrphanMessages.add("This EstadoCarnet (" + estadoCarnet + ") cannot be destroyed since the Funcionarios " + funcionariosListOrphanCheckFuncionarios + " in its funcionariosList field has a non-nullable estadocarnetIDESTADOCARNET field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

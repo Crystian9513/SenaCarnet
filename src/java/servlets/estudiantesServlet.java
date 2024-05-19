@@ -4,6 +4,7 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
 import controladores.EstadoCarnetJpaController;
 import controladores.EstudiantesJpaController;
 import controladores.FormacionJpaController;
@@ -27,6 +28,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -57,26 +60,25 @@ public class estudiantesServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, ParseException {
 
-        String boton = request.getParameter("action");
-
-        switch (boton) {
-            case "Guardar":
-                botonGuardar(request, response);
-                break;
-            case "Eliminar":
-                botonEliminar(request, response);
-                break;
-            case "Editar":
-                botonEditar(request, response);
-                break;
-            case "NuevaFormacion":
-                botonNuevaFormacion(request, response);
-                break;
-            case "Importar2":
-                botonImportar(request, response);
-                break;
-            default:
-                throw new AssertionError();
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "guardar":
+                    botonGuardar(request, response);
+                    break;
+                case "actualizar":
+                    botonEditar(request, response);
+                    break;
+                case "eliminar":
+                    botonEliminar(request, response);
+                    break;
+                case "nuevaFormacion":
+                    botonNuevaFormacion(request, response);
+                    break;
+                default:
+                    // Acción no válida
+                    break;
+            }
         }
 
     }
@@ -123,8 +125,8 @@ public class estudiantesServlet extends HttpServlet {
 
             if (controlador.findEstudiantes(cedula) != null) {
 
-                mensaje = "Existe";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                enviarRespuestaError(response, "¡Error! Ya existe un registro con esa cédula.");
+                return; // Se agrega un return para terminar la ejecución del método
 
             }
             if (part == null) {
@@ -161,20 +163,17 @@ public class estudiantesServlet extends HttpServlet {
             controlador.create(guardarEstudiante);
             controladorUsuario.create(guardarUsuario);
 
-            mensaje = "guardar";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+            enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
 
         } catch (Exception e) {
 
-            mensaje = "errorAlguardarr";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+             enviarRespuestaError(response, "¡Error!");;
         }
     }
 
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String mensaje;
+        
         int codigoUsuario = Integer.parseInt(request.getParameter("cedula2"));
 
         try {
@@ -191,26 +190,21 @@ public class estudiantesServlet extends HttpServlet {
                 controlador.destroy(codigoUsuario);
                 controladorUsuario.destroy(codigoUsuario);
 
-                mensaje = "eliminado";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro Eliminado exitosamente!");
             } else {
                 // Manejar el caso en que el estudiante no existe
-                mensaje = "El estudiante no existe";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                enviarRespuestaError(response, "¡Error!");
             }
 
         } catch (Exception e) {
 
-            mensaje = "errorEliminar";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+            enviarRespuestaError(response, "¡Error!");
         }
 
     }
 
     public void botonEditar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String mensaje;
 
         int cedula = Integer.parseInt(request.getParameter("cedula2"));
         int tpdocumento = Integer.parseInt(request.getParameter("tipoDocumento2"));
@@ -288,22 +282,18 @@ public class estudiantesServlet extends HttpServlet {
                 guardarUsuario.setEstadoClave(1);
                 controladorUsuario.edit(guardarUsuario);
 
-                mensaje = "edicionGuardad";
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro editado exitosamente!");
             }
 
         } catch (Exception e) {
 
-            mensaje = "erroreditarr";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+            enviarRespuestaError(response, "¡Error!");
         }
 
     }
 
     public void botonNuevaFormacion(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String mensaje;
 
         int cedula = Integer.parseInt(request.getParameter("cedula20"));
         int tpdocumento = Integer.parseInt(request.getParameter("tipoDocumento20"));
@@ -334,6 +324,16 @@ public class estudiantesServlet extends HttpServlet {
         FormacionJpaController tipoForma = new FormacionJpaController();
         SedeJpaController tipoSede = new SedeJpaController();
         EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
+        
+         // Obtener el archivo de la foto
+        Part part = request.getPart("foto20");
+        byte[] nuevaFoto = null;
+
+        // Verificar si se proporcionó una nueva foto
+        if (part != null && part.getSize() > 0) {
+            // Guardar la nueva foto en un arreglo de bytes
+            nuevaFoto = part.getInputStream().readAllBytes();
+        }
 
         try {
 
@@ -353,6 +353,11 @@ public class estudiantesServlet extends HttpServlet {
                 editarEstudiante.setRh(rh);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
+                
+                // Verificar si se proporcionó una nueva foto y actualizarla
+                if (nuevaFoto != null) {
+                    editarEstudiante.setFotografia(nuevaFoto);
+                }
 
                 //TABLA USUSARIO
                 guardarUsuario.setCedula(cedula2);
@@ -363,15 +368,12 @@ public class estudiantesServlet extends HttpServlet {
 
                 controladorUsuario.edit(guardarUsuario);
                 controlador.edit(editarEstudiante);
-                mensaje = "edicionGuardad";
-
-                response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro editado exitosamente!");
             }
 
         } catch (Exception e) {
+             enviarRespuestaError(response, "¡Error!");
 
-            mensaje = "erroreditarr";
-            response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
         }
 
     }
@@ -449,6 +451,30 @@ public class estudiantesServlet extends HttpServlet {
                 response.sendRedirect("vistas/estudiantes.jsp?respuesta=" + mensaje);
             }
         }
+    }
+
+    // Método para enviar una respuesta JSON de éxito
+    private void enviarRespuestaExito(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "exito");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
+
+    // Método para enviar una respuesta JSON de error
+    private void enviarRespuestaError(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "error");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

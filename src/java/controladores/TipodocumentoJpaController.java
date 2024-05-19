@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import entidades.Estudiantes;
+import entidades.Funcionarios;
 import entidades.Tipodocumento;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import javax.persistence.Persistence;
 public class TipodocumentoJpaController implements Serializable {
 
     public TipodocumentoJpaController( ) {
-       this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
+         this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -36,27 +36,27 @@ public class TipodocumentoJpaController implements Serializable {
     }
 
     public void create(Tipodocumento tipodocumento) throws PreexistingEntityException, Exception {
-        if (tipodocumento.getEstudiantesList() == null) {
-            tipodocumento.setEstudiantesList(new ArrayList<Estudiantes>());
+        if (tipodocumento.getFuncionariosList() == null) {
+            tipodocumento.setFuncionariosList(new ArrayList<Funcionarios>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Estudiantes> attachedEstudiantesList = new ArrayList<Estudiantes>();
-            for (Estudiantes estudiantesListEstudiantesToAttach : tipodocumento.getEstudiantesList()) {
-                estudiantesListEstudiantesToAttach = em.getReference(estudiantesListEstudiantesToAttach.getClass(), estudiantesListEstudiantesToAttach.getCedula());
-                attachedEstudiantesList.add(estudiantesListEstudiantesToAttach);
+            List<Funcionarios> attachedFuncionariosList = new ArrayList<Funcionarios>();
+            for (Funcionarios funcionariosListFuncionariosToAttach : tipodocumento.getFuncionariosList()) {
+                funcionariosListFuncionariosToAttach = em.getReference(funcionariosListFuncionariosToAttach.getClass(), funcionariosListFuncionariosToAttach.getCedula());
+                attachedFuncionariosList.add(funcionariosListFuncionariosToAttach);
             }
-            tipodocumento.setEstudiantesList(attachedEstudiantesList);
+            tipodocumento.setFuncionariosList(attachedFuncionariosList);
             em.persist(tipodocumento);
-            for (Estudiantes estudiantesListEstudiantes : tipodocumento.getEstudiantesList()) {
-                Tipodocumento oldTipoDocumentoFkOfEstudiantesListEstudiantes = estudiantesListEstudiantes.getTipoDocumentoFk();
-                estudiantesListEstudiantes.setTipoDocumentoFk(tipodocumento);
-                estudiantesListEstudiantes = em.merge(estudiantesListEstudiantes);
-                if (oldTipoDocumentoFkOfEstudiantesListEstudiantes != null) {
-                    oldTipoDocumentoFkOfEstudiantesListEstudiantes.getEstudiantesList().remove(estudiantesListEstudiantes);
-                    oldTipoDocumentoFkOfEstudiantesListEstudiantes = em.merge(oldTipoDocumentoFkOfEstudiantesListEstudiantes);
+            for (Funcionarios funcionariosListFuncionarios : tipodocumento.getFuncionariosList()) {
+                Tipodocumento oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListFuncionarios = funcionariosListFuncionarios.getTipodocumentoIDTIPODOCUMENTO();
+                funcionariosListFuncionarios.setTipodocumentoIDTIPODOCUMENTO(tipodocumento);
+                funcionariosListFuncionarios = em.merge(funcionariosListFuncionarios);
+                if (oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListFuncionarios != null) {
+                    oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListFuncionarios.getFuncionariosList().remove(funcionariosListFuncionarios);
+                    oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListFuncionarios = em.merge(oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListFuncionarios);
                 }
             }
             em.getTransaction().commit();
@@ -78,36 +78,36 @@ public class TipodocumentoJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Tipodocumento persistentTipodocumento = em.find(Tipodocumento.class, tipodocumento.getIdTipoDocumento());
-            List<Estudiantes> estudiantesListOld = persistentTipodocumento.getEstudiantesList();
-            List<Estudiantes> estudiantesListNew = tipodocumento.getEstudiantesList();
+            List<Funcionarios> funcionariosListOld = persistentTipodocumento.getFuncionariosList();
+            List<Funcionarios> funcionariosListNew = tipodocumento.getFuncionariosList();
             List<String> illegalOrphanMessages = null;
-            for (Estudiantes estudiantesListOldEstudiantes : estudiantesListOld) {
-                if (!estudiantesListNew.contains(estudiantesListOldEstudiantes)) {
+            for (Funcionarios funcionariosListOldFuncionarios : funcionariosListOld) {
+                if (!funcionariosListNew.contains(funcionariosListOldFuncionarios)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Estudiantes " + estudiantesListOldEstudiantes + " since its tipoDocumentoFk field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Funcionarios " + funcionariosListOldFuncionarios + " since its tipodocumentoIDTIPODOCUMENTO field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Estudiantes> attachedEstudiantesListNew = new ArrayList<Estudiantes>();
-            for (Estudiantes estudiantesListNewEstudiantesToAttach : estudiantesListNew) {
-                estudiantesListNewEstudiantesToAttach = em.getReference(estudiantesListNewEstudiantesToAttach.getClass(), estudiantesListNewEstudiantesToAttach.getCedula());
-                attachedEstudiantesListNew.add(estudiantesListNewEstudiantesToAttach);
+            List<Funcionarios> attachedFuncionariosListNew = new ArrayList<Funcionarios>();
+            for (Funcionarios funcionariosListNewFuncionariosToAttach : funcionariosListNew) {
+                funcionariosListNewFuncionariosToAttach = em.getReference(funcionariosListNewFuncionariosToAttach.getClass(), funcionariosListNewFuncionariosToAttach.getCedula());
+                attachedFuncionariosListNew.add(funcionariosListNewFuncionariosToAttach);
             }
-            estudiantesListNew = attachedEstudiantesListNew;
-            tipodocumento.setEstudiantesList(estudiantesListNew);
+            funcionariosListNew = attachedFuncionariosListNew;
+            tipodocumento.setFuncionariosList(funcionariosListNew);
             tipodocumento = em.merge(tipodocumento);
-            for (Estudiantes estudiantesListNewEstudiantes : estudiantesListNew) {
-                if (!estudiantesListOld.contains(estudiantesListNewEstudiantes)) {
-                    Tipodocumento oldTipoDocumentoFkOfEstudiantesListNewEstudiantes = estudiantesListNewEstudiantes.getTipoDocumentoFk();
-                    estudiantesListNewEstudiantes.setTipoDocumentoFk(tipodocumento);
-                    estudiantesListNewEstudiantes = em.merge(estudiantesListNewEstudiantes);
-                    if (oldTipoDocumentoFkOfEstudiantesListNewEstudiantes != null && !oldTipoDocumentoFkOfEstudiantesListNewEstudiantes.equals(tipodocumento)) {
-                        oldTipoDocumentoFkOfEstudiantesListNewEstudiantes.getEstudiantesList().remove(estudiantesListNewEstudiantes);
-                        oldTipoDocumentoFkOfEstudiantesListNewEstudiantes = em.merge(oldTipoDocumentoFkOfEstudiantesListNewEstudiantes);
+            for (Funcionarios funcionariosListNewFuncionarios : funcionariosListNew) {
+                if (!funcionariosListOld.contains(funcionariosListNewFuncionarios)) {
+                    Tipodocumento oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListNewFuncionarios = funcionariosListNewFuncionarios.getTipodocumentoIDTIPODOCUMENTO();
+                    funcionariosListNewFuncionarios.setTipodocumentoIDTIPODOCUMENTO(tipodocumento);
+                    funcionariosListNewFuncionarios = em.merge(funcionariosListNewFuncionarios);
+                    if (oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListNewFuncionarios != null && !oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListNewFuncionarios.equals(tipodocumento)) {
+                        oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListNewFuncionarios.getFuncionariosList().remove(funcionariosListNewFuncionarios);
+                        oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListNewFuncionarios = em.merge(oldTipodocumentoIDTIPODOCUMENTOOfFuncionariosListNewFuncionarios);
                     }
                 }
             }
@@ -141,12 +141,12 @@ public class TipodocumentoJpaController implements Serializable {
                 throw new NonexistentEntityException("The tipodocumento with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Estudiantes> estudiantesListOrphanCheck = tipodocumento.getEstudiantesList();
-            for (Estudiantes estudiantesListOrphanCheckEstudiantes : estudiantesListOrphanCheck) {
+            List<Funcionarios> funcionariosListOrphanCheck = tipodocumento.getFuncionariosList();
+            for (Funcionarios funcionariosListOrphanCheckFuncionarios : funcionariosListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Tipodocumento (" + tipodocumento + ") cannot be destroyed since the Estudiantes " + estudiantesListOrphanCheckEstudiantes + " in its estudiantesList field has a non-nullable tipoDocumentoFk field.");
+                illegalOrphanMessages.add("This Tipodocumento (" + tipodocumento + ") cannot be destroyed since the Funcionarios " + funcionariosListOrphanCheckFuncionarios + " in its funcionariosList field has a non-nullable tipodocumentoIDTIPODOCUMENTO field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

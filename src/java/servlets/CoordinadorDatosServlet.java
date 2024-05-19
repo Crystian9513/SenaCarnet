@@ -4,12 +4,15 @@
  */
 package servlets;
 
+import com.google.gson.Gson;
 import controladores.CoordinadorJpaController;
 import controladores.UsuariosJpaController;
 import controladores.exceptions.NonexistentEntityException;
 import entidades.Coordinador;
 import entidades.Usuarios;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -38,47 +41,45 @@ public class CoordinadorDatosServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NonexistentEntityException {
-
-        String boton = request.getParameter("action");
-
-        switch (boton) {
-            case "Guardar":
-                botonGuardar(request, response);
-                break;
-            case "Eliminar":
-                botonEliminar(request, response);
-                break;
-            case "Editar":
-                botonEditar(request, response);
-                break;
-
-            default:
-                throw new AssertionError();
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "guardar":
+                    botonGuardar(request, response);
+                    break;
+                case "actualizar":
+                    botonEditar(request, response);
+                    break;
+                case "eliminar":
+                    botonEliminar(request, response);
+                    break;
+                default:
+                    // Acción no válida
+                    break;
+            }
         }
-
     }
 
     public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nombre = request.getParameter("nombre");
-        String apellido = request.getParameter("apellido");
-        int cedula = Integer.parseInt(request.getParameter("cedula"));
-        String correo = request.getParameter("correo");
+        String nombre = request.getParameter("nombreCorGd");
+        String apellido = request.getParameter("apellidoCorGd");
+        int cedula = Integer.parseInt(request.getParameter("cedulaCorGd"));
+        String correo = request.getParameter("correoCorGd");
 
         CoordinadorJpaController controlador = new CoordinadorJpaController();
         Coordinador guardarCoor = new Coordinador();
         UsuariosJpaController controlUsuario = new UsuariosJpaController();
         Usuarios guardaUsuario = new Usuarios();
 
-        String clave = request.getParameter("clave");
+        String clave = request.getParameter("claveCorGd");
         String claveEncriptada = controlador.EncryptarClave(clave);
 
         try {
 
             if (controlador.findCoordinador(cedula) != null && controlUsuario.findUsuarios(cedula) != null) {
-                String mensaje = "existe";
-                response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+                enviarRespuestaError(response, "¡Error! Ya existe un registro con esa cédula.");
                 return; // Se agrega un return para terminar la ejecución del método
             } else {
 
@@ -97,14 +98,11 @@ public class CoordinadorDatosServlet extends HttpServlet {
                 guardaUsuario.setEstadoClave(2);
                 controlUsuario.create(guardaUsuario);
 
-                String mensaje = "guardado";
-                response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
-
+                enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
             }
 
         } catch (Exception e) {
-            String mensaje = "errorAlguardar";
-            response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+             enviarRespuestaError(response, "¡Error!");
         }
 
     }
@@ -112,25 +110,27 @@ public class CoordinadorDatosServlet extends HttpServlet {
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, NonexistentEntityException {
 
-        String mensaje;
-        int cedula = Integer.parseInt(request.getParameter("cedula2"));
+        int cedula = Integer.parseInt(request.getParameter("cedulaCd"));
 
-        CoordinadorJpaController controlador = new CoordinadorJpaController();
-        controlador.destroy(cedula);
+        try {
+            CoordinadorJpaController controlador = new CoordinadorJpaController();
+            controlador.destroy(cedula);
 
-        UsuariosJpaController controlUsuario = new UsuariosJpaController();
-        controlUsuario.destroy(cedula);
+            UsuariosJpaController controlUsuario = new UsuariosJpaController();
+            controlUsuario.destroy(cedula);
 
-        mensaje = "eliminado";
-         response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
-      
+            enviarRespuestaExito(response, "¡Registro Eliminado exitosamente!");
+        } catch (Exception e) {
+            enviarRespuestaError(response, "¡Error!");
+        }
+
     }
 
     public void botonEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nombre = request.getParameter("nombre2");
-        String apellido = request.getParameter("apellido2");
-        int cedula = Integer.parseInt(request.getParameter("cedula2"));
-        String correo = request.getParameter("correo2");
+        String nombre = request.getParameter("nombreCd");
+        String apellido = request.getParameter("apellidoCd");
+        int cedula = Integer.parseInt(request.getParameter("cedulaCd"));
+        String correo = request.getParameter("correoCd");
 
         CoordinadorJpaController controlador = new CoordinadorJpaController();
         UsuariosJpaController controlUsuario = new UsuariosJpaController();
@@ -151,16 +151,37 @@ public class CoordinadorDatosServlet extends HttpServlet {
 
                 controlUsuario.edit(usuarioExistente);
 
-                String mensaje = "editado";
-                response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro Editado exitosamente!");
             } else {
-                String mensaje = "noExiste";
-                response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+                  enviarRespuestaError(response, "¡Error!");
             }
         } catch (Exception e) {
-            String mensaje = "errorAlEditar";
-            response.sendRedirect("vistas/coordinadorDatos.jsp?respuesta=" + mensaje);
+             enviarRespuestaError(response, "¡Error!");
         }
+    }
+
+    // Método para enviar una respuesta JSON de éxito
+    private void enviarRespuestaExito(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "exito");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
+
+    // Método para enviar una respuesta JSON de error
+    private void enviarRespuestaError(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "error");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

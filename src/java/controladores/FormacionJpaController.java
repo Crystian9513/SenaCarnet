@@ -235,4 +235,6 @@ public class FormacionJpaController implements Serializable {
         }
     }
     
+    
+    
 }

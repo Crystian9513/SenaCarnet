@@ -1,30 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package servlets;
 
+import com.google.gson.Gson;
 import controladores.SedeJpaController;
 import entidades.Sede;
 import java.io.BufferedReader;
-import java.io.File;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
-
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
-
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +29,6 @@ import javax.servlet.http.Part;
 @WebServlet(name = "SedesServlet", urlPatterns = {"/SedesServlet"})
 public class SedesServlet extends HttpServlet {
 
- 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,31 +40,30 @@ public class SedesServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String boton = request.getParameter("action");
-
-        switch (boton) {
-            case "Guardar":
-                botonGuardar(request, response);
-                break;
-            case "Eliminar":
-                botonEliminar(request, response);
-                break;
-            case "Editar":
-                botonEditar(request, response);
-                break;
-            case "Importar":
-                botonImportar(request, response);
-                break;
-            default:
-                throw new AssertionError();
+        String accion = request.getParameter("accion");
+        if (accion != null) {
+            switch (accion) {
+                case "guardar":
+                    botonGuardar(request, response);
+                    break;
+                case "actualizar":
+                    botonEditar(request, response);
+                    break;
+                case "eliminar":
+                    botonEliminar(request, response);
+                    break;
+                default:
+                    // Acción no válida
+                    break;
+            }
         }
     }
 
     public void botonGuardar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int codigo = Integer.parseInt(request.getParameter("codigo"));
-        String nombre = request.getParameter("nombre");
+        int codigo = Integer.parseInt(request.getParameter("codigoSe"));
+        String nombre = request.getParameter("nombreSe");
 
         SedeJpaController se = new SedeJpaController();
         Sede guardaSede = new Sede();
@@ -83,24 +72,18 @@ public class SedesServlet extends HttpServlet {
             // Verificar si el código ya existe en la base de datos
             if (se.findSede(codigo) != null) {
                 // El código ya existe, enviar notificación
-                String mensaje = "Existe";
-                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+                enviarRespuestaError(response, "¡Error! Ya existe un registro con ese Codigo.");
             } else {
                 // El código no existe, proceder con la creación de la sede
                 guardaSede.setIdSede(codigo);
                 guardaSede.setNombre(nombre);
-               
 
                 se.create(guardaSede);
-                
-                 response.setCharacterEncoding("UTF-8");
-                String mensaje = "Guardado";
-                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
             }
         } catch (Exception e) {
-            String mensaje = "errorguardar";
-            response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
-
+            // Error al guardar el registro, enviar notificación de error
+            enviarRespuestaError(response, "¡Error!");
         }
     }
 
@@ -109,16 +92,14 @@ public class SedesServlet extends HttpServlet {
         String mensaje;
         try {
 
-            int codigo = Integer.parseInt(request.getParameter("codigoEliminar"));
+            int codigo = Integer.parseInt(request.getParameter("codigoEl"));
 
             SedeJpaController sedeController = new SedeJpaController();
             sedeController.destroy(codigo);
 
-            mensaje = "SedeEliminada";
-            response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+            enviarRespuestaExito(response, "¡Registro Eliminado exitosamente!");
         } catch (Exception e) {
-            mensaje = "ErrorEliminada";
-            response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+              enviarRespuestaError(response, "¡Error!");
         }
 
     }
@@ -126,8 +107,8 @@ public class SedesServlet extends HttpServlet {
     public void botonEditar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int codigo = Integer.parseInt(request.getParameter("codigoEliminar"));
-        String nombre = request.getParameter("nombreEliminar");
+        int codigo = Integer.parseInt(request.getParameter("codigoEl"));
+        String nombre = request.getParameter("nombreEl");
 
         SedeJpaController sedeController = new SedeJpaController();
         Sede sedeExistente = sedeController.findSede(codigo);
@@ -138,71 +119,36 @@ public class SedesServlet extends HttpServlet {
                 sedeExistente.setNombre(nombre);
                 sedeController.edit(sedeExistente);
 
-                String mensaje = "Editado";
-
-                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+                enviarRespuestaExito(response, "¡Registro Editado exitosamente!");
             }
         } catch (Exception e) {
-            String mensaje = "erroreditar";
-
-            response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
+             enviarRespuestaError(response, "¡Error!");
         }
     }
 
-   protected void botonImportar(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        Part filePart = request.getPart("file"); // Obtener el archivo cargado desde la solicitud
-        if (filePart != null) {
-            InputStream inputStream = filePart.getInputStream(); // Obtener el flujo de entrada del archivo
+    // Método para enviar una respuesta JSON de éxito
+    private void enviarRespuestaExito(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "exito");
+        respuesta.put("mensaje", mensaje);
 
-            try {
-                // Iniciando procesamiento del archivo
-                System.out.println("Iniciando procesamiento del archivo...");
-
-                // Cargar el controlador JDBC para MySQL
-                Class.forName("com.mysql.cj.jdbc.Driver");
-
-                // Establecer conexión con la base de datos
-                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/senacarnet", "root", "27478426*cP");
-                System.out.println("Conexión establecida con la base de datos...");
-
-                // Crear un lector de CSV
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                // Preparar la consulta para insertar datos en la base de datos
-                String sql = "INSERT INTO sede (NOMBRE) VALUES (?)";
-                PreparedStatement statement = conn.prepareStatement(sql);
-
-                // Leer el archivo CSV y guardar los datos en la base de datos
-                while ((line = reader.readLine()) != null) {
-                    String[] data = line.split(";");
-                    if (data.length >= 1) { // Asegúrate de tener suficientes columnas según tu tabla
-                        statement.setString(1, data[0]);
-                        statement.executeUpdate();
-                        System.out.println("Registro insertado en la base de datos: " + Arrays.toString(data));
-                    } else {
-                        // Imprimir un mensaje de advertencia si el registro no tiene suficientes columnas
-                        System.out.println("Advertencia: El registro no tiene suficientes columnas.");
-                    }
-                }
-
-                // Cerrar recursos
-                statement.close();
-                conn.close();
-                reader.close();
-
-                // Imprimir mensaje de éxito en la consola
-                System.out.println("Procesamiento del archivo completado con éxito.");
-                String mensaje = "ArchivosImportados";
-                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
-
-            } catch (Exception e) {
-                 String mensaje = "ErrorImportacion";
-                response.sendRedirect("vistas/sedesFormaciones.jsp?respuesta=" + mensaje);
-            } 
-        }
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
     }
 
+    // Método para enviar una respuesta JSON de error
+    private void enviarRespuestaError(HttpServletResponse response, String mensaje) throws IOException {
+        Map<String, Object> respuesta = new HashMap<>();
+        respuesta.put("estado", "error");
+        respuesta.put("mensaje", mensaje);
+
+        String json = new Gson().toJson(respuesta);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
