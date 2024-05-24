@@ -6,6 +6,7 @@ package controladores;
 
 import controladores.exceptions.NonexistentEntityException;
 import controladores.exceptions.PreexistingEntityException;
+import entidades.EstadoCarnet;
 import entidades.Estudiantes;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -14,10 +15,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import entidades.Formacion;
 import entidades.Sede;
+import entidades.Tipodocumento;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
 
 /**
  *
@@ -25,8 +30,8 @@ import javax.persistence.Persistence;
  */
 public class EstudiantesJpaController implements Serializable {
 
-    public EstudiantesJpaController( ) {
-       this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
+    public EstudiantesJpaController() {
+        this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
 
@@ -163,20 +168,57 @@ public class EstudiantesJpaController implements Serializable {
     }
 
     private List<Estudiantes> findEstudiantesEntities(boolean all, int maxResults, int firstResult) {
-        EntityManager em = getEntityManager();
-        try {
-            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Estudiantes.class));
-            Query q = em.createQuery(cq);
-            if (!all) {
-                q.setMaxResults(maxResults);
-                q.setFirstResult(firstResult);
-            }
-            return q.getResultList();
-        } finally {
-            em.close();
+    EntityManager em = getEntityManager();
+    try {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object[]> cq = cb.createQuery(Object[].class);
+        Root<Estudiantes> root = cq.from(Estudiantes.class);
+        
+        // Selección de los campos necesarios y exclusión de la columna de la fotografía
+        cq.select(cb.array(
+            root.get("cedula"),
+            root.get("tipoDocumentoFk"),
+            root.get("nombres"),
+            root.get("apellidos"),
+            root.get("formacionFk"),
+            root.get("sedeFk"),
+            root.get("correo"),
+            root.get("venceCarnet"),
+            root.get("estadoCarnetIdestadoCarnet"),
+            root.get("rh")
+        ));
+
+        Query q = em.createQuery(cq);
+        if (!all) {
+            q.setMaxResults(maxResults);
+            q.setFirstResult(firstResult);
         }
+        
+        List<Object[]> resultList = q.getResultList();
+        List<Estudiantes> estudiantesList = new ArrayList<>();
+        
+        // Construir objetos Estudiantes a partir de los resultados de la consulta
+        for (Object[] result : resultList) {
+            Estudiantes estudiante = new Estudiantes();
+            estudiante.setCedula((Integer) result[0]);
+            estudiante.setTipoDocumentoFk((Tipodocumento) result[1]);
+            estudiante.setNombres((String) result[2]);
+            estudiante.setApellidos((String) result[3]);
+            estudiante.setFormacionFk((Formacion) result[4]);
+            estudiante.setSedeFk((Sede) result[5]);
+            estudiante.setCorreo((String) result[6]);
+            estudiante.setVenceCarnet((Date) result[7]);
+            estudiante.setEstadoCarnetIdestadoCarnet((EstadoCarnet) result[8]);
+            estudiante.setRh((String) result[9]);
+            
+            estudiantesList.add(estudiante);
+        }
+        
+        return estudiantesList;
+    } finally {
+        em.close();
     }
+}
 
     public Estudiantes findEstudiantes(Integer id) {
         EntityManager em = getEntityManager();
@@ -199,8 +241,8 @@ public class EstudiantesJpaController implements Serializable {
             em.close();
         }
     }
-    
-      public Object[] findEstudianteYEstadoCarnetPorIdentificadorUnico(String identificadorUnico) {
+
+    public Object[] findEstudianteYEstadoCarnetPorIdentificadorUnico(String identificadorUnico) {
         EntityManager em = getEntityManager();
         try {
             Query query = em.createQuery("SELECT e, e.estadoCarnetIdestadoCarnet FROM Estudiantes e WHERE e.identificadorUnico = :identificadorUnico");
@@ -216,5 +258,4 @@ public class EstudiantesJpaController implements Serializable {
         }
     }
 
-    
 }

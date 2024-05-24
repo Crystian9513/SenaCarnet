@@ -100,7 +100,7 @@ public class AreaTrabajo implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.AreaTrabajo[ codigo=" + codigo + " ]";
+        return nombre;
     }
     
 }

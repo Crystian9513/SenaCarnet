@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="504" pageHeight="420" orientation="Landscape" columnWidth="464" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="f1258751-6e45-4c84-9c28-706ef408bab8">
-	<property name="ireport.zoom" value="1.6105100000000019"/>
+	<property name="ireport.zoom" value="1.5000000000000002"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="147"/>
+	<property name="ireport.y" value="54"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -16,7 +16,7 @@
     e.VENCE_CARNET,
     e.IDENTIFICADOR_UNICO, 
     td.NOMBRE AS TIPO_DOCUMENTO, 
-    f.NOMBRE AS FORMACION, 
+    SUBSTRING_INDEX(f.NOMBRE, '-', 1) AS FORMACION, 
     f.ID_FORMACION AS NUMERO_FICHA, 
     s.NOMBRE AS SEDE,
     logo.IDLOGO,
@@ -34,7 +34,8 @@ INNER JOIN
 CROSS JOIN 
     (SELECT IDLOGO ,DIRECTOR, IMAGEN , FIRMA FROM logo LIMIT 1) AS logo
 WHERE 
-    e.CEDULA = $P{id}]]>
+    e.CEDULA = $P{id}
+]]>
 	</queryString>
 	<field name="NOMBRES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -82,9 +83,9 @@ WHERE
 				<reportElement x="12" y="15" width="211" height="337" uuid="ca1a4bc6-5bba-4ba7-a35a-9d80433b02d3"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="193" y="19" width="27" height="120" uuid="4069be94-4ad3-4d74-b6d4-f9a713085bf9"/>
-				<textElement rotation="Left">
-					<font size="16" isBold="true"/>
+				<reportElement x="25" y="134" width="86" height="20" uuid="4069be94-4ad3-4d74-b6d4-f9a713085bf9"/>
+				<textElement textAlignment="Left" rotation="None">
+					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[APRENDIZ]]></text>
 			</staticText>
@@ -95,9 +96,9 @@ WHERE
 				<reportElement x="258" y="34" width="181" height="232" uuid="491bafdb-ef0b-4230-9f07-add5de8c8750"/>
 			</rectangle>
 			<textField>
-				<reportElement x="25" y="196" width="27" height="20" uuid="30a50ae7-dd55-4745-b9e8-786e04df21ae"/>
+				<reportElement x="25" y="203" width="27" height="17" uuid="30a50ae7-dd55-4745-b9e8-786e04df21ae"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
 			</textField>
@@ -108,51 +109,44 @@ WHERE
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="79" y="196" width="127" height="20" uuid="7e1ace3e-ef88-490a-8125-d92f793004b3"/>
+				<reportElement x="52" y="203" width="89" height="17" uuid="7e1ace3e-ef88-490a-8125-d92f793004b3"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="25" y="271" width="181" height="15" forecolor="#009900" uuid="acd80d46-3261-48ed-a908-7c5c24ce7b39"/>
-				<textElement>
-					<font size="8"/>
+				<reportElement x="25" y="284" width="181" height="12" forecolor="#009900" uuid="acd80d46-3261-48ed-a908-7c5c24ce7b39"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="25" y="176" width="181" height="20" forecolor="#009900" uuid="823087f9-eb20-4a22-9e73-ac8739338985"/>
+				<reportElement x="25" y="183" width="181" height="20" forecolor="#009900" uuid="823087f9-eb20-4a22-9e73-ac8739338985"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="52" y="196" width="27" height="20" uuid="98662e55-43d2-496d-a1cd-328b26f29662"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
-				<text><![CDATA[No.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="25" y="286" width="181" height="15" forecolor="#009900" uuid="32456552-05b1-410e-8553-9a899156e19d"/>
-				<textElement>
-					<font size="8"/>
+				<reportElement x="25" y="297" width="181" height="12" forecolor="#009900" uuid="32456552-05b1-410e-8553-9a899156e19d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="25" y="156" width="181" height="20" forecolor="#009900" uuid="9f5c53a5-fcef-446b-b938-ba05f6e5ef4d"/>
+				<reportElement x="25" y="163" width="181" height="20" forecolor="#009900" uuid="9f5c53a5-fcef-446b-b938-ba05f6e5ef4d"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="25" y="216" width="181" height="20" uuid="fb29a4d5-348e-4d08-886e-61233403781d"/>
-				<textElement>
-					<font size="14"/>
+				<reportElement x="25" y="272" width="181" height="12" uuid="fb29a4d5-348e-4d08-886e-61233403781d"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REGIONAL SUCRE]]></text>
 			</staticText>
@@ -164,14 +158,14 @@ WHERE
 				<text><![CDATA[Este carne es personal e intransferible; identifica al portador Aprendiz del Servicio Nacional de Aprendizaje SENA.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="258" y="276" width="58" height="20" uuid="e0f29104-6aa6-4805-9805-bd6d9939214b"/>
+				<reportElement x="258" y="284" width="58" height="20" uuid="e0f29104-6aa6-4805-9805-bd6d9939214b"/>
 				<textElement>
 					<font size="14" isBold="false"/>
 				</textElement>
 				<text><![CDATA[VENCE:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="328" y="316" width="123" height="15" uuid="6cf1d669-1bb2-47de-9d25-6d067cf9d982"/>
+				<reportElement x="328" y="305" width="123" height="15" uuid="6cf1d669-1bb2-47de-9d25-6d067cf9d982"/>
 				<textFieldExpression><![CDATA[$F{IDENTIFICADOR_UNICO}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -182,9 +176,9 @@ WHERE
 				<text><![CDATA[El SENA es una entidad que inparte una formacion tecnica profesional y tecnologica que forma parte de la educacion superior; se solicita a las autoridades publicas, civiles y militares prestarle al portador toda la colaboracion para la realizacion de las actividades de su aprendizaje.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="258" y="296" width="54" height="20" uuid="bcd27ba6-690c-46e5-8e3a-0c047b334838"/>
-				<textElement>
-					<font size="14" isBold="false"/>
+				<reportElement x="25" y="321" width="33" height="12" uuid="bcd27ba6-690c-46e5-8e3a-0c047b334838"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[FICHA:]]></text>
 			</staticText>
@@ -196,32 +190,32 @@ WHERE
 				<text><![CDATA[Por disposicion de las Leyes 418 de 1997, 548 de 1997, 642 de 2001 y 1106 de 2006, los menores de 18 años de edad y los estudiantes de educacion superior no seran incorporados en la prestacion del servicio militar.]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="316" y="276" width="123" height="20" uuid="88162fa8-5a08-4b7d-b74b-eaf4c197159d"/>
+				<reportElement x="316" y="284" width="123" height="20" uuid="88162fa8-5a08-4b7d-b74b-eaf4c197159d"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{VENCE_CARNET}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="258" y="316" width="70" height="15" uuid="4bfdc2d1-b0c4-41ea-bf8f-cd52f58ad126"/>
+				<reportElement x="258" y="305" width="70" height="15" uuid="4bfdc2d1-b0c4-41ea-bf8f-cd52f58ad126"/>
 				<textElement>
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Codigo-Unico:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="312" y="296" width="127" height="20" uuid="1a2b7870-b2af-46f1-be17-3d422ee7dcf6"/>
-				<textElement>
-					<font size="14"/>
+				<reportElement x="58" y="321" width="127" height="12" uuid="1a2b7870-b2af-46f1-be17-3d422ee7dcf6"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{NUMERO_FICHA}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="79" y="19" width="114" height="130" uuid="ab5a4bb8-80a8-456d-80e6-9bb692c4a3fe"/>
+				<reportElement x="111" y="24" width="95" height="130" uuid="ab5a4bb8-80a8-456d-80e6-9bb692c4a3fe"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{FOTOGRAFIA})]]></imageExpression>
 			</image>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="25" y="44" width="54" height="47" uuid="492596aa-f098-4287-bed4-83afa332137f"/>
+				<reportElement x="25" y="34" width="65" height="57" uuid="492596aa-f098-4287-bed4-83afa332137f"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{IMAGEN})]]></imageExpression>
 			</image>
 			<textField>
@@ -233,40 +227,46 @@ WHERE
 				<reportElement x="269" y="218" width="159" height="33" uuid="6e1f23f6-1966-4310-82e7-eefd5baccc11"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte [])$F{FIRMA} )]]></imageExpression>
 			</image>
-			<staticText>
-				<reportElement x="258" y="331" width="181" height="12" uuid="efe95e45-0822-4327-a17d-8d2ac955a421"/>
-				<textElement verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<text><![CDATA[https://www.cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
-			</staticText>
 			<componentElement>
-				<reportElement x="25" y="304" width="181" height="27" uuid="646d8477-d45d-43f0-8a77-12cc80aa7b85"/>
+				<reportElement x="25" y="225" width="127" height="23" uuid="646d8477-d45d-43f0-8a77-12cc80aa7b85"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$F{CEDULA}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<staticText>
-				<reportElement x="25" y="236" width="27" height="20" uuid="b375dbc8-6d33-45cf-81ac-96a9d7cba870"/>
+				<reportElement x="154" y="203" width="20" height="17" uuid="b375dbc8-6d33-45cf-81ac-96a9d7cba870"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<text><![CDATA[RH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="52" y="236" width="154" height="20" uuid="a51e14fb-9f30-410b-bc86-adf71577bdb4"/>
+				<reportElement x="174" y="203" width="32" height="17" uuid="a51e14fb-9f30-410b-bc86-adf71577bdb4"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{RH}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="25" y="256" width="181" height="15" uuid="4406778e-ef79-4137-ba50-f3797908c2b9"/>
-				<textElement>
+				<reportElement x="25" y="309" width="181" height="12" uuid="4406778e-ef79-4137-ba50-f3797908c2b9"/>
+				<textElement verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{FORMACION}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="258" y="320" width="193" height="17" uuid="160c6c73-168c-4654-b9a6-653018b6f4ab"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[https://senasucre.net/SenaCarnet/verificacionCarnet.jsp]]></text>
+			</staticText>
+			<line>
+				<reportElement x="25" y="266" width="39" height="1" uuid="756390ae-aab7-404b-bafc-ce7cbc012bde"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineColor="#009900"/>
+				</graphicElement>
+			</line>
 		</band>
 	</detail>
 </jasperReport>

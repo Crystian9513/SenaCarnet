@@ -85,7 +85,7 @@ public class AreaTrabajoServlet extends HttpServlet {
 
     protected void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String mensaje;
+     
         try {
 
             int codigo = Integer.parseInt(request.getParameter("codigoElAr"));

@@ -3,7 +3,7 @@
 <%@page import="entidades.Usuarios"%>
 <%@page import="controladores.UsuariosJpaController"%>
 <%@page import="java.util.UUID"%>
-
+  <meta charset="UTF-8">
 <%
 // Obtener la URL base
 String urlBase = request.getRequestURL().toString();

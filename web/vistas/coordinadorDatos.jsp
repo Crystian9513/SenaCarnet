@@ -91,6 +91,7 @@
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('formularioCoordinador');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -100,6 +101,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarCoordinador");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -110,20 +113,21 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarCoordinador");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
                     }
                 }
-                 $('#btnLimpiarModalCoordinador').click(function () {
+                $('#btnLimpiarModalCoordinador').click(function () {
                     limpiarFormulario('formularioCoordinador');
                 });
-                
-                // Manejador de evento para limpiar los campos del modal cuando se oculta
-                $('#ModalCoordinador').on('hidden.bs.modal', function () {
-                    $('#formularioCoordinador').trigger('reset');
-                });
+
+                function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
 
                 // Función para manejar el error de la solicitud AJAX
                 function handleError(errorMessage) {
@@ -138,25 +142,25 @@
                         dataType: 'json',
                         success: function (data) {
                             $('#tablaCoordinador tbody').empty();
-                             if (data.length === 0) {
+                            if (data.length === 0) {
                                 // Si no hay datos, agregar una fila indicando que no se encontraron estudiantes
                                 $('#tablaCoordinador tbody').append('<tr><td colspan="6" class="text-center">No se encontraron Coordinadores en la base de datos.</td></tr>');
                             } else {
-                            $.each(data, function (index, coordinador) {
-                                var row = '<tr>' +
-                                        '<td>' + coordinador.cedula + '</td>' +
-                                        '<td>' + coordinador.nombre + '</td>' +
-                                        '<td>' + coordinador.apellido + '</td>' +
-                                        '<td>' + coordinador.clave + '</td>' +
-                                        '<td>' + coordinador.correo + '</td>' +
-                                        '<td>' +
-                                        '<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#ModalEditarCoordinador" ' +
-                                        'onclick="obtenerDatosCoordinador(' + coordinador.cedula + ', \'' + coordinador.nombre + '\', \'' + coordinador.apellido + '\', \'' + coordinador.correo + '\')">Opciones</button>' +
-                                        '</td>' +
-                                        '</tr>';
-                                $('#tablaCoordinador tbody').append(row);
-                            });
-                        }
+                                $.each(data, function (index, coordinador) {
+                                    var row = '<tr>' +
+                                            '<td>' + coordinador.cedula + '</td>' +
+                                            '<td>' + coordinador.nombre + '</td>' +
+                                            '<td>' + coordinador.apellido + '</td>' +
+                                            '<td>' + coordinador.clave + '</td>' +
+                                            '<td>' + coordinador.correo + '</td>' +
+                                            '<td>' +
+                                            '<button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#ModalEditarCoordinador" ' +
+                                            'onclick="obtenerDatosCoordinador(' + coordinador.cedula + ', \'' + coordinador.nombre + '\', \'' + coordinador.apellido + '\', \'' + coordinador.correo + '\')">Opciones</button>' +
+                                            '</td>' +
+                                            '</tr>';
+                                    $('#tablaCoordinador tbody').append(row);
+                                });
+                            }
                         },
                         error: function (xhr, status, error) {
                             handleError('Error al obtener los datos: ' + error);
@@ -249,7 +253,7 @@
         <jsp:include page="../Componentes/modales.jsp" ></jsp:include>
 
 
-       
+
         <script src="../js/alertas.js"></script>
         <script src="../js/DatosTablas.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

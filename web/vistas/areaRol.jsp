@@ -33,6 +33,7 @@
         <script src="../js/alertas.js"></script>
         <script src="../js/app.js"></script>
 
+
         <script>
             $(document).ready(function () {
                 // Manejador de evento para el botón de guardar en el formulario
@@ -79,11 +80,16 @@
                         }
                     });
                 }
+                
+                 function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
 
                 // Función para manejar la respuesta exitosa de la solicitud de guardar
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('FormularioArea');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -93,6 +99,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarAreas");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -103,6 +111,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarAreas");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -114,11 +124,7 @@
                     limpiarFormulario('FormularioArea');
                 });
 
-                // Manejador de evento para limpiar los campos del modal cuando se oculta
-                $('#ModalArea').on('hidden.bs.modal', function () {
-                    $('#FormularioArea').trigger('reset');
-                });
-
+               
                 // Función para manejar el error de la solicitud AJAX
                 function handleError(errorMessage) {
                     mostrarError(errorMessage);
@@ -161,7 +167,7 @@
         </script>
         <script>
             $(document).ready(function () {
-                // Manejador de evento para el botón de guardar en el formulario
+                // Manejador de evento para el bot?n de guardar en el formulario
                 $('#btnGuardarRol').click(function (event) {
                     event.preventDefault();
 
@@ -171,7 +177,7 @@
                     enviarPeticion(formData, handleSuccessGuardar, handleError);
                 });
 
-                // Manejador de evento para el botón de eliminar en el modal de edición
+                // Manejador de evento para el bot?n de eliminar en el modal de edici?n
                 $('#btnEliminarRol').click(function (event) {
                     event.preventDefault();
 
@@ -181,7 +187,7 @@
                     enviarPeticion(formData, handleSuccessEliminar, handleError);
                 });
 
-                // Manejador de evento para el botón de actualizar en el modal de edición
+                // Manejador de evento para el bot?n de actualizar en el modal de edici?n
                 $('#btnEditarRol').click(function (event) {
                     event.preventDefault();
 
@@ -191,7 +197,7 @@
                     enviarPeticion(formData, handleSuccessActualizar, handleError);
                 });
 
-                // Función para enviar la petición AJAX común
+                // Funci?n para enviar la petici?n AJAX com?n
                 function enviarPeticion(formData, successCallback, errorCallback) {
                     $.ajax({
                         type: 'POST',
@@ -205,20 +211,27 @@
                         }
                     });
                 }
+                
+                  function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
 
-                // Función para manejar la respuesta exitosa de la solicitud de guardar
+                // Funci?n para manejar la respuesta exitosa de la solicitud de guardar
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('FormularioRol');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
                     }
                 }
 
-                // Función para manejar la respuesta exitosa de la solicitud de eliminar
+                // Funci?n para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarRol");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -226,31 +239,33 @@
                     }
                 }
 
-                // Función para manejar la respuesta exitosa de la solicitud de actualizar
+                // Funci?n para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarRol");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
                     }
                 }
-                
+
                 $('#btnLimpiarModalRol').click(function () {
                     limpiarFormulario('FormularioRol');
                 });
-                
+
                 // Manejador de evento para limpiar los campos del modal cuando se oculta
                 $('#ModalArea').on('hidden.bs.modal', function () {
                     $('#FormularioRol').trigger('reset');
                 });
 
-                // Función para manejar el error de la solicitud AJAX
+                // Funci?n para manejar el error de la solicitud AJAX
                 function handleError(errorMessage) {
                     mostrarError(errorMessage);
                 }
 
-                // Función para cargar y mostrar la tabla de personas
+                // Funci?n para cargar y mostrar la tabla de personas
                 function cargarTabla() {
                     $.ajax({
                         type: 'GET',
@@ -281,7 +296,7 @@
                     });
                 }
 
-                // Se llama a la función cargarTabla para cargar y mostrar la tabla al cargar la página por primera vez
+                // Se llama a la funci?n cargarTabla para cargar y mostrar la tabla al cargar la p?gina por primera vez
                 cargarTabla();
             });
         </script>
@@ -416,23 +431,23 @@
 
 <script>
             $(document).ready(function () {
-                // Manejador de evento para el cambio en el campo de búsqueda
+                // Manejador de evento para el cambio en el campo de b?squeda
                 $('#filtro1').on('input', function () {
-                    var valorFiltro = $(this).val().toLowerCase(); // Obtener el valor del campo de búsqueda y convertirlo a minúsculas
+                    var valorFiltro = $(this).val().toLowerCase(); // Obtener el valor del campo de b?squeda y convertirlo a min?sculas
 
                     // Iterar sobre cada fila de la tabla
                     $('#tablaArea tbody tr').filter(function () {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(valorFiltro) > -1); // Mostrar u ocultar la fila según el filtro
+                        $(this).toggle($(this).text().toLowerCase().indexOf(valorFiltro) > -1); // Mostrar u ocultar la fila seg?n el filtro
                     });
                 });
 
-                // Manejador de evento para el cambio en el campo de búsqueda de formaciones
+                // Manejador de evento para el cambio en el campo de b?squeda de formaciones
                 $('#filtro2').on('input', function () {
-                    var valorFiltro = $(this).val().toLowerCase(); // Obtener el valor del campo de búsqueda y convertirlo a minúsculas
+                    var valorFiltro = $(this).val().toLowerCase(); // Obtener el valor del campo de b?squeda y convertirlo a min?sculas
 
                     // Iterar sobre cada fila de la tabla
                     $('#tablaRol tbody tr').filter(function () {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(valorFiltro) > -1); // Mostrar u ocultar la fila según el filtro
+                        $(this).toggle($(this).text().toLowerCase().indexOf(valorFiltro) > -1); // Mostrar u ocultar la fila seg?n el filtro
                     });
                 });
             });

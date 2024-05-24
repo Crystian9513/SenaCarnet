@@ -31,7 +31,7 @@
         <script>
             function verReporte5(cedula) {
                 // Redirigir al enlace con la cédula como parámetro
-                 window.open("<%= request.getContextPath()%>/reportes/reporteCarnetFuncionario.jsp?cedula=" + cedula, "_blank");
+                window.open("<%= request.getContextPath()%>/reportes/reporteCarnetFuncionario.jsp?cedula=" + cedula, "_blank");
             }
         </script>
 
@@ -81,11 +81,16 @@
                         }
                     });
                 }
+                
+                $('#btnLimpiarModalFuncionario').click(function () {
+                    limpiarFormulario('FormularioFuncionarios');
+                });
 
                 // Función para manejar la respuesta exitosa de la solicitud de guardar
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                         limpiarFormulario('FormularioFuncionarios');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -95,6 +100,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarfuncionario");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -105,17 +112,19 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarfuncionario");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
                     }
                 }
-                
-                 $('#btnLimpiarModalFuncionarios').click(function () {
+
+                $('#btnLimpiarModalFuncionarios').click(function () {
                     limpiarFormulario('FormularioFuncionarios');
                 });
-                
+
                 // Manejador de evento para limpiar los campos del modal cuando se oculta
                 $('#ModalFuncionarios').on('hidden.bs.modal', function () {
                     $('#FormularioFuncionarios').trigger('reset');
@@ -261,7 +270,7 @@
         <jsp:include page="../Componentes/modales.jsp" ></jsp:include>
 
 
-        <script src="../js/DatosTablas.js"></script>
+        <script src="../js/datosFuncionario.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"

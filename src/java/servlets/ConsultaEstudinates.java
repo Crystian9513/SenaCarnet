@@ -51,8 +51,11 @@ public class ConsultaEstudinates extends HttpServlet {
 
     protected void cargarTabla(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
         response.setContentType("application/json;charset=UTF-8");
 
+       
         // Lógica para consultar los datos de los estudiantes
         EstudiantesJpaController estudiantesController = new EstudiantesJpaController();
         List<Estudiantes> estudiantes = estudiantesController.findEstudiantesEntities();

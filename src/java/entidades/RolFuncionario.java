@@ -97,7 +97,7 @@ public class RolFuncionario implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.RolFuncionario[ codigo=" + codigo + " ]";
+        return nombre;
     }
     
 }

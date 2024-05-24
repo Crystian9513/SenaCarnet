@@ -196,81 +196,72 @@ public class FuncionarioServlets extends HttpServlet {
         int rol = Integer.parseInt(request.getParameter("RolFunEl"));
         int area = Integer.parseInt(request.getParameter("AreaFunEl"));
         String correo = request.getParameter("correoFunEl");
-        // Obtener el archivo de la foto
         Part part = request.getPart("fotoFunEl");
         byte[] nuevaFoto = null;
-
         String fechaInicio = request.getParameter("venceFunEl");
         String rh = request.getParameter("rhFunEl");
         int estado = Integer.parseInt(request.getParameter("estadoFunEl"));
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha1 = formato.parse(fechaInicio);
 
-        int cedula2 = Integer.parseInt(request.getParameter("cedulaFunEl"));//TABLA DE USUARIO
-        String nombres2 = request.getParameter("nombresFunEl");//TABLA DE USUARIO
-        String apellidos2 = request.getParameter("apellidosFunEl");//TABLA DE USUARIO
-        String clave = request.getParameter("cedulaFunEl");//TABLA DE USUARIO
+        int cedula2 = Integer.parseInt(request.getParameter("cedulaFunEl"));
+        String nombres2 = request.getParameter("nombresFunEl");
+        String apellidos2 = request.getParameter("apellidosFunEl");
+        String clave = request.getParameter("cedulaFunEl");
 
-        UsuariosJpaController controladorUsuario = new UsuariosJpaController();//TABLA DE USUARIO
-        Usuarios guardarUsuario = new Usuarios();//TABLA DE USUARIO
+        UsuariosJpaController controladorUsuario = new UsuariosJpaController();
+        Usuarios guardarUsuario = controladorUsuario.findUsuarios(cedula2);
 
         String claveEncriptada = controladorUsuario.EncryptarClave(clave);
 
         FuncionariosJpaController controlador = new FuncionariosJpaController();
-        Funcionarios guardarFuncionario = new Funcionarios();
+        Funcionarios guardarFuncionario = controlador.findFuncionarios(cedula);
 
         TipodocumentoJpaController tipo = new TipodocumentoJpaController();
         RolFuncionarioJpaController tipoRol = new RolFuncionarioJpaController();
         EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
         AreaTrabajoJpaController tipoArea = new AreaTrabajoJpaController();
 
-        // Verificar si se proporcionó una nueva foto
         if (part != null && part.getSize() > 0) {
-            // Guardar la nueva foto en un arreglo de bytes
             nuevaFoto = part.getInputStream().readAllBytes();
         }
 
         try {
-
             if (guardarFuncionario != null) {
+                Tipodocumento to = tipo.findTipodocumento(tpdocumento);
+                guardarFuncionario.setTipodocumentoIDTIPODOCUMENTO(to);
+                guardarFuncionario.setNombres(nombres);
+                guardarFuncionario.setApellidos(apellidos);
+                RolFuncionario ro = tipoRol.findRolFuncionario(rol);
+                guardarFuncionario.setRolfuncionarioCODIGO(ro);
+                AreaTrabajo are = tipoArea.findAreaTrabajo(area);
+                guardarFuncionario.setAreatrabajoCODIGO(are);
+                guardarFuncionario.setCorreo(correo);
+                guardarFuncionario.setVenceCarnet(fecha1);
+                guardarFuncionario.setRh(rh);
+                EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
+                guardarFuncionario.setEstadocarnetIDESTADOCARNET(car);
 
+                if (nuevaFoto != null) {
+                    guardarFuncionario.setFotografia(nuevaFoto);
+                }
+
+                controlador.edit(guardarFuncionario);
             }
-            guardarFuncionario.setCedula(cedula);
-            Tipodocumento to = tipo.findTipodocumento(tpdocumento);
-            guardarFuncionario.setTipodocumentoIDTIPODOCUMENTO(to);
-            guardarFuncionario.setNombres(nombres);
-            guardarFuncionario.setApellidos(apellidos);
-            RolFuncionario ro = tipoRol.findRolFuncionario(rol);
-            guardarFuncionario.setRolfuncionarioCODIGO(ro);
-            AreaTrabajo are = tipoArea.findAreaTrabajo(area);
-            guardarFuncionario.setAreatrabajoCODIGO(are);
-            guardarFuncionario.setCorreo(correo);
-            guardarFuncionario.setVenceCarnet(fecha1);
-            guardarFuncionario.setRh(rh);
-            EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
-            guardarFuncionario.setEstadocarnetIDESTADOCARNET(car);
 
-            // Verificar si se proporcionó una nueva foto y actualizarla
-            if (nuevaFoto != null) {
-                guardarFuncionario.setFotografia(nuevaFoto);
+            if (guardarUsuario != null) {
+                guardarUsuario.setNombres(nombres2);
+                guardarUsuario.setApellidos(apellidos2);
+                guardarUsuario.setClaves(claveEncriptada);
+                guardarUsuario.setRol(4);
+                guardarUsuario.setEstadoClave(1);
+
+                controladorUsuario.edit(guardarUsuario);
             }
-
-            controlador.edit(guardarFuncionario);
-
-            //TABLA USUARIO
-            guardarUsuario.setCedula(cedula2);
-            guardarUsuario.setNombres(nombres2);
-            guardarUsuario.setApellidos(apellidos2);
-            guardarUsuario.setClaves(claveEncriptada);
-            guardarUsuario.setRol(4);
-            guardarUsuario.setEstadoClave(1);
-
-            controladorUsuario.edit(guardarUsuario);
 
             enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
 
         } catch (Exception e) {
-
             enviarRespuestaError(response, "¡Error al guardar el registro!");
         }
     }

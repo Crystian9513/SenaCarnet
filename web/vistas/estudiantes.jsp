@@ -45,7 +45,7 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="../js/alertas.js"></script>
         <script src="../js/app.js"></script>
-        
+
         <script>
             function verReporte4(cedula) {
                 // Redirigir al enlace con la cédula como parámetro
@@ -58,40 +58,32 @@
                 // Manejador de evento para el botón de guardar en el formulario
                 $('#btnGuardarEst').click(function (event) {
                     event.preventDefault();
-
-                    var formData = new FormData($('#FormularioEstudiantes')[0]);  // Selecciona el formulario y crea un objeto FormData
-                    formData.append('accion', 'guardar');  // Agrega la acción como un parámetro adicional
+                    var formData = new FormData($('#FormularioEstudiantes')[0]); // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'guardar'); // Agrega la acción como un parámetro adicional
 
                     enviarPeticion(formData, handleSuccessGuardar, handleError);
                 });
-
                 $('#btnEliminarEst').click(function (event) {
                     event.preventDefault();
-
-                    var formData = new FormData($('#FormularioEstudiantesActualizar')[0]);  // Selecciona el formulario y crea un objeto FormData
-                    formData.append('accion', 'eliminar');  // Agrega la acción como un parámetro adicional
+                    var formData = new FormData($('#FormularioEstudiantesActualizar')[0]); // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'eliminar'); // Agrega la acción como un parámetro adicional
 
                     enviarPeticion(formData, handleSuccessEliminar, handleError);
                 });
-
                 $('#btnActualizarEst').click(function (event) {
                     event.preventDefault();
-
-                    var formData = new FormData($('#FormularioEstudiantesActualizar')[0]);  // Selecciona el formulario y crea un objeto FormData
-                    formData.append('accion', 'actualizar');  // Agrega la acción como un parámetro adicional
+                    var formData = new FormData($('#FormularioEstudiantesActualizar')[0]); // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'actualizar'); // Agrega la acción como un parámetro adicional
 
                     enviarPeticion(formData, handleSuccessActualizar, handleError);
                 });
-
                 $('#btnNuevaFormacion').click(function (event) {
                     event.preventDefault();
-
-                    var formData = new FormData($('#FormularioNuevaFormacion')[0]);  // Selecciona el formulario y crea un objeto FormData
-                    formData.append('accion', 'nuevaFormacion');  // Agrega la acción como un parámetro adicional
+                    var formData = new FormData($('#FormularioNuevaFormacion')[0]); // Selecciona el formulario y crea un objeto FormData
+                    formData.append('accion', 'nuevaFormacion'); // Agrega la acción como un parámetro adicional
 
                     enviarPeticion(formData, handleSuccessNuevoModal, handleError);
                 });
-
                 // Función para enviar la petición AJAX común
                 function enviarPeticion(formData, successCallback, errorCallback) {
                     $.ajax({
@@ -109,10 +101,15 @@
                     });
                 }
 
+                function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
+
                 // Función para manejar la respuesta exitosa de la solicitud de guardar
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('FormularioEstudiantes');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -122,6 +119,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarEstudinate");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -132,6 +131,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarEstudinate");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -142,22 +143,22 @@
                 // Función para manejar la respuesta exitosa de la solicitud de nueva formacion
                 function handleSuccessNuevoModal(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarNuevaFormacion");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
                     }
                 }
-                
+
                 $('#btnLimpiarModalEstudinates').click(function () {
                     limpiarFormulario('FormularioEstudiantes');
                 });
-
                 // Manejador de evento para limpiar los campos del modal cuando se oculta
                 $('#ModalEstudiantes').on('hidden.bs.modal', function () {
                     $('#FormularioEstudiantes').trigger('reset');
                 });
-
                 // Función para manejar el error de la solicitud AJAX
                 function handleError(errorMessage) {
                     mostrarError(errorMessage);
@@ -220,7 +221,7 @@
                         }
                     });
                 }
-                // Se llama a la función cargarTabla para cargar y mostrar la tabla al cargar la página por primera vez
+                // Se llama a la funci?n cargarTabla para cargar y mostrar la tabla al cargar la p?gina por primera vez
                 cargarTabla();
             });
         </script>
@@ -307,6 +308,7 @@
                                                                     <tbody>
                                                                     </tbody>
                                                                 </table>
+
                                                             </div>
                                                         </div>
                                                     </div>

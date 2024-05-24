@@ -4,7 +4,7 @@
  */
 package servlets;
 
-import entidades.IncriptacionContraseñas;
+import entidades.IncriptacionContrasenas;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,7 +62,7 @@ public class usuarioServlet extends HttpServlet {
         if (filePart != null) {
             try {
                 
-                IncriptacionContraseñas encriptar = new IncriptacionContraseñas();
+                IncriptacionContrasenas encriptar = new IncriptacionContrasenas();
                 InputStream inputStream = filePart.getInputStream();
                 System.out.println("Iniciando procesamiento del archivo...");
 

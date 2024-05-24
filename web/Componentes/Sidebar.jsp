@@ -1,8 +1,10 @@
+
+  <meta charset="UTF-8">
 <nav id="sidebar" class="sidebar js-sidebar ">
     <div class="sidebar-content js-simplebar ">
-        <a class="sidebar-brand mt-2" href="#">
-            <span class="align-middle ">Gestion De Aprendices</span>
+        <a class="sidebar-brand mt-2" href="#"> 
         </a>
+        <h5 class="text-center">Gestion De Aprendices</h5>
         <ul class="sidebar-nav">
             <li class="sidebar-header">
                 Menu
@@ -81,7 +83,7 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3 "><!-- bottones -->
                         <button type="submit" class="btn botones text-white px-4" id="btnBusqueda" style="background-color: #018E42;"><b>Buscar</b></button>
-                        <button type="submit" class="btn text-white" id="btnRestablecer" style="background-color: #018E42;"><b>Restablecer</b></button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnRestablecer" ><b>Restablecer</b></button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>

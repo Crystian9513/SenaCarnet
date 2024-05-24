@@ -86,6 +86,7 @@
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('FormularioSede')
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -95,6 +96,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarSede");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -105,6 +108,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarSede");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -116,10 +121,10 @@
                     limpiarFormulario('FormularioSede');
                 });
 
-                // Manejador de evento para limpiar los campos del modal cuando se oculta
-                $('#ModalSedes').on('hidden.bs.modal', function () {
-                    $('#FormularioSede').trigger('reset');
-                });
+                function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
+
 
                 // Función para manejar el error de la solicitud AJAX
                 function handleError(errorMessage) {
@@ -213,6 +218,7 @@
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('FormularioFormaciones')
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -222,6 +228,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarFormacion");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -232,6 +240,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarFormacion");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -243,10 +253,9 @@
                     limpiarFormulario('FormularioFormaciones');
                 });
 
-                // Manejador de evento para limpiar los campos del modal cuando se oculta
-                $('#ModalFormaciones').on('hidden.bs.modal', function () {
-                    $('#FormularioFormaciones').trigger('reset');
-                });
+                function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
 
                 // Función para manejar el error de la solicitud AJAX
                 function handleError(errorMessage) {

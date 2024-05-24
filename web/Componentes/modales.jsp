@@ -1,3 +1,4 @@
+  <meta charset="UTF-8">
 <%@page import="entidades.AreaTrabajo"%>
 <%@page import="controladores.AreaTrabajoJpaController"%>
 <%@page import="entidades.RolFuncionario"%>
@@ -32,7 +33,6 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3">
                         <button type="submit" class="btn botones text-white px-4" id="btnGuardarSede" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalSedes" onclick="limpiarModal()">Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
@@ -84,7 +84,6 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardadoFormacion" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalFormaciones" onclick="limpiarFormulario()">Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
@@ -133,8 +132,7 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarAdm" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalAdministrador" onclick="limpiarFormulario()">Limpiar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarAdministrador" data-bs-dismiss="modal" >Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -183,8 +181,7 @@
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarCd"
                                 style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalCoordinador" onclick="limpiarFormulario()">Limpiar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
+                                <button type="button" class="btn btn-secondary" id="btnCerrarCoordinador" data-bs-dismiss="modal" >Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -327,8 +324,7 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarEst" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalEstudinates" onclick="limpiarFormulario()">Limpiar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarEstudiante" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -594,8 +590,7 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarFun" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalFuncionarios" onclick="limpiarFormulario()">Limpiar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="btnLimpiarModalFuncionario" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -625,8 +620,7 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3">
                         <button type="submit" class="btn botones text-white px-4" id="btnGuardarArea" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalAreas" onclick="limpiarFormulario()">Limpiar</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarArea" data-bs-dismiss="modal" >Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -656,7 +650,6 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3">
                         <button type="submit" class="btn botones text-white px-4" id="btnGuardarRol" style="background-color: #018E42;"><b>Guardar</b></button>
-                        <button type="button" class="btn btn-danger" id="btnLimpiarModalRol" onclick="limpiarFormulario()">Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Cerrar</button>
                     </div>
                 </form>

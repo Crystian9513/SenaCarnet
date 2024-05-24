@@ -79,10 +79,15 @@
                     });
                 }
 
+                function limpiarFormulario(formularioId) {
+                    $('#' + formularioId)[0].reset();
+                }
+
                 // Función para manejar la respuesta exitosa de la solicitud de guardar
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
+                        limpiarFormulario('FormularioAdministradores');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -92,6 +97,8 @@
                 // Función para manejar la respuesta exitosa de la solicitud de eliminar
                 function handleSuccessEliminar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarAdministrador");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
@@ -102,14 +109,16 @@
                 // Función para manejar la respuesta exitosa de la solicitud de actualizar
                 function handleSuccessActualizar(response) {
                     if (response.estado === "exito") {
+                        var boton = document.getElementById("btnCerrarAdministrador");
+                        boton.click();
                         mostrarExito(response.mensaje);
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
                     }
                 }
-                
-                 $('#btnLimpiarModalAdministrador').click(function () {
+
+                $('#btnLimpiarModalAdministrador').click(function () {
                     limpiarFormulario('FormularioAdministradores');
                 });
 

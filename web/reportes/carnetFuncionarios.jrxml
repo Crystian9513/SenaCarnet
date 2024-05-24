@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="464" pageHeight="464" columnWidth="464" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="826d2312-ab66-4126-a039-facc0f42ec7b">
-	<property name="ireport.zoom" value="1.6105100000000012"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="30"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -97,30 +97,23 @@ WHERE
 				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="75" y="211" width="125" height="20" uuid="ce52bffd-c1f7-40b4-932c-803dc5b26616"/>
+				<reportElement x="48" y="211" width="152" height="17" uuid="ce52bffd-c1f7-40b4-932c-803dc5b26616"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="48" y="211" width="26" height="20" uuid="81937735-eedc-4ad9-be0c-665a73d2dcad"/>
-				<textElement>
-					<font size="14"/>
-				</textElement>
-				<text><![CDATA[No.]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="21" y="211" width="27" height="20" uuid="23cb0ea5-b38e-46f8-9989-013fbf45052d"/>
+				<reportElement x="21" y="211" width="27" height="17" uuid="23cb0ea5-b38e-46f8-9989-013fbf45052d"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="21" y="288" width="181" height="20" uuid="6d2b6433-2fc8-4f83-a198-f2013b80dd60"/>
-				<textElement>
-					<font size="14"/>
+				<reportElement x="19" y="302" width="181" height="15" uuid="6d2b6433-2fc8-4f83-a198-f2013b80dd60"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REGIONAL SUCRE]]></text>
 			</staticText>
@@ -132,56 +125,52 @@ WHERE
 				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="189" y="20" width="28" height="131" uuid="d8480525-5523-4554-9804-de6340d44228"/>
-				<textElement rotation="Left">
-					<font size="16" isBold="true"/>
+				<reportElement x="19" y="141" width="85" height="18" uuid="d8480525-5523-4554-9804-de6340d44228"/>
+				<textElement textAlignment="Left" rotation="None">
+					<font size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ROL_FUNCIONARIO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="21" y="231" width="27" height="20" uuid="3f169402-fd52-4201-a79a-73f05aef03ee"/>
+				<reportElement x="21" y="228" width="27" height="17" uuid="3f169402-fd52-4201-a79a-73f05aef03ee"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<text><![CDATA[RH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="48" y="231" width="154" height="20" uuid="f3a7e949-6a20-467c-811f-ee1fa5d3200d"/>
+				<reportElement x="48" y="228" width="152" height="17" uuid="f3a7e949-6a20-467c-811f-ee1fa5d3200d"/>
 				<textElement>
-					<font size="14"/>
+					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{RH}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="21" y="277" width="39" height="1" uuid="5efcbfd0-5d06-4229-9b1a-47bafdd863a5"/>
+				<reportElement x="21" y="295" width="39" height="1" uuid="5efcbfd0-5d06-4229-9b1a-47bafdd863a5"/>
 				<graphicElement>
 					<pen lineWidth="1.25" lineColor="#009900"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="19" y="308" width="181" height="15" forecolor="#009900" uuid="912b575b-f1fc-49d0-9821-8aaff010e2cd"/>
-				<textElement>
-					<font size="8"/>
+				<reportElement x="19" y="316" width="181" height="15" forecolor="#009900" uuid="912b575b-f1fc-49d0-9821-8aaff010e2cd"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="19" y="323" width="181" height="15" forecolor="#009900" uuid="4df6225f-0bfd-48d5-81eb-f91218449915"/>
-				<textElement>
-					<font size="8"/>
+				<reportElement x="19" y="331" width="181" height="15" forecolor="#009900" uuid="4df6225f-0bfd-48d5-81eb-f91218449915"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="19" y="337" width="181" height="20" uuid="3c41fc7e-5ffe-4bd6-a55f-b383f83b7519"/>
-				<textFieldExpression><![CDATA[$F{AREA_TRABAJO}]]></textFieldExpression>
-			</textField>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="75" y="29" width="114" height="130" uuid="b3f3b08f-b830-432a-a21e-32a7fa09ee8c"/>
+				<reportElement x="104" y="29" width="96" height="130" uuid="b3f3b08f-b830-432a-a21e-32a7fa09ee8c"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{FOTOGRAFIA})]]></imageExpression>
 			</image>
 			<image hAlign="Center" vAlign="Middle">
-				<reportElement x="21" y="54" width="54" height="47" uuid="be243a4a-e371-45e5-b156-a7f2e3660e6b"/>
+				<reportElement x="21" y="41" width="65" height="47" uuid="be243a4a-e371-45e5-b156-a7f2e3660e6b"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{IMAGEN})]]></imageExpression>
 			</image>
 			<componentElement>
@@ -208,7 +197,7 @@ WHERE
 				<text><![CDATA[Este carnet es de caracter personal e intransferible]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="324" y="319" width="123" height="15" uuid="ff7bac29-958a-4d09-9266-26e5eb9831d4"/>
+				<reportElement x="324" y="316" width="123" height="15" uuid="ff7bac29-958a-4d09-9266-26e5eb9831d4"/>
 				<textFieldExpression><![CDATA[$F{IDENTIFICADOR_UNICO}]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -235,14 +224,14 @@ WHERE
 				<textFieldExpression><![CDATA[$F{VENCE_CARNET}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="254" y="334" width="181" height="12" uuid="0289b4a3-0617-4061-8f0c-74358255bba8"/>
+				<reportElement x="254" y="331" width="193" height="12" uuid="0289b4a3-0617-4061-8f0c-74358255bba8"/>
 				<textElement verticalAlignment="Middle">
-					<font size="6"/>
+					<font size="7"/>
 				</textElement>
-				<text><![CDATA[https://www.cits.com.co/senacarnet/verificacionCarnet.jsp]]></text>
+				<text><![CDATA[https://senasucre.net/SenaCarnet/verificacionCarnet.jsp]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="254" y="319" width="70" height="15" uuid="626154fa-09b8-45cc-88e0-e176c38c17ff"/>
+				<reportElement x="254" y="316" width="70" height="15" uuid="626154fa-09b8-45cc-88e0-e176c38c17ff"/>
 				<textElement>
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -257,14 +246,14 @@ WHERE
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Debe portarse en un lugar visible en caso de perdida, debe denunciarse y darse aviso de inmediato]]></text>
+				<text><![CDATA[Debe portarse en un lugar visible en caso de perdida, debe denunciarse y darse aviso de inmediato.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="265" y="189" width="159" height="22" uuid="276b0308-d955-4b1a-8bed-fb12aeed95d6"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<text><![CDATA[Email. megomez@sena.edu.co]]></text>
+				<text><![CDATA[Email. cgilo@sena.edu.co ]]></text>
 			</staticText>
 		</band>
 	</detail>

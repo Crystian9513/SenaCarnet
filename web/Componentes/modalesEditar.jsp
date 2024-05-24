@@ -1,4 +1,4 @@
-<!-- MODALES DE SEDES EDITAR INICIO -->
+ 
 <div class="modal fade" id="ModalSedeOpciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -20,8 +20,8 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3 "><!-- bottones -->
                         <button type="submit" class="btn botones text-white px-4" id="btnEditarSede" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarSede" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarSede" ><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarSede" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -60,8 +60,8 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones px-4 text-white" id="btnActualizarFormacion" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarFormacion" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarFormacion"><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarFormacion" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -103,8 +103,8 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones text-white px-4" id="btnActualizarAdm" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarAdm" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarAdm" ><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarAdministrador" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -147,8 +147,8 @@
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones text-white px-4" id="btnActualizarCd"
                                 style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarCd" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarCd"><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarCoordinador" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -244,8 +244,8 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnActualizarEst" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarEst" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarEst" ><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarEstudinate" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -340,7 +340,7 @@
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnNuevaFormacion" style="background-color: #018E42;"><b>Actualizar</b></button>
                         <!--   <button type="submit" class="btn " name="action" value="Eliminar" style="background-color: #6acd56;"><b>Eliminar</b></button>-->  
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarNuevaFormacion" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -398,13 +398,12 @@
                             <select name="AreaFunEl" id="AreaEdFun"
                                     class="from-selec-sm col-6" required>
                                 <option value="" disabled selected hidden>-- Elija --</option>
-                                
                             </select>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="input-group input-group-sm">
-                            <div class="input-group-text col-6"><b>Correo: </b></div>
+                            <div class="input-group-text col-6"><b>Correo:</b></div>
                             <input type="email" class="form-control" id="correoEdFun" name="correoFunEl" required min="1" maxlength="45">
                         </div>
                     </div>
@@ -437,8 +436,8 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnActualizarFun" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarFun" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarFun" ><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarfuncionario"  data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -453,7 +452,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form id="FormularioAreaOpciones" class="row g-2 " >
-                    <h2 class="pt-3 pb-2 text-center">Registrar Area de Trabajoa</h2>
+                    <h2 class="pt-3 pb-2 text-center">Registrar Area de Trabajo</h2>
                     <div class="col-12">
                         <div class="input-group ">
                             <div class="input-group-text col-5"><b>Codigo:</b></div>
@@ -468,8 +467,8 @@
                     </div>
                     <div class="col-12 text-center py-3 pt-3 "><!-- bottones -->
                         <button type="submit" class="btn botones text-white px-4" id="btnEditarArea" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarArea" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarArea" ><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarAreas" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -499,8 +498,8 @@
                     </div>
                       <div class="col-12 text-center py-3 pt-3 "><!-- bottones -->
                         <button type="submit" class="btn botones text-white px-4" id="btnEditarRol" style="background-color: #018E42;"><b>Actualizar</b></button>
-                        <button type="submit" class="btn text-white" id="btnEliminarRol" style="background-color: #018E42;"><b>Eliminar</b></button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn text-white bg-danger" id="btnEliminarRol"><b>Eliminar</b></button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarRol" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </form>
             </div>
