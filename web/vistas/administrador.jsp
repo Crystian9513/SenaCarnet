@@ -31,6 +31,11 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="../js/alertas.js"></script>
         <script src="../js/app.js"></script>
+        
+         <%--letras --%>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
 
         <script>
             $(document).ready(function () {

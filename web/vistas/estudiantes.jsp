@@ -45,6 +45,11 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="../js/alertas.js"></script>
         <script src="../js/app.js"></script>
+         <%--letras --%>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+
 
         <script>
             function verReporte4(cedula) {
@@ -258,12 +263,12 @@
                                                     <input type="text" class="form-control" id="filtroEstudiantes">
                                                 </div>
                                             </div>
-                                        <%--   <div class="col-md-6 col-12">
-                                               <form action="<%=request.getContextPath()%>/estudiantesServlet" method="post" enctype="multipart/form-data" class="pt-2">
+                                       <%-- <div class="col-md-6 col-12">
+                                               <form action="<%=request.getContextPath()%>/usuarioServlet" method="post" enctype="multipart/form-data" class="pt-2">
                                                    <div class="input-group mb-2">
-                                                       <div class="input-group-text col-4"><b>Aprendices:</b></div>
+                                                       <div class="input-group-text col-3"><b>Aprendices:</b></div>
                                                        <input type="file" class="form-control" name="file5" id="fileInput2" required="1" accept=".csv">
-                                                       <button type="submit" class="btn text-white" name="action" value="Importar2" style="background-color: #018E42;"><b>Importar</b></button>
+                                                       <button type="submit" class="btn text-white" name="action" value="ImportarEstudiantes" style="background-color: #018E42;"><b>Importar</b></button>
                                                 </div>
                                             </form>
                                         </div>
@@ -272,7 +277,7 @@
                                                 <div class="input-group mb-2">
                                                     <div class="input-group-text col-4"><b>Usuarios:</b></div>
                                                     <input type="file" class="form-control" name="file3" id="fileInput3" required="1" accept=".csv">
-                                                    <button type="submit" class="btn"  name="action text-white" value="Importar" style="background-color: #018E42;"><b>Importar</b></button>
+                                                    <button type="submit" class="btn text-white"  name="action " value="ImportarUsuarios" style="background-color: #018E42;"><b>Importar</b></button>
                                                 </div>
                                             </form>
                                         </div>--%>

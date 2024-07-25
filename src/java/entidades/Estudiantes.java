@@ -39,6 +39,10 @@ public class Estudiantes implements Serializable {
     @Lob
     @Column(name = "FOTOGRAFIA")
     private byte[] fotografia;
+    @Column(name = "REGIONAL_ID")
+    private String regionalId;
+    @Column(name = "CENTRO_ID")
+    private String centroId;
     @Basic(optional = false)
     @Column(name = "RH")
     private String rh;
@@ -199,6 +203,15 @@ public class Estudiantes implements Serializable {
         return "entidades.Estudiantes[ cedula=" + cedula + " ]";
     }
 
+
+    public String getRh() {
+        return rh;
+    }
+
+    public void setRh(String rh) {
+        this.rh = rh;
+    }
+
     public byte[] getFotografia() {
         return fotografia;
     }
@@ -207,12 +220,20 @@ public class Estudiantes implements Serializable {
         this.fotografia = fotografia;
     }
 
-    public String getRh() {
-        return rh;
+    public String getRegionalId() {
+        return regionalId;
     }
 
-    public void setRh(String rh) {
-        this.rh = rh;
+    public void setRegionalId(String regionalId) {
+        this.regionalId = regionalId;
+    }
+
+    public String getCentroId() {
+        return centroId;
+    }
+
+    public void setCentroId(String centroId) {
+        this.centroId = centroId;
     }
     
 }

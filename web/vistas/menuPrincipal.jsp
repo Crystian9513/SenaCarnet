@@ -16,6 +16,11 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="../js/app.js"></script>
 
+        <%--letras --%>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+
         <% HttpSession sesion = request.getSession();
 
             Usuarios usuario = (Usuarios) sesion.getAttribute("user");
@@ -28,7 +33,7 @@
             response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
             response.setHeader("Pragma", "no-cache"); // HTTP 1.0
             response.setHeader("Expires", "0"); // Proxies
-        %>
+%>
 
         <script>
             function verReporte3() {
@@ -53,7 +58,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-lg-10 col-md-10 col-sd-12"> <h1 class="letra pb-3">Bienvenido:<%if (usuario != null) {
-                                        out.print(usuario.getNombres());
+                                        out.print(usuario.getNombres() );
                                     }%> </h1></div>
                                 <div class="col-lg-2 col-md-2 col-sd-12"><img class="float-end" src="../img/inicioSesion_sena.jpg" width="70px" height="70px" alt="alt"/></div>
                             </div>
@@ -172,7 +177,7 @@
 
         <jsp:include page="../Componentes/modales.jsp" ></jsp:include>
 
-          
+
             <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
             <script>AOS.init();</script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
@@ -210,7 +215,7 @@
 </script>
 <%break;
             default:
-              
+
         }
     }
 

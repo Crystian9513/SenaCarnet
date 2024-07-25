@@ -1,4 +1,21 @@
-  <meta charset="UTF-8">
+<%@page import="entidades.Usuarios"%>
+<% HttpSession sesion = request.getSession();
+
+    Usuarios usuario = (Usuarios) sesion.getAttribute("user");
+
+    if (usuario == null) {
+        response.sendRedirect("../index.jsp");
+    } else {
+
+    }
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
+%>
+<%@page import="entidades.Centro"%>
+<%@page import="controladores.CentroJpaController"%>
+<%@page import="entidades.Regional"%>
+<%@page import="controladores.RegionalJpaController"%>
 <%@page import="entidades.AreaTrabajo"%>
 <%@page import="controladores.AreaTrabajoJpaController"%>
 <%@page import="entidades.RolFuncionario"%>
@@ -130,6 +147,46 @@
                             <input type="email" class="form-control" id="correoAdmGd" name="correoGd" required min="1" maxlength="45">
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="input-group input-group">
+                            <div class="input-group-text col-5"><b>Regional:</b></div>
+                            <select name="regionalGd" id="regionalAdmGd"
+                                    class="from-selec-sm col-7" required>
+                                <option value="" disabled selected hidden>-- Elija --</option>
+                                <%
+                                    RegionalJpaController reg = new RegionalJpaController();
+                                    List listareg = reg.findRegionalEntities();
+
+                                    for (int i = 0; i < listareg.size(); i++) {
+                                        Regional tipo = (Regional) listareg.get(i);
+                                        out.print("<option value='" + tipo.getIdregional() + "'>");
+                                        out.print(tipo.getNombre());
+                                        out.print("</option>");
+                                    }
+                                %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="input-group input-group">
+                            <div class="input-group-text col-5"><b>Centro:</b></div>
+                            <select name="centroGd" id="centroAdmGd"
+                                    class="from-selec-sm col-7" required>
+                                <option value="" disabled selected hidden>-- Elija --</option>
+                                <%
+                                    CentroJpaController centro = new CentroJpaController();
+                                    List listacen = centro.findCentroEntities();
+
+                                    for (int i = 0; i < listacen.size(); i++) {
+                                        Centro tipo = (Centro) listacen.get(i);
+                                        out.print("<option value='" + tipo.getIdcentro() + "'>");
+                                        out.print(tipo.getNombre());
+                                        out.print("</option>");
+                                    }
+                                %>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarAdm" style="background-color: #018E42;"><b>Guardar</b></button>
                         <button type="button" class="btn btn-secondary" id="btnCerrarAdministrador" data-bs-dismiss="modal" >Cerrar</button>
@@ -181,7 +238,7 @@
                     <div class="col-12 text-center py-3 pt-3"><!-- bottones -->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarCd"
                                 style="background-color: #018E42;"><b>Guardar</b></button>
-                                <button type="button" class="btn btn-secondary" id="btnCerrarCoordinador" data-bs-dismiss="modal" >Cerrar</button>
+                        <button type="button" class="btn btn-secondary" id="btnCerrarCoordinador" data-bs-dismiss="modal" >Cerrar</button>
                     </div>
                 </form>
             </div>
@@ -322,6 +379,20 @@
                             </select>
                         </div>
                     </div>
+                    <% if (usuario != null) {%>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Regional:</b></div>
+                            <input type="text" class="form-control" id="regiona" name="regiona" value="<%= usuario.getRegionalId()%>">
+                        </div>
+                    </div>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Centro:</b></div>
+                            <input type="text" class="form-control" id="centro" name="centro" value="<%= usuario.getCentroId()%>">
+                        </div>
+                    </div>
+                    <% }%>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarEst" style="background-color: #018E42;"><b>Guardar</b></button>
                         <button type="button" class="btn btn-secondary" id="btnCerrarEstudiante" data-bs-dismiss="modal">Cerrar</button>
@@ -345,6 +416,7 @@
                     <div class="col-12">
                         <div class="input-group">
                             <div class="input-group-text col-6"><b>Logo:</b></div>
+
                             <input type="file" class="form-control" id="logo" name="logo" accept="image/*" >
                         </div>
                     </div>
@@ -588,6 +660,20 @@
                             </select>
                         </div>
                     </div>
+                    <% if (usuario != null) {%>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Regional:</b></div>
+                            <input type="text" class="form-control" id="regionalGd" name="regionalGd" value="<%= usuario.getRegionalId()%>">
+                        </div>
+                    </div>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Centro:</b></div>
+                            <input type="text" class="form-control" id="centroGd" name="centroGd" value="<%= usuario.getCentroId()%>">
+                        </div>
+                    </div>
+                    <% }%>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnGuardarFun" style="background-color: #018E42;"><b>Guardar</b></button>
                         <button type="button" class="btn btn-secondary" id="btnLimpiarModalFuncionario" data-bs-dismiss="modal">Cerrar</button>

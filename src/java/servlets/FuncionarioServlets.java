@@ -85,6 +85,8 @@ public class FuncionarioServlets extends HttpServlet {
         int estado = Integer.parseInt(request.getParameter("estadoFun"));
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha1 = formato.parse(fechaInicio);
+        String centro = request.getParameter("centroGd");
+        String regional = request.getParameter("regionalGd");
 
         int cedula2 = Integer.parseInt(request.getParameter("cedulaFun"));//TABLA DE USUARIO
         String nombres2 = request.getParameter("nombresFun");//TABLA DE USUARIO
@@ -134,6 +136,8 @@ public class FuncionarioServlets extends HttpServlet {
             EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
             guardarFuncionario.setEstadocarnetIDESTADOCARNET(car);
             guardarFuncionario.setFotografia(imagenBytes); // Guardar la imagen en el campo BLOB
+            guardarFuncionario.setCentroId(centro);
+            guardarFuncionario.setRegionalId(regional);
 
             //TABLA USUARIO
             guardarUsuario.setCedula(cedula2);
@@ -203,6 +207,8 @@ public class FuncionarioServlets extends HttpServlet {
         int estado = Integer.parseInt(request.getParameter("estadoFunEl"));
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha1 = formato.parse(fechaInicio);
+        String centro = request.getParameter("centroEd");
+        String regional = request.getParameter("regionalEd");
 
         int cedula2 = Integer.parseInt(request.getParameter("cedulaFunEl"));
         String nombres2 = request.getParameter("nombresFunEl");
@@ -241,6 +247,8 @@ public class FuncionarioServlets extends HttpServlet {
                 guardarFuncionario.setRh(rh);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 guardarFuncionario.setEstadocarnetIDESTADOCARNET(car);
+                guardarFuncionario.setCentroId(centro);
+                guardarFuncionario.setRegionalId(regional);
 
                 if (nuevaFoto != null) {
                     guardarFuncionario.setFotografia(nuevaFoto);

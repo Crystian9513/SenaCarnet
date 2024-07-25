@@ -36,6 +36,14 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Funcionarios.findByIdentificadorUnico", query = "SELECT f FROM Funcionarios f WHERE f.identificadorUnico = :identificadorUnico")})
 public class Funcionarios implements Serializable {
 
+    @Lob
+    @Column(name = "FOTOGRAFIA")
+    private byte[] fotografia;
+    @Column(name = "REGIONAL_ID")
+    private String regionalId;
+    @Column(name = "CENTRO_ID")
+    private String centroId;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -47,9 +55,6 @@ public class Funcionarios implements Serializable {
     @Basic(optional = false)
     @Column(name = "APELLIDOS")
     private String apellidos;
-    @Lob
-    @Column(name = "FOTOGRAFIA")
-    private byte[] fotografia;
     @Basic(optional = false)
     @Column(name = "CORREO")
     private String correo;
@@ -113,13 +118,6 @@ public class Funcionarios implements Serializable {
         this.apellidos = apellidos;
     }
 
-    public byte[] getFotografia() {
-        return fotografia;
-    }
-
-    public void setFotografia(byte[] fotografia) {
-        this.fotografia = fotografia;
-    }
 
     public String getCorreo() {
         return correo;
@@ -208,6 +206,30 @@ public class Funcionarios implements Serializable {
     @Override
     public String toString() {
         return "entidades.Funcionarios[ cedula=" + cedula + " ]";
+    }
+
+    public byte[] getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(byte[] fotografia) {
+        this.fotografia = fotografia;
+    }
+
+    public String getRegionalId() {
+        return regionalId;
+    }
+
+    public void setRegionalId(String regionalId) {
+        this.regionalId = regionalId;
+    }
+
+    public String getCentroId() {
+        return centroId;
+    }
+
+    public void setCentroId(String centroId) {
+        this.centroId = centroId;
     }
     
 }

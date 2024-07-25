@@ -27,6 +27,11 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="../js/alertas.js"></script>
         <script src="../js/app.js"></script>
+        <%--letras --%>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+
 
         <script>
             function verReporte5(cedula) {
@@ -81,7 +86,7 @@
                         }
                     });
                 }
-                
+
                 $('#btnLimpiarModalFuncionario').click(function () {
                     limpiarFormulario('FormularioFuncionarios');
                 });
@@ -90,7 +95,7 @@
                 function handleSuccessGuardar(response) {
                     if (response.estado === "exito") {
                         mostrarExito(response.mensaje);
-                         limpiarFormulario('FormularioFuncionarios');
+                        limpiarFormulario('FormularioFuncionarios');
                         cargarTabla();
                     } else {
                         mostrarError(response.mensaje);
@@ -156,6 +161,7 @@
                                             '<td>' + funcionario.apellido + '</td>' +
                                             '<td>' + funcionario.funcionarioNombre + '</td>' +
                                             '<td>' + funcionario.areaTrabajonombre + '</td>' +
+                                            '<td>' + funcionario.correo + '</td>' +
                                             '<td>' + funcionario.fechaVencimientoCarnet + '</td>' +
                                             '<td>' + funcionario.rh + '</td>' +
                                             '<td>' + funcionario.estadoCarnetNombre + '</td>' +
@@ -238,6 +244,7 @@
                                                                             <th class="text-white">Apellidos</th>
                                                                             <th class="text-white">Rol</th>
                                                                             <th class="text-white">Area</th>
+                                                                            <th class="text-white">Correo</th>
                                                                             <th class="text-white">Carnet-Vence</th>
                                                                             <th class="text-white">RH</th>
                                                                             <th class="text-white">Estado-Carnet</th>

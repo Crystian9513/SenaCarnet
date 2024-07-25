@@ -1,7 +1,8 @@
+<%@page import="controladores.UsuariosJpaController"%>
 <%@page import="entidades.Estudiantes"%>
 <%@page import="controladores.EstudiantesJpaController"%>
 <%@page import="entidades.Usuarios"%>
-<%@page import="controladores.UsuariosJpaController"%>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -13,6 +14,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
 
     </head>
     <body>
@@ -48,7 +52,7 @@
                                                   </a>
                                               </div>--> 
                                             <div class="col-12 d-flex justify-content-center align-items-center">
-                                                <button type="submit" name="btninicio" class="btn mx-auto mt-2 text-white" style="background-color: #018E42;"
+                                                <button type="submit" name="btninicio" class="btn mx-auto mt-2 text-white" style="background-color: #579B34;"
                                                         >
                                                     <strong>Iniciar Sesion </strong></button>
                                             </div>
@@ -91,35 +95,27 @@
             </div>
         </div>
 
-        <footer style="max-height: 160px; font-family: monospace; background-color: #6acd56">
+        <footer class="footer justify-content-end" style="background-color: #579B34; ">
             <div class="container-fluid">
                 <!--Row Principal-->
-                <div class="row ">
-                    <!--Primera Columna-->
-
-                    <!--Segunda Columna-->
-                    <div class="col-md-4 d-flex align-items-center justify-content-center mt-3">
-                        <p class="contact-info" style="margin-left: 10%; color: #000; font-family: monospace"> 
-                            &copy;  <a class="text-muted" href="https://www.linkedin.com/in/crystian-jesus-peralta-arias-495632213/"
-                                       target="_blank"><strong>Crystian Peralta</strong></a> - <a class="text-muted"
-                                       href="https://www.linkedin.com/in/sebastian-hurtado-72a564267/" target="_blank"><strong> Sebastian Navaja</strong></a> 
+                <div class="row">
+                    <div class="col-12 text-center mt-3">
+                        <p class="text-small text-white">
+                            Servicio Nacional de Aprendizaje SENA - Regional Sucre - Sede la Gallera 
                             <br>
-                            Correo: jcchamorroa@sena.edu.co
-                        </p>
-                    </div>
-                    <div class="col-md-4 d-flex align-items-center justify-content-center mt-3" >
-                        <p>By ADSO - (2619872) 2024</p>
-                    </div>
-                    <!--Columna Logo Personal-->
-                    <div class="col-md-4 my-1" id="logoPersonal">
-                        <div class="col-md-4">
-                            <img src="img/inicioSesion_sena.jpg" alt="Descripcion de la imagen"
-                                 style="width: 70px; margin-top: 10; margin-left: 180%;">
-                        </div>
+                            Horario de atención: lunes a viernes de 8:00 am a 5:30 pm 
+                            Correo electrónico: jcchamorroa@sena.edu.co<br>
+                            &copy;  <a class="text-white" href="https://www.linkedin.com/in/crystian-jesus-peralta-arias-495632213/"
+                                       target="_blank"><strong>Crystian Peralta</strong></a> - <a class="text-white"
+                                       href="https://www.linkedin.com/in/sebastian-hurtado-72a564267/" target="_blank"><strong> Sebastian Navaja</strong></a> 
+                            - <a class="text-white"
+                                 href="" target="_blank"><strong> Steven Pajaro
+                                </strong></a> 
+                        </p>    
                     </div>
                 </div>
             </div>
-        </footer> 
+        </footer>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"

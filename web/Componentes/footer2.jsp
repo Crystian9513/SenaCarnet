@@ -10,14 +10,11 @@
                                href="https://github.com/DevSteven1" target="_blank"><strong>Steven Pajaro</strong></a>
                 </p>
                  <p class="mb-0">
-                  Telefono: 300-783-6674
-                </p>
-                 <p class="mb-0">
                    Correo: Crystian_9513@hotmail.com
                 </p>
             </div>
             <div class="col-6 text-end">
-                <p>By ADSO - (2619872) 2024</p>
+                <p>Centro De La Innovación Tecnológica Y Los Servicios</p>
             </div>
         </div>
     </div>

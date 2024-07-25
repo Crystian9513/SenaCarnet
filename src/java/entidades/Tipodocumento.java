@@ -28,6 +28,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Tipodocumento.findByNombre", query = "SELECT t FROM Tipodocumento t WHERE t.nombre = :nombre")})
 public class Tipodocumento implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoDocumentoFk")
+    private List<Estudiantes> estudiantesList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -98,6 +101,14 @@ public class Tipodocumento implements Serializable {
     @Override
     public String toString() {
         return "entidades.Tipodocumento[ idTipoDocumento=" + idTipoDocumento + " ]";
+    }
+
+    public List<Estudiantes> getEstudiantesList() {
+        return estudiantesList;
+    }
+
+    public void setEstudiantesList(List<Estudiantes> estudiantesList) {
+        this.estudiantesList = estudiantesList;
     }
     
 }

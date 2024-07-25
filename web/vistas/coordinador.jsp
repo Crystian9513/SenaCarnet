@@ -42,8 +42,13 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <link href="../css/app.css" rel="stylesheet">
         <script src="../js/alertas.js"></script>
-         <script src="../js/app.js"></script>
-        
+        <script src="../js/app.js"></script>
+        <%--letras --%>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+
+
         <script>
             $(document).ready(function () {
                 // Manejador de evento para el botón de guardar en el formulario
@@ -168,7 +173,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-12">
-                                <h1 class="letra text-center pb-3">Informacion de Aprendices <img  src="../img/inicioSesion_sena.jpg" width="70px" height="70px" alt="alt"/></h1>
+                                <h1 class="letra3 text-center pb-3">Informacion de Aprendices <img  src="../img/inicioSesion_sena.jpg" width="70px" height="70px" alt="alt"/></h1>
                                 <h3 class="text-center">Bienvenido  <%if (usuario != null) {
                                         out.print(usuario.getNombres());
                                     }%> aqui podra buscar y eliminar los carnet de los Aprendices.</h3>
@@ -231,7 +236,7 @@
 
         <jsp:include page="../Componentes/modales.jsp" ></jsp:include>
 
-      
+
         <script src="../js/DatosTablas.js"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>

@@ -1,17 +1,22 @@
-a,p,b{
-    font-family: monospace;
+/* Global font settings */
+html, body, h1 {
+    font-family: 'Work Sans', sans-serif;
 }
 
-.letra {
-    font-family: monospace; /* Definición de la fuente */
-    font-size: 250%; /* Definición del tamaño de la fuente */
+a, p, b, h3, h4, h5, h6 {
+    font-family: 'Calibri', sans-serif;
+}
+
+.letra2 {
+   
+    font-size: 150%; /* Definición del tamaño de la fuente */
     font-weight: bold; /* Definición del grosor de la fuente */
     font-style: italic; /* Definición del estilo de la fuente */
 }
 
-.letra2 {
-    font-family: monospace; /* Definición de la fuente */
-    font-size: 150%; /* Definición del tamaño de la fuente */
+.letra3 {
+   
+    font-size: 350%; /* Definición del tamaño de la fuente */
     font-weight: bold; /* Definición del grosor de la fuente */
     font-style: italic; /* Definición del estilo de la fuente */
 }

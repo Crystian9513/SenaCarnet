@@ -6,9 +6,13 @@ package servlets;
 
 import com.google.gson.Gson;
 import controladores.AdministradorJpaController;
+import controladores.CentroJpaController;
+import controladores.RegionalJpaController;
 import controladores.UsuariosJpaController;
 import controladores.exceptions.NonexistentEntityException;
 import entidades.Administrador;
+import entidades.Centro;
+import entidades.Regional;
 import entidades.Usuarios;
 import java.io.IOException;
 import java.util.HashMap;
@@ -75,10 +79,15 @@ public class administradoresServlet extends HttpServlet {
 
         String clave = request.getParameter("claveGd");
         String claveEncriptada = controladorAdm.EncryptarClave(clave);
+        int regional = Integer.parseInt(request.getParameter("regionalGd"));
+        int centro = Integer.parseInt(request.getParameter("centroGd"));
+        
+        RegionalJpaController regionalControlador = new RegionalJpaController();
+        CentroJpaController centroControlador = new CentroJpaController();
 
         try {
             if (controladorAdm.findAdministrador(cedula) != null && controlUsuario.findUsuarios(cedula) != null) {
-               enviarRespuestaError(response, "¡Error! Ya existe un registro con esa cédula.");
+                enviarRespuestaError(response, "¡Error! Ya existe un registro con esa cédula.");
                 return; // Se agrega un return para terminar la ejecución del método
             }
 
@@ -95,9 +104,15 @@ public class administradoresServlet extends HttpServlet {
             guardaUsuario.setClaves(claveEncriptada);
             guardaUsuario.setRol(2);
             guardaUsuario.setEstadoClave(2);
+            
+            Regional region = regionalControlador.findRegional(regional);
+            guardaUsuario.setRegionalId(region);
+            Centro centros = centroControlador.findCentro(centro);
+            guardaUsuario.setCentroId(centros);
+            
             controlUsuario.create(guardaUsuario);
 
-             enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
+            enviarRespuestaExito(response, "¡Registro guardado exitosamente!");
         } catch (Exception e) {
             enviarRespuestaError(response, "¡Error!");
         }
@@ -109,13 +124,13 @@ public class administradoresServlet extends HttpServlet {
         int cedula = Integer.parseInt(request.getParameter("cedulaEd"));
 
         try {
-              AdministradorJpaController controlador = new AdministradorJpaController();
-        controlador.destroy(cedula);
+            AdministradorJpaController controlador = new AdministradorJpaController();
+            controlador.destroy(cedula);
 
-        UsuariosJpaController controlUsuario = new UsuariosJpaController();
-        controlUsuario.destroy(cedula);
+            UsuariosJpaController controlUsuario = new UsuariosJpaController();
+            controlUsuario.destroy(cedula);
 
-        enviarRespuestaExito(response, "¡Registro Eliminado exitosamente!");
+            enviarRespuestaExito(response, "¡Registro Eliminado exitosamente!");
         } catch (Exception e) {
             enviarRespuestaError(response, "¡Error!");
         }
@@ -156,16 +171,16 @@ public class administradoresServlet extends HttpServlet {
                 controladorAdm.edit(adminExistente);
                 controladorUsuario.edit(usuarioExistente);
 
-                 enviarRespuestaExito(response, "¡Registro Editado exitosamente!");
+                enviarRespuestaExito(response, "¡Registro Editado exitosamente!");
             } else {
                 enviarRespuestaError(response, "¡Error!");
             }
         } catch (Exception e) {
-             enviarRespuestaError(response, "¡Error!");
+            enviarRespuestaError(response, "¡Error!");
         }
     }
-    
-     // Método para enviar una respuesta JSON de éxito
+
+    // Método para enviar una respuesta JSON de éxito
     private void enviarRespuestaExito(HttpServletResponse response, String mensaje) throws IOException {
         Map<String, Object> respuesta = new HashMap<>();
         respuesta.put("estado", "exito");

@@ -1,4 +1,17 @@
- 
+ <%@page import="entidades.Usuarios"%>
+<% HttpSession sesion = request.getSession();
+
+    Usuarios usuario = (Usuarios) sesion.getAttribute("user");
+
+    if (usuario == null) {
+        response.sendRedirect("../index.jsp");
+    } else {
+
+    }
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1
+    response.setHeader("Pragma", "no-cache"); // HTTP 1.0
+    response.setHeader("Expires", "0"); // Proxies
+%>
 <div class="modal fade" id="ModalSedeOpciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -242,6 +255,20 @@
                             </select>
                         </div>
                     </div>
+                     <% if (usuario != null) {%>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Regional:</b></div>
+                            <input type="text" class="form-control" id="regionaEd" name="regionaEd" value="<%= usuario.getRegionalId()%>">
+                        </div>
+                    </div>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Centro:</b></div>
+                            <input type="text" class="form-control" id="centroEd" name="centroEd" value="<%= usuario.getCentroId()%>">
+                        </div>
+                    </div>
+                    <% }%>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnActualizarEst" style="background-color: #018E42;"><b>Actualizar</b></button>
                         <button type="submit" class="btn text-white bg-danger" id="btnEliminarEst" ><b>Eliminar</b></button>
@@ -434,6 +461,20 @@
                             </select>
                         </div>
                     </div>
+                     <% if (usuario != null) {%>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Regional:</b></div>
+                            <input type="text" class="form-control" id="regionalEd" name="regionalEd" value="<%= usuario.getRegionalId()%>">
+                        </div>
+                    </div>
+                    <div class="col-12" style="display: none">
+                        <div class="input-group input-group-sm">
+                            <div class="input-group-text col-6"><b>Centro:</b></div>
+                            <input type="text" class="form-control" id="centroEd" name="centroEd" value="<%= usuario.getCentroId()%>">
+                        </div>
+                    </div>
+                    <% }%>
                     <div class="col-12 text-center py-3 pt-3"><!--bottones-->
                         <button type="submit" class="btn botones px-4 text-white" id="btnActualizarFun" style="background-color: #018E42;"><b>Actualizar</b></button>
                         <button type="submit" class="btn text-white bg-danger" id="btnEliminarFun" ><b>Eliminar</b></button>

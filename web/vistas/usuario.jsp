@@ -28,6 +28,11 @@
               integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" >
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+         <%--letras --%>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&family=Carlito:wght@400;700&display=swap" rel="stylesheet">
+
 
         <style>
             .fondo2 {
@@ -46,7 +51,7 @@
 
         <div class="fondo2">
             <a href="cerrarSesionUsuario.jsp">
-                <button type="button" class="btn m-2" style="background-color: #6acd56;">
+                <button type="button" class="btn m-2 text-white" style="background-color: #579B34;">
                     <b>Salir</b>
                 </button>
             </a>
@@ -58,7 +63,7 @@
                                 <div class="col-md-12 d-flex flex-column align-items-center">
 
                                     <h1 class="letra text-center ">
-                                        Bienvenido: <%if (usuario != null) {
+                                        Bienvenido:<%if (usuario != null) {
                                                 out.print(usuario.getNombres());
                                             }%>
                                     </h1>
@@ -72,7 +77,7 @@
                                                 <h3 class="mt-3 mb-3 text-center">Carnet</h3>
                                             </div>
                                             <div class="text-center">
-                                                <button type="button" class="btn" onclick="verReporte()" data-cedula="${not empty estudiante ? estudiante.cedula : ''}" style="background-color: #6acd56;">
+                                                <button type="button" class="btn text-white" onclick="verReporte()" data-cedula="${not empty estudiante ? estudiante.cedula : ''}" style="background-color: #579B34;">
                                                     <b>Descargar</b>
                                                 </button>
                                             </div>

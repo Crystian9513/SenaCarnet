@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="464" pageHeight="464" columnWidth="464" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="826d2312-ab66-4126-a039-facc0f42ec7b">
-	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.zoom" value="2.415765000000002"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="30"/>
+	<property name="ireport.y" value="396"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -14,7 +14,9 @@
     f.FOTOGRAFIA,
     f.RH,
     f.VENCE_CARNET,
-    f.IDENTIFICADOR_UNICO, 
+    f.IDENTIFICADOR_UNICO,
+f.REGIONAL_ID,
+    SUBSTRING_INDEX(f.CENTRO_ID, '-', 1) AS CENTRO_ID,  
     td.NOMBRE AS TIPO_DOCUMENTO, 
     rf.NOMBRE AS ROL_FUNCIONARIO, 
     ec.NOMBRE AS ESTADO_CARNET,
@@ -59,6 +61,10 @@ WHERE
 	<field name="IDENTIFICADOR_UNICO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="REGIONAL_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CENTRO_ID" class="java.lang.String"/>
 	<field name="TIPO_DOCUMENTO" class="java.lang.String"/>
 	<field name="ROL_FUNCIONARIO" class="java.lang.String"/>
 	<field name="ESTADO_CARNET" class="java.lang.String"/>
@@ -111,11 +117,11 @@ WHERE
 				<textFieldExpression><![CDATA[$F{TIPO_DOCUMENTO}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="19" y="302" width="181" height="15" uuid="6d2b6433-2fc8-4f83-a198-f2013b80dd60"/>
+				<reportElement x="19" y="302" width="45" height="15" uuid="6d2b6433-2fc8-4f83-a198-f2013b80dd60"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REGIONAL SUCRE]]></text>
+				<text><![CDATA[REGIONAL]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="21" y="191" width="181" height="20" forecolor="#009900" uuid="1998694d-310b-45b2-a4f5-b15d714f82c5"/>
@@ -151,20 +157,6 @@ WHERE
 					<pen lineWidth="1.25" lineColor="#009900"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement x="19" y="316" width="181" height="15" forecolor="#009900" uuid="912b575b-f1fc-49d0-9821-8aaff010e2cd"/>
-				<textElement verticalAlignment="Bottom">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="19" y="331" width="181" height="15" forecolor="#009900" uuid="4df6225f-0bfd-48d5-81eb-f91218449915"/>
-				<textElement verticalAlignment="Bottom">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
-			</staticText>
 			<image hAlign="Center" vAlign="Middle">
 				<reportElement x="104" y="29" width="96" height="130" uuid="b3f3b08f-b830-432a-a21e-32a7fa09ee8c"/>
 				<imageExpression><![CDATA[JRImageRenderer.getInstance((byte []) $F{FOTOGRAFIA})]]></imageExpression>
@@ -255,6 +247,20 @@ WHERE
 				</textElement>
 				<text><![CDATA[Email. cgilo@sena.edu.co ]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="64" y="302" width="129" height="15" uuid="8cbadf18-41b7-4609-87b8-1016a442e071"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REGIONAL_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="19" y="317" width="181" height="23" forecolor="#009900" uuid="e201599f-be81-4d3c-acfd-29c3d3578ce1"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CENTRO_ID}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

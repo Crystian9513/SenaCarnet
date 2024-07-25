@@ -1,5 +1,10 @@
-a,p,b,li,ul,strong,p,h1,h2,h3,h4,h5,b{
-    font-family: monospace;
+/* Global font settings */
+html, body, h1 {
+    font-family: 'Work Sans', sans-serif;
+}
+
+a, p, b, h3, h4, h5, h6 {
+    font-family: 'Calibri', sans-serif;
 }
 
 
@@ -13,7 +18,7 @@ a,p,b,li,ul,strong,p,h1,h2,h3,h4,h5,b{
 }
 
 .letra {
-    font-family: monospace; /* Definición de la fuente */
+   
     font-size: 250%; /* Definición del tamaño de la fuente */
     font-weight: bold; /* Definición del grosor de la fuente */
     font-style: italic; /* Definición del estilo de la fuente */

@@ -27,7 +27,7 @@ import javax.persistence.Persistence;
  */
 public class FuncionariosJpaController implements Serializable {
 
-    public FuncionariosJpaController( ) {
+    public FuncionariosJpaController() {
          this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
@@ -257,22 +257,5 @@ public class FuncionariosJpaController implements Serializable {
             em.close();
         }
     }
-    
-    public Object[] findFuncionarioYEstadoCarnetPorIdentificadorUnico(String identificadorUnico) {
-    EntityManager em = getEntityManager();
-    try {
-        Query query = em.createQuery("SELECT f, f.estadocarnetIDESTADOCARNET FROM Funcionarios f WHERE f.identificadorUnico = :identificadorUnico");
-        query.setParameter("identificadorUnico", identificadorUnico);
-        List<Object[]> resultados = query.getResultList();
-        if (!resultados.isEmpty()) {
-            return resultados.get(0); // Devuelve un array con el funcionario y el estado del carnet
-        } else {
-            return null; // No se encontraron funcionarios con ese identificador único
-        }
-    } finally {
-        em.close();
-    }
-}
-
     
 }

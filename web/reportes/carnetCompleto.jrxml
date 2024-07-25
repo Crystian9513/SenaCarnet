@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="504" pageHeight="420" orientation="Landscape" columnWidth="464" leftMargin="20" rightMargin="20" topMargin="19" bottomMargin="20" uuid="f1258751-6e45-4c84-9c28-706ef408bab8">
-	<property name="ireport.zoom" value="1.5000000000000002"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="54"/>
+	<property name="ireport.zoom" value="2.196150000000002"/>
+	<property name="ireport.x" value="27"/>
+	<property name="ireport.y" value="299"/>
 	<parameter name="id" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -14,7 +14,9 @@
     e.FOTOGRAFIA,
     e.RH,
     e.VENCE_CARNET,
-    e.IDENTIFICADOR_UNICO, 
+    e.IDENTIFICADOR_UNICO,
+    e.REGIONAL_ID,
+    SUBSTRING_INDEX(e.CENTRO_ID, '-', 1) AS CENTRO_ID, -- Aplicar SUBSTRING_INDEX en CENTRO_ID
     td.NOMBRE AS TIPO_DOCUMENTO, 
     SUBSTRING_INDEX(f.NOMBRE, '-', 1) AS FORMACION, 
     f.ID_FORMACION AS NUMERO_FICHA, 
@@ -32,10 +34,9 @@ INNER JOIN
 INNER JOIN 
     tipodocumento td ON e.TIPO_DOCUMENTO_FK = td.ID_TIPO_DOCUMENTO
 CROSS JOIN 
-    (SELECT IDLOGO ,DIRECTOR, IMAGEN , FIRMA FROM logo LIMIT 1) AS logo
+    (SELECT IDLOGO, DIRECTOR, IMAGEN, FIRMA FROM logo LIMIT 1) AS logo
 WHERE 
-    e.CEDULA = $P{id}
-]]>
+    e.CEDULA = $P{id}]]>
 	</queryString>
 	<field name="NOMBRES" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -58,6 +59,10 @@ WHERE
 	<field name="IDENTIFICADOR_UNICO" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="REGIONAL_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CENTRO_ID" class="java.lang.String"/>
 	<field name="TIPO_DOCUMENTO" class="java.lang.String"/>
 	<field name="FORMACION" class="java.lang.String"/>
 	<field name="NUMERO_FICHA" class="java.lang.Integer"/>
@@ -115,13 +120,6 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{CEDULA}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="25" y="284" width="181" height="12" forecolor="#009900" uuid="acd80d46-3261-48ed-a908-7c5c24ce7b39"/>
-				<textElement verticalAlignment="Bottom">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[CENTRO DE LA INNOVACION,]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="25" y="183" width="181" height="20" forecolor="#009900" uuid="823087f9-eb20-4a22-9e73-ac8739338985"/>
 				<textElement>
@@ -129,13 +127,6 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{APELLIDOS}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="25" y="297" width="181" height="12" forecolor="#009900" uuid="32456552-05b1-410e-8553-9a899156e19d"/>
-				<textElement verticalAlignment="Bottom">
-					<font size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[LA TECNOLOGIA Y LOS SERVICIOS]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="25" y="163" width="181" height="20" forecolor="#009900" uuid="9f5c53a5-fcef-446b-b938-ba05f6e5ef4d"/>
 				<textElement>
@@ -144,11 +135,11 @@ WHERE
 				<textFieldExpression><![CDATA[$F{NOMBRES}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="25" y="272" width="181" height="12" uuid="fb29a4d5-348e-4d08-886e-61233403781d"/>
+				<reportElement x="25" y="274" width="45" height="12" uuid="fb29a4d5-348e-4d08-886e-61233403781d"/>
 				<textElement verticalAlignment="Bottom">
 					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REGIONAL SUCRE]]></text>
+				<text><![CDATA[REGIONAL]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="269" y="46" width="159" height="35" uuid="419284bd-d4cc-406a-9770-f52da8fa2d1a"/>
@@ -267,6 +258,20 @@ WHERE
 					<pen lineWidth="1.25" lineColor="#009900"/>
 				</graphicElement>
 			</line>
+			<textField>
+				<reportElement x="70" y="274" width="136" height="12" uuid="1de9f06f-390c-4ab5-8c62-dfa43390b69c"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{REGIONAL_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="25" y="286" width="181" height="23" forecolor="#009900" uuid="fa584132-c202-45a5-ba86-29b8b1a6cf8b"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CENTRO_ID}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

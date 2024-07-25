@@ -102,6 +102,8 @@ public class estudiantesServlet extends HttpServlet {
         int estado = Integer.parseInt(request.getParameter("estado"));
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha1 = formato.parse(fechaInicio);
+        String centro = request.getParameter("centro");
+        String regional = request.getParameter("regiona");
 
         int cedula2 = Integer.parseInt(request.getParameter("cedula"));//TABLA DE USUARIO
         String nombres2 = request.getParameter("nombres");//TABLA DE USUARIO
@@ -151,7 +153,9 @@ public class estudiantesServlet extends HttpServlet {
             EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
             guardarEstudiante.setEstadoCarnetIdestadoCarnet(car);
             guardarEstudiante.setFotografia(imagenBytes); // Guardar la imagen en el campo BLOB
-
+            guardarEstudiante.setCentroId(centro);
+            guardarEstudiante.setRegionalId(regional);
+            
             //TABLA USUARIO
             guardarUsuario.setCedula(cedula2);
             guardarUsuario.setNombres(nombres2);
@@ -167,13 +171,13 @@ public class estudiantesServlet extends HttpServlet {
 
         } catch (Exception e) {
 
-             enviarRespuestaError(response, "¡Error!");;
+            enviarRespuestaError(response, "¡Error!");;
         }
     }
 
     public void botonEliminar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         int codigoUsuario = Integer.parseInt(request.getParameter("cedula2"));
 
         try {
@@ -215,6 +219,8 @@ public class estudiantesServlet extends HttpServlet {
         String correo = request.getParameter("correo2");
         String vencimiento = request.getParameter("vence2");
         String rh = request.getParameter("rh2");
+        String centro = request.getParameter("centroEd");
+        String regional = request.getParameter("regionaEd");
 
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
         int estado = Integer.parseInt(request.getParameter("estado2"));
@@ -264,6 +270,8 @@ public class estudiantesServlet extends HttpServlet {
                 editarEstudiante.setRh(rh);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
+                editarEstudiante.setCentroId(centro);
+                editarEstudiante.setRegionalId(regional);
 
                 // Verificar si se proporcionó una nueva foto y actualizarla
                 if (nuevaFoto != null) {
@@ -324,8 +332,8 @@ public class estudiantesServlet extends HttpServlet {
         FormacionJpaController tipoForma = new FormacionJpaController();
         SedeJpaController tipoSede = new SedeJpaController();
         EstadoCarnetJpaController tipoEstado = new EstadoCarnetJpaController();
-        
-         // Obtener el archivo de la foto
+
+        // Obtener el archivo de la foto
         Part part = request.getPart("foto20");
         byte[] nuevaFoto = null;
 
@@ -353,7 +361,7 @@ public class estudiantesServlet extends HttpServlet {
                 editarEstudiante.setRh(rh);
                 EstadoCarnet car = tipoEstado.findEstadoCarnet(estado);
                 editarEstudiante.setEstadoCarnetIdestadoCarnet(car);
-                
+
                 // Verificar si se proporcionó una nueva foto y actualizarla
                 if (nuevaFoto != null) {
                     editarEstudiante.setFotografia(nuevaFoto);
@@ -372,7 +380,7 @@ public class estudiantesServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-             enviarRespuestaError(response, "¡Error!");
+            enviarRespuestaError(response, "¡Error!");
 
         }
 

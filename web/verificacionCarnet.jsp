@@ -29,7 +29,7 @@
                                     <h1 class="letra pt-5 text-center">Verificar Carnet</h1>
                                     <div class="form-left h-100 px-5">
                                         <form action="" class="row g-4">
-                                            <div class="col-12 ">
+                                            <div class="col-12 mt-5">
                                                 <label class="pb-2"><strong>Codigo-Unico</strong><span class="text-danger">*</span></label>
                                                 <div class="input-group">
                                                     <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
@@ -38,7 +38,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-12 d-flex justify-content-center align-items-center">
-                                                <button type="submit" name="verificar" class="btn mx-auto mt-2" style="background-color: #6acd56;"
+                                                <button type="submit" name="verificar" class="btn mx-auto mt-2 text-white" style="background-color: #579B34;"
                                                         >
                                                     <strong>Verificar</strong></button>
                                             </div>
@@ -57,6 +57,28 @@
                 </div>
             </div>
         </div>
+        
+          <footer class="footer justify-content-end" style="background-color: #579B34; ">
+            <div class="container-fluid">
+                <!--Row Principal-->
+                <div class="row">
+                    <div class="col-12 text-center mt-3">
+                        <p class="text-small text-white">
+                            Servicio Nacional de Aprendizaje SENA - Regional Sucre - Sede la Gallera 
+                            Línea gratuita de atención al Egresado Regional Sucre Sincelejo 3...... <br>
+                            Horario de atención: lunes a viernes de 8:00 am a 5:30 pm 
+                            Correo electrónico: para solicitudes: Correo@sena.edu.co<br>
+                            &copy;  <a class="text-white" href="https://www.linkedin.com/in/crystian-jesus-peralta-arias-495632213/"
+                                       target="_blank"><strong>Crystian Peralta</strong></a> - <a class="text-white"
+                                       href="https://www.linkedin.com/in/sebastian-hurtado-72a564267/" target="_blank"><strong> Sebastian Navaja</strong></a> 
+                            - <a class="text-white"
+                                 href="" target="_blank"><strong> Steven Pajaro
+                                </strong></a> 
+                        </p>    
+                    </div>
+                </div>
+            </div>
+        </footer>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>AOS.init();</script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"

@@ -11,6 +11,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -29,6 +31,13 @@ import javax.persistence.Table;
     @NamedQuery(name = "Usuarios.findByClaves", query = "SELECT u FROM Usuarios u WHERE u.claves = :claves"),
     @NamedQuery(name = "Usuarios.findByRol", query = "SELECT u FROM Usuarios u WHERE u.rol = :rol")})
 public class Usuarios implements Serializable {
+
+    @JoinColumn(name = "CENTRO_ID", referencedColumnName = "IDCENTRO")
+    @ManyToOne
+    private Centro centroId;
+    @JoinColumn(name = "REGIONAL_ID", referencedColumnName = "IDREGIONAL")
+    @ManyToOne
+    private Regional regionalId;
 
     @Basic(optional = false)
     @Column(name = "ESTADO_CLAVE")
@@ -148,6 +157,32 @@ public class Usuarios implements Serializable {
 
     public void setEstadoClave(int estadoClave) {
         this.estadoClave = estadoClave;
+    }
+
+    public Centro getCentroId() {
+        return centroId;
+    }
+
+    public void setCentroId(Centro centroId) {
+        this.centroId = centroId;
+    }
+
+    public Regional getRegionalId() {
+        return regionalId;
+    }
+
+    public void setRegionalId(Regional regionalId) {
+        this.regionalId = regionalId;
+    }
+    
+    public Regional getRegionalId2(int id) {
+        // Este método normalmente no se implementaría en la entidad
+        // Esto es solo un ejemplo. En un caso real, deberías usar un repositorio o servicio para obtener datos basados en un ID.
+        // Si necesitas buscar un Regional basado en un ID, considera mover esta lógica a un repositorio.
+        if (regionalId != null && regionalId.getIdregional() == id) {
+            return regionalId;
+        }
+        return null; // o manejar el caso cuando no se encuentra
     }
 
 }

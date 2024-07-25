@@ -6,13 +6,13 @@ package controladores;
 
 import controladores.exceptions.NonexistentEntityException;
 import controladores.exceptions.PreexistingEntityException;
-import entidades.EstadoCarnet;
-import entidades.Estudiantes;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import entidades.EstadoCarnet;
+import entidades.Estudiantes;
 import entidades.Formacion;
 import entidades.Sede;
 import entidades.Tipodocumento;
@@ -30,7 +30,7 @@ import javax.persistence.criteria.CriteriaBuilder;
  */
 public class EstudiantesJpaController implements Serializable {
 
-    public EstudiantesJpaController() {
+    public EstudiantesJpaController( ) {
         this.emf = Persistence.createEntityManagerFactory("SenaCarnetPU");
     }
     private EntityManagerFactory emf = null;
@@ -44,6 +44,11 @@ public class EstudiantesJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            EstadoCarnet estadoCarnetIdestadoCarnet = estudiantes.getEstadoCarnetIdestadoCarnet();
+            if (estadoCarnetIdestadoCarnet != null) {
+                estadoCarnetIdestadoCarnet = em.getReference(estadoCarnetIdestadoCarnet.getClass(), estadoCarnetIdestadoCarnet.getIdestadoCarnet());
+                estudiantes.setEstadoCarnetIdestadoCarnet(estadoCarnetIdestadoCarnet);
+            }
             Formacion formacionFk = estudiantes.getFormacionFk();
             if (formacionFk != null) {
                 formacionFk = em.getReference(formacionFk.getClass(), formacionFk.getIdFormacion());
@@ -54,7 +59,16 @@ public class EstudiantesJpaController implements Serializable {
                 sedeFk = em.getReference(sedeFk.getClass(), sedeFk.getIdSede());
                 estudiantes.setSedeFk(sedeFk);
             }
+            Tipodocumento tipoDocumentoFk = estudiantes.getTipoDocumentoFk();
+            if (tipoDocumentoFk != null) {
+                tipoDocumentoFk = em.getReference(tipoDocumentoFk.getClass(), tipoDocumentoFk.getIdTipoDocumento());
+                estudiantes.setTipoDocumentoFk(tipoDocumentoFk);
+            }
             em.persist(estudiantes);
+            if (estadoCarnetIdestadoCarnet != null) {
+                estadoCarnetIdestadoCarnet.getEstudiantesList().add(estudiantes);
+                estadoCarnetIdestadoCarnet = em.merge(estadoCarnetIdestadoCarnet);
+            }
             if (formacionFk != null) {
                 formacionFk.getEstudiantesList().add(estudiantes);
                 formacionFk = em.merge(formacionFk);
@@ -62,6 +76,10 @@ public class EstudiantesJpaController implements Serializable {
             if (sedeFk != null) {
                 sedeFk.getEstudiantesList().add(estudiantes);
                 sedeFk = em.merge(sedeFk);
+            }
+            if (tipoDocumentoFk != null) {
+                tipoDocumentoFk.getEstudiantesList().add(estudiantes);
+                tipoDocumentoFk = em.merge(tipoDocumentoFk);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -82,10 +100,18 @@ public class EstudiantesJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Estudiantes persistentEstudiantes = em.find(Estudiantes.class, estudiantes.getCedula());
+            EstadoCarnet estadoCarnetIdestadoCarnetOld = persistentEstudiantes.getEstadoCarnetIdestadoCarnet();
+            EstadoCarnet estadoCarnetIdestadoCarnetNew = estudiantes.getEstadoCarnetIdestadoCarnet();
             Formacion formacionFkOld = persistentEstudiantes.getFormacionFk();
             Formacion formacionFkNew = estudiantes.getFormacionFk();
             Sede sedeFkOld = persistentEstudiantes.getSedeFk();
             Sede sedeFkNew = estudiantes.getSedeFk();
+            Tipodocumento tipoDocumentoFkOld = persistentEstudiantes.getTipoDocumentoFk();
+            Tipodocumento tipoDocumentoFkNew = estudiantes.getTipoDocumentoFk();
+            if (estadoCarnetIdestadoCarnetNew != null) {
+                estadoCarnetIdestadoCarnetNew = em.getReference(estadoCarnetIdestadoCarnetNew.getClass(), estadoCarnetIdestadoCarnetNew.getIdestadoCarnet());
+                estudiantes.setEstadoCarnetIdestadoCarnet(estadoCarnetIdestadoCarnetNew);
+            }
             if (formacionFkNew != null) {
                 formacionFkNew = em.getReference(formacionFkNew.getClass(), formacionFkNew.getIdFormacion());
                 estudiantes.setFormacionFk(formacionFkNew);
@@ -94,7 +120,19 @@ public class EstudiantesJpaController implements Serializable {
                 sedeFkNew = em.getReference(sedeFkNew.getClass(), sedeFkNew.getIdSede());
                 estudiantes.setSedeFk(sedeFkNew);
             }
+            if (tipoDocumentoFkNew != null) {
+                tipoDocumentoFkNew = em.getReference(tipoDocumentoFkNew.getClass(), tipoDocumentoFkNew.getIdTipoDocumento());
+                estudiantes.setTipoDocumentoFk(tipoDocumentoFkNew);
+            }
             estudiantes = em.merge(estudiantes);
+            if (estadoCarnetIdestadoCarnetOld != null && !estadoCarnetIdestadoCarnetOld.equals(estadoCarnetIdestadoCarnetNew)) {
+                estadoCarnetIdestadoCarnetOld.getEstudiantesList().remove(estudiantes);
+                estadoCarnetIdestadoCarnetOld = em.merge(estadoCarnetIdestadoCarnetOld);
+            }
+            if (estadoCarnetIdestadoCarnetNew != null && !estadoCarnetIdestadoCarnetNew.equals(estadoCarnetIdestadoCarnetOld)) {
+                estadoCarnetIdestadoCarnetNew.getEstudiantesList().add(estudiantes);
+                estadoCarnetIdestadoCarnetNew = em.merge(estadoCarnetIdestadoCarnetNew);
+            }
             if (formacionFkOld != null && !formacionFkOld.equals(formacionFkNew)) {
                 formacionFkOld.getEstudiantesList().remove(estudiantes);
                 formacionFkOld = em.merge(formacionFkOld);
@@ -110,6 +148,14 @@ public class EstudiantesJpaController implements Serializable {
             if (sedeFkNew != null && !sedeFkNew.equals(sedeFkOld)) {
                 sedeFkNew.getEstudiantesList().add(estudiantes);
                 sedeFkNew = em.merge(sedeFkNew);
+            }
+            if (tipoDocumentoFkOld != null && !tipoDocumentoFkOld.equals(tipoDocumentoFkNew)) {
+                tipoDocumentoFkOld.getEstudiantesList().remove(estudiantes);
+                tipoDocumentoFkOld = em.merge(tipoDocumentoFkOld);
+            }
+            if (tipoDocumentoFkNew != null && !tipoDocumentoFkNew.equals(tipoDocumentoFkOld)) {
+                tipoDocumentoFkNew.getEstudiantesList().add(estudiantes);
+                tipoDocumentoFkNew = em.merge(tipoDocumentoFkNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -140,6 +186,11 @@ public class EstudiantesJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The estudiantes with id " + id + " no longer exists.", enfe);
             }
+            EstadoCarnet estadoCarnetIdestadoCarnet = estudiantes.getEstadoCarnetIdestadoCarnet();
+            if (estadoCarnetIdestadoCarnet != null) {
+                estadoCarnetIdestadoCarnet.getEstudiantesList().remove(estudiantes);
+                estadoCarnetIdestadoCarnet = em.merge(estadoCarnetIdestadoCarnet);
+            }
             Formacion formacionFk = estudiantes.getFormacionFk();
             if (formacionFk != null) {
                 formacionFk.getEstudiantesList().remove(estudiantes);
@@ -149,6 +200,11 @@ public class EstudiantesJpaController implements Serializable {
             if (sedeFk != null) {
                 sedeFk.getEstudiantesList().remove(estudiantes);
                 sedeFk = em.merge(sedeFk);
+            }
+            Tipodocumento tipoDocumentoFk = estudiantes.getTipoDocumentoFk();
+            if (tipoDocumentoFk != null) {
+                tipoDocumentoFk.getEstudiantesList().remove(estudiantes);
+                tipoDocumentoFk = em.merge(tipoDocumentoFk);
             }
             em.remove(estudiantes);
             em.getTransaction().commit();
@@ -167,7 +223,7 @@ public class EstudiantesJpaController implements Serializable {
         return findEstudiantesEntities(false, maxResults, firstResult);
     }
 
-    private List<Estudiantes> findEstudiantesEntities(boolean all, int maxResults, int firstResult) {
+     private List<Estudiantes> findEstudiantesEntities(boolean all, int maxResults, int firstResult) {
     EntityManager em = getEntityManager();
     try {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -241,21 +297,5 @@ public class EstudiantesJpaController implements Serializable {
             em.close();
         }
     }
-
-    public Object[] findEstudianteYEstadoCarnetPorIdentificadorUnico(String identificadorUnico) {
-        EntityManager em = getEntityManager();
-        try {
-            Query query = em.createQuery("SELECT e, e.estadoCarnetIdestadoCarnet FROM Estudiantes e WHERE e.identificadorUnico = :identificadorUnico");
-            query.setParameter("identificadorUnico", identificadorUnico);
-            List<Object[]> resultados = query.getResultList();
-            if (!resultados.isEmpty()) {
-                return resultados.get(0); // Devuelve un array con el estudiante y el estado del carnet
-            } else {
-                return null; // No se encontraron estudiantes con ese identificador único
-            }
-        } finally {
-            em.close();
-        }
-    }
-
+    
 }
